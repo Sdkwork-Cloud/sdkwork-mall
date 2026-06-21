@@ -1,0 +1,129 @@
+{
+  "name": "@sdkwork/mall-pc-commerce",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Commerce workflows, offers, and pricing-aware capability composition.",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./routes": {
+      "types": "./src/routes.ts",
+      "import": "./src/routes.ts",
+      "default": "./src/routes.ts"
+    },
+    "./favorites-service": {
+      "types": "./src/favorites-service.ts",
+      "import": "./src/favorites-service.ts",
+      "default": "./src/favorites-service.ts"
+    },
+    "./buyer-pages": {
+      "types": "./src/pages/BuyerPages.tsx",
+      "import": "./src/pages/BuyerPages.tsx",
+      "default": "./src/pages/BuyerPages.tsx"
+    },
+    "./buyer-dashboard-page": {
+      "types": "./src/pages/BuyerDashboardPage.tsx",
+      "import": "./src/pages/BuyerDashboardPage.tsx",
+      "default": "./src/pages/BuyerDashboardPage.tsx"
+    },
+    "./buyer-favorites-page": {
+      "types": "./src/pages/BuyerFavoritesPage.tsx",
+      "import": "./src/pages/BuyerFavoritesPage.tsx",
+      "default": "./src/pages/BuyerFavoritesPage.tsx"
+    },
+    "./buyer-profile-page": {
+      "types": "./src/pages/BuyerProfilePage.tsx",
+      "import": "./src/pages/BuyerProfilePage.tsx",
+      "default": "./src/pages/BuyerProfilePage.tsx"
+    },
+    "./buyer-security-page": {
+      "types": "./src/pages/BuyerSecurityPage.tsx",
+      "import": "./src/pages/BuyerSecurityPage.tsx",
+      "default": "./src/pages/BuyerSecurityPage.tsx"
+    },
+    "./buyer-gift-cards-page": {
+      "types": "./src/pages/BuyerGiftCardsPage.tsx",
+      "import": "./src/pages/BuyerGiftCardsPage.tsx",
+      "default": "./src/pages/BuyerGiftCardsPage.tsx"
+    },
+    "./legacy-hub": {
+      "types": "./src/legacy-hub.ts",
+      "import": "./src/legacy-hub.ts",
+      "default": "./src/legacy-hub.ts"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@sdkwork/mall-pc-billing": "workspace:*",
+    "@sdkwork/mall-pc-checkout": "workspace:*",
+    "@sdkwork/mall-pc-entitlement": "workspace:*",
+    "@sdkwork/mall-pc-membership-purchase": "workspace:*",
+    "@sdkwork/mall-pc-offer": "workspace:*",
+    "@sdkwork/mall-pc-payment": "workspace:*",
+    "@sdkwork/mall-pc-pricing": "workspace:*",
+    "@sdkwork/mall-pc-subscription": "workspace:*"
+  },
+  "peerDependencies": {
+    "@sdkwork/appbase-pc-react": "*",
+    "@sdkwork/commerce-service": "*",
+    "@sdkwork/mall-pc-core": "*",
+    "@sdkwork/mall-pc-coupon": "*",
+    "@sdkwork/mall-pc-invoice": "*",
+    "@sdkwork/mall-pc-order": "*",
+    "@sdkwork/mall-pc-points": "*",
+    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/mall-pc-membership": "*",
+    "@sdkwork/mall-pc-wallet": "*",
+    "react": ">=18.2.0 <20.0.0",
+    "react-dom": ">=18.2.0 <20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@sdkwork/appbase-pc-react": {
+      "optional": true
+    },
+    "@sdkwork/commerce-service": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-core": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-coupon": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-invoice": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-order": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-points": {
+      "optional": true
+    },
+    "@sdkwork/ui-pc-react": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-membership": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-wallet": {
+      "optional": true
+    }
+  },
+  "sdkwork": {
+    "workspace": "sdkwork-mall",
+    "architecture": "pc-react",
+    "domain": "commerce",
+    "capability": "commerce",
+    "status": "ready"
+  }
+}

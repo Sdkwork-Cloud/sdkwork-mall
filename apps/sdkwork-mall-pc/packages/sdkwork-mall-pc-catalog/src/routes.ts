@@ -1,0 +1,40 @@
+import type { SdkworkMallPcRouteContribution } from "@sdkwork/mall-pc-core";
+
+export const sdkworkMallPcCatalogRoutes = [
+  {
+    auth: "public",
+    capability: "catalog",
+    domain: "commerce",
+    id: "storefront.mall.categories",
+    packageName: "@sdkwork/mall-pc-catalog",
+    path: "/categories",
+    screen: "categories",
+    surface: "storefront",
+    title: "类目频道",
+    titleKey: "catalog.routes.categories.title",
+  },
+  {
+    auth: "public",
+    capability: "catalog",
+    domain: "commerce",
+    id: "storefront.mall.category-detail",
+    packageName: "@sdkwork/mall-pc-catalog",
+    path: "/categories/:categoryId",
+    screen: "category-detail",
+    surface: "storefront",
+    title: "类目详情",
+    titleKey: "catalog.routes.categoryDetail.title",
+  },
+  {
+    auth: "public",
+    capability: "catalog",
+    domain: "commerce",
+    id: "storefront.mall.product-detail",
+    packageName: "@sdkwork/mall-pc-catalog",
+    path: "/product/:productId",
+    screen: "product-detail",
+    surface: "storefront",
+    title: "商品详情",
+    titleKey: "catalog.routes.productDetail.title",
+  },
+] as const satisfies readonly SdkworkMallPcRouteContribution[];

@@ -1,0 +1,37 @@
+{
+  "name": "@sdkwork/mall-pc-admin-marketing",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./routes": {
+      "types": "./src/routes.ts",
+      "import": "./src/routes.ts",
+      "default": "./src/routes.ts"
+    },
+    "./admin-pages": {
+      "types": "./src/admin-pages.ts",
+      "import": "./src/admin-pages.ts",
+      "default": "./src/admin-pages.ts"
+    }
+  },
+  "peerDependencies": {
+    "@sdkwork/commerce-service": "*",
+    "@sdkwork/mall-pc-cms": "*",
+    "@sdkwork/mall-pc-core": "*",
+    "@sdkwork/ui-pc-react": "*",
+    "react": ">=18.2.0 <20.0.0"
+  },
+  "sdkwork": {
+    "workspace": "sdkwork-mall",
+    "architecture": "pc-react",
+    "domain": "commerce",
+    "capability": "admin-marketing",
+    "status": "ready"
+  }
+}

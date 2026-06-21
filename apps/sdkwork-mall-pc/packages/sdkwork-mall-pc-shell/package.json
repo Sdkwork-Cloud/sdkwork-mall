@@ -1,0 +1,35 @@
+{
+  "name": "@sdkwork/mall-pc-shell",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SDKWork Mall PC app shell and navigation layout.",
+  "exports": {
+    ".": {
+      "types": "./src/index.tsx",
+      "import": "./src/index.tsx",
+      "default": "./src/index.tsx"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-commons": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20.0.0"
+  },
+  "sdkwork": {
+    "workspace": "sdkwork-mall",
+    "architecture": "pc-react",
+    "domain": "commerce",
+    "capability": "shell",
+    "surface": "app",
+    "status": "ready"
+  }
+}

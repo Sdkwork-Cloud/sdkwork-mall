@@ -1,0 +1,52 @@
+{
+  "name": "@sdkwork/mall-pc-admin-membership",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Admin membership management service, controller, and reusable management workspace.",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./routes": {
+      "types": "./src/routes.ts",
+      "import": "./src/routes.ts",
+      "default": "./src/routes.ts"
+    },
+    "./membership-admin-page": {
+      "types": "./src/membership-admin-page.ts",
+      "import": "./src/membership-admin-page.ts",
+      "default": "./src/membership-admin-page.ts"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@sdkwork/appbase-pc-react": "*",
+    "@sdkwork/commerce-service": "*",
+    "react": ">=18.2.0 <20.0.0",
+    "react-dom": ">=18.2.0 <20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@sdkwork/appbase-pc-react": {
+      "optional": true
+    },
+    "@sdkwork/commerce-service": {
+      "optional": true
+    }
+  },
+  "sdkwork": {
+    "workspace": "sdkwork-mall",
+    "architecture": "pc-react",
+    "domain": "commerce",
+    "capability": "membership-admin",
+    "status": "ready"
+  }
+}

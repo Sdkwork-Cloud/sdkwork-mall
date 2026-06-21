@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-mall-workspace",
+    "displayName": "SDKWork Mall Workspace",
+    "version": "0.1.0",
+    "type": "pc-app-workspace",
+    "root": "sdkwork-mall",
+    "domain": "commerce",
+    "capability": "mall-application",
+    "languages": ["typescript", "react"],
+    "generated": false,
+    "manifests": ["package.json", "pnpm-workspace.yaml"]
+  },
+  "canonicalSpecs": [
+    {
+      "file": "SDKWORK_WORKSPACE_SPEC.md",
+      "path": "../sdkwork-specs/SDKWORK_WORKSPACE_SPEC.md",
+      "purpose": "Repository directory dictionary."
+    },
+    {
+      "file": "APP_PC_ARCHITECTURE_SPEC.md",
+      "path": "../sdkwork-specs/APP_PC_ARCHITECTURE_SPEC.md",
+      "purpose": "PC application root layout."
+    },
+    {
+      "file": "APP_SDK_INTEGRATION_SPEC.md",
+      "path": "../sdkwork-specs/APP_SDK_INTEGRATION_SPEC.md",
+      "purpose": "Cross-repo SDK consumption and TokenManager wiring."
+    },
+    {
+      "file": "PNPM_SCRIPT_SPEC.md",
+      "path": "../sdkwork-specs/PNPM_SCRIPT_SPEC.md",
+      "purpose": "Public pnpm script vocabulary."
+    },
+    {
+      "file": "GITHUB_WORKFLOW_SPEC.md",
+      "path": "../sdkwork-specs/GITHUB_WORKFLOW_SPEC.md",
+      "purpose": "CI verify and packaging workflow integration."
+    },
+    {
+      "file": "SECURITY_SPEC.md",
+      "path": "../sdkwork-specs/SECURITY_SPEC.md",
+      "purpose": "Frontend security and transport boundaries."
+    }
+  ],
+  "contracts": {
+    "sdkDependencies": [
+      "sdkwork-commerce-app-sdk",
+      "sdkwork-commerce-backend-sdk",
+      "sdkwork-appbase-app-sdk"
+    ],
+    "dependencyApiSurfaces": [
+      {
+        "sdkFamily": "sdkwork-commerce-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_COMMERCE_APP_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-commerce-backend-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_COMMERCE_BACKEND_API_BASE_URL"
+      }
+    ]
+  }
+}

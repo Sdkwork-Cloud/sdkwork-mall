@@ -1,0 +1,221 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@sdkwork/appbase-app-sdk": [
+        "../sdkwork-appbase/sdks/sdkwork-appbase-app-sdk/sdkwork-appbase-app-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "@sdkwork/appbase-backend-sdk": [
+        "../sdkwork-appbase/sdks/sdkwork-appbase-backend-sdk/sdkwork-appbase-backend-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "@sdkwork/appbase-pc-react": [
+        "../sdkwork-appbase/packages/pc-react/foundation/sdkwork-appbase-pc-react/src/index.ts"
+      ],
+      "@sdkwork/auth-pc-react": [
+        "../sdkwork-appbase/packages/pc-react/iam/sdkwork-auth-pc-react/src/index.ts"
+      ],
+      "@sdkwork/auth-runtime-pc-react": [
+        "../sdkwork-appbase/packages/pc-react/iam/sdkwork-auth-runtime-pc-react/src/index.ts"
+      ],
+      "@sdkwork/iam-contracts": [
+        "../sdkwork-appbase/packages/common/iam/sdkwork-iam-contracts/src/index.ts"
+      ],
+      "@sdkwork/iam-runtime": [
+        "../sdkwork-appbase/packages/common/iam/sdkwork-iam-runtime/src/index.ts"
+      ],
+      "@sdkwork/commerce-contracts": [
+        "../sdkwork-commerce/packages/common/commerce/sdkwork-commerce-contracts/src/index.ts"
+      ],
+      "@sdkwork/commerce-runtime": [
+        "../sdkwork-commerce/packages/common/commerce/sdkwork-commerce-runtime/src/index.ts"
+      ],
+      "@sdkwork/commerce-sdk-ports": [
+        "../sdkwork-commerce/packages/common/commerce/sdkwork-commerce-sdk-ports/src/index.ts"
+      ],
+      "@sdkwork/commerce-service": [
+        "../sdkwork-commerce/packages/common/commerce/sdkwork-commerce-service/src/index.ts"
+      ],
+      "@sdkwork/runtime-bootstrap": [
+        "../sdkwork-appbase/packages/common/foundation/sdkwork-runtime-bootstrap/src/index.ts"
+      ],
+      "@sdkwork/sdk-common": [
+        "../sdkwork-sdk-commons/sdkwork-sdk-common-typescript/src/index.ts"
+      ],
+      "@sdkwork/utils-typescript": [
+        "../sdkwork-utils/packages/sdkwork-utils-typescript/src/index.ts"
+      ],
+      "@sdkwork/ui-pc-react": [
+        "../sdkwork-ui/sdkwork-ui-pc-react/src/index.ts"
+      ],
+      "@sdkwork/ui-pc-react/components/ui/button": [
+        "../sdkwork-ui/sdkwork-ui-pc-react/src/components/ui/button.tsx"
+      ],
+      "@sdkwork/ui-pc-react/components/ui/feedback/states": [
+        "../sdkwork-ui/sdkwork-ui-pc-react/src/components/ui/feedback/states.tsx"
+      ],
+      "@sdkwork/ui-pc-react/theme": [
+        "../sdkwork-ui/sdkwork-ui-pc-react/src/theme/index.ts"
+      ],
+      "sdkwork-commerce-app-sdk-generated-typescript": [
+        "../sdkwork-commerce/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "sdkwork-commerce-backend-sdk-generated-typescript": [
+        "../sdkwork-commerce/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "@sdkwork/mall-pc-activity": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-activity\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-address": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-address\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-core": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-core\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-marketing": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-marketing\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-membership": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-membership\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-orders": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-orders\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-permissions": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-permissions\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-product": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-product\\src\\index.tsx"
+      ],
+      "@sdkwork/mall-pc-admin-reports": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-reports\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-risk": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-risk\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-settlement": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-settlement\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-shell": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-shell\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-admin-shops": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-admin-shops\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-after-sales": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-after-sales\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-billing": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-billing\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-cart": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-cart\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-catalog": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-catalog\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-checkout": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-checkout\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-cms": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-cms\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-commerce": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-commerce\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-commons": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-commons\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-core": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-core\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-coupon": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-coupon\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-entitlement": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-entitlement\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-home": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-home\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-invoice": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-invoice\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-membership": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-membership\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-membership-purchase": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-membership-purchase\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-merchant": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-merchant\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-messages": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-messages\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-offer": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-offer\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-order": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-order\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-payment": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-payment\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-points": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-points\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-pricing": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-pricing\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-reviews": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-reviews\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-search": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-search\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-shell": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-shell\\src\\index.tsx"
+      ],
+      "@sdkwork/mall-pc-shop": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-shop\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-subscription": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-subscription\\src\\index.ts"
+      ],
+      "@sdkwork/mall-pc-wallet": [
+        "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-wallet\\src\\index.ts"
+      ],
+      "react": [
+        "node_modules/@types/react"
+      ],
+      "react-dom": [
+        "node_modules/@types/react-dom"
+      ],
+      "react/jsx-runtime": [
+        "node_modules/@types/react/jsx-runtime.d.ts"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": [
+      "node",
+      "@testing-library/jest-dom"
+    ]
+  }
+}

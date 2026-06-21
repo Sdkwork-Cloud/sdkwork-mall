@@ -1,0 +1,40 @@
+import type { SdkworkMallPcRouteContribution } from "@sdkwork/mall-pc-core";
+
+export const sdkworkMallPcCartRoutes = [
+  {
+    auth: "required",
+    capability: "cart",
+    domain: "commerce",
+    id: "storefront.mall.cart",
+    packageName: "@sdkwork/mall-pc-cart",
+    path: "/cart",
+    screen: "cart",
+    surface: "storefront",
+    title: "购物车",
+    titleKey: "cart.routes.cart.title",
+  },
+  {
+    auth: "required",
+    capability: "checkout",
+    domain: "commerce",
+    id: "storefront.mall.checkout",
+    packageName: "@sdkwork/mall-pc-cart",
+    path: "/checkout",
+    screen: "checkout",
+    surface: "storefront",
+    title: "结算",
+    titleKey: "cart.routes.checkout.title",
+  },
+  {
+    auth: "public",
+    capability: "payment-result",
+    domain: "commerce",
+    id: "storefront.mall.payment-result",
+    packageName: "@sdkwork/mall-pc-cart",
+    path: "/payment/result",
+    screen: "payment-result",
+    surface: "storefront",
+    title: "支付结果",
+    titleKey: "cart.routes.paymentResult.title",
+  },
+] as const satisfies readonly SdkworkMallPcRouteContribution[];

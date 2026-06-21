@@ -1,0 +1,155 @@
+import manifest from "../../sdkwork.app.config.json";
+
+export type SdkworkMallPcEnvironment =
+  | "development"
+  | "test"
+  | "staging"
+  | "production";
+
+export type SdkworkMallPcConfigProfile =
+  | "dev"
+  | "test"
+  | "staging"
+  | "prod";
+
+export type SdkworkMallPcDeploymentMode = "web";
+export type SdkworkMallPcRuntimeTarget = "browser";
+export type SdkworkMallPcBuildMode = SdkworkMallPcEnvironment;
+
+export interface SdkworkMallPcAuthRuntimeConfig {
+  accessTokenHeader: "Access-Token";
+  authTokenHeader: "Authorization";
+  refreshEnabled: boolean;
+  tokenManagerMode: "appbase-global";
+  tokenStorage: "browser-session";
+}
+
+export interface SdkworkMallPcI18nRuntimeConfig {
+  defaultLocale: string;
+  fallbackLocale: string;
+  supportedLocales: string[];
+}
+
+export interface SdkworkMallPcDependencySdkBaseUrls {
+  appApiBaseUrl?: string;
+  backendApiBaseUrl?: string;
+}
+
+export interface SdkworkMallPcSdkBaseUrls {
+  appApiBaseUrl?: string;
+  backendApiBaseUrl?: string;
+  dependencySdkBaseUrls?: Record<string, SdkworkMallPcDependencySdkBaseUrls>;
+  sdkBaseUrl?: string;
+}
+
+export interface SdkworkMallPcRuntimeConfig {
+  appApiBaseUrl: string;
+  appDisplayName: string;
+  appKey: string;
+  auth: SdkworkMallPcAuthRuntimeConfig;
+  backendApiBaseUrl?: string;
+  buildMode: SdkworkMallPcBuildMode;
+  configProfile: SdkworkMallPcConfigProfile;
+  deploymentMode: SdkworkMallPcDeploymentMode;
+  environment: SdkworkMallPcEnvironment;
+  i18n: SdkworkMallPcI18nRuntimeConfig;
+  runtimeTarget: SdkworkMallPcRuntimeTarget;
+  sdkBaseUrl?: string;
+  sdkBaseUrls?: SdkworkMallPcSdkBaseUrls;
+  version: string;
+}
+
+const environmentByMode: Record<string, SdkworkMallPcEnvironment> = {
+  development: "development",
+  dev: "development",
+  production: "production",
+  prod: "production",
+  staging: "staging",
+  test: "test",
+};
+
+const profileByEnvironment: Record<SdkworkMallPcEnvironment, SdkworkMallPcConfigProfile> = {
+  development: "dev",
+  production: "prod",
+  staging: "staging",
+  test: "test",
+};
+
+function envValue(key: string): string | undefined {
+  const value = import.meta.env[key];
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function resolveEnvironment(mode: string): SdkworkMallPcEnvironment {
+  return environmentByMode[mode] ?? "development";
+}
+
+function parseSdkBaseUrls(
+  sdkBaseUrl?: string,
+): SdkworkMallPcSdkBaseUrls | undefined {
+  const raw = envValue("VITE_SDKWORK_COMMERCE_PC_SDK_BASE_URLS_JSON");
+  if (raw) {
+    try {
+      return JSON.parse(raw) as SdkworkMallPcSdkBaseUrls;
+    } catch {
+      return undefined;
+    }
+  }
+
+  if (!sdkBaseUrl) {
+    return undefined;
+  }
+
+  const normalizedSdkBaseUrl = sdkBaseUrl.replace(/\/+$/u, "");
+  return {
+    appApiBaseUrl: `${normalizedSdkBaseUrl}/app/v3/api`,
+    backendApiBaseUrl: `${normalizedSdkBaseUrl}/backend/v3/api`,
+    dependencySdkBaseUrls: {
+      "sdkwork-appbase-app-sdk": {
+        appApiBaseUrl: `${normalizedSdkBaseUrl}/app/v3/api`,
+      },
+      "sdkwork-appbase-backend-sdk": {
+        backendApiBaseUrl: `${normalizedSdkBaseUrl}/backend/v3/api`,
+      },
+    },
+    sdkBaseUrl: normalizedSdkBaseUrl,
+  };
+}
+
+export function resolveSdkworkMallPcRuntimeConfig(
+  mode = import.meta.env.MODE,
+): SdkworkMallPcRuntimeConfig {
+  const environment = resolveEnvironment(mode);
+  const sdkBaseUrl = envValue("VITE_SDKWORK_COMMERCE_PC_SDK_BASE_URL");
+  const sdkBaseUrls = parseSdkBaseUrls(sdkBaseUrl);
+
+  return {
+    appApiBaseUrl: envValue("VITE_SDKWORK_COMMERCE_PC_APP_API_BASE_URL")
+      ?? sdkBaseUrls?.appApiBaseUrl
+      ?? (sdkBaseUrl ? `${sdkBaseUrl.replace(/\/+$/u, "")}/app/v3/api` : "/app/v3/api"),
+    appDisplayName: manifest.app.displayName,
+    appKey: manifest.app.key,
+    auth: {
+      accessTokenHeader: "Access-Token",
+      authTokenHeader: "Authorization",
+      refreshEnabled: true,
+      tokenManagerMode: "appbase-global",
+      tokenStorage: "browser-session",
+    },
+    backendApiBaseUrl: envValue("VITE_SDKWORK_COMMERCE_PC_BACKEND_API_BASE_URL")
+      ?? sdkBaseUrls?.backendApiBaseUrl,
+    buildMode: environment,
+    configProfile: profileByEnvironment[environment],
+    deploymentMode: "web",
+    environment,
+    i18n: {
+      defaultLocale: envValue("VITE_SDKWORK_COMMERCE_PC_DEFAULT_LOCALE") ?? "zh-CN",
+      fallbackLocale: "en-US",
+      supportedLocales: ["zh-CN", "en-US"],
+    },
+    runtimeTarget: "browser",
+    sdkBaseUrl,
+    sdkBaseUrls,
+    version: manifest.release.currentVersion,
+  };
+}

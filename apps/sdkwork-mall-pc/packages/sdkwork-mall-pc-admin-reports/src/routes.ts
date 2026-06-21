@@ -1,0 +1,43 @@
+import type { SdkworkMallPcRouteContribution } from "@sdkwork/mall-pc-core";
+
+export const sdkworkMallPcAdminReportsRoutes = [
+  {
+    auth: "required",
+    capability: "admin-dashboard",
+    domain: "commerce",
+    id: "admin.mall.dashboard",
+    packageName: "@sdkwork/mall-pc-admin-reports",
+    path: "/admin",
+    permissionHint: "commerce.reports.read",
+    screen: "dashboard",
+    surface: "backend-admin",
+    title: "平台总览",
+    titleKey: "adminReports.routes.dashboard.title",
+  },
+  {
+    auth: "required",
+    capability: "admin-reports",
+    domain: "commerce",
+    id: "admin.mall.reports",
+    packageName: "@sdkwork/mall-pc-admin-reports",
+    path: "/admin/reports",
+    permissionHint: "commerce.reports.read",
+    screen: "reports",
+    surface: "backend-admin",
+    title: "数据报表",
+    titleKey: "adminReports.routes.reports.title",
+  },
+  {
+    auth: "required",
+    capability: "admin-audit",
+    domain: "commerce",
+    id: "admin.mall.audit",
+    packageName: "@sdkwork/mall-pc-admin-reports",
+    path: "/admin/audit",
+    permissionHint: "commerce.audit.read",
+    screen: "audit",
+    surface: "backend-admin",
+    title: "审计日志",
+    titleKey: "adminReports.routes.audit.title",
+  },
+] as const satisfies readonly SdkworkMallPcRouteContribution[];
