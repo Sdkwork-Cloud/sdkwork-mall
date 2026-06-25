@@ -1,3 +1,3 @@
-# Plugins
+# Repository Plugins
 
-Add Mall-specific plugins here.
+Add repository-local plugins under `.sdkwork/plugins/<plugin-name>/.codex-plugin/plugin.json`.

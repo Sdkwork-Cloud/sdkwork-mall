@@ -1,3 +1,3 @@
-# Skills
+# Repository Skills
 
-Add Mall-specific agent skills here.
+Add repository-local skills under `.sdkwork/skills/<skill-name>/SKILL.md`.
