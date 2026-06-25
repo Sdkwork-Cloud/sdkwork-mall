@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.dependency.composition",
+  "applicationCode": "mall",
+  "clientArchitecture": "pc",
+  "surfaces": [
+    {
+      "surface": "app",
+      "corePackage": "@sdkwork/mall-pc-core",
+      "sdkClients": [
+        {
+          "id": "commerceApp",
+          "workspace": "sdkwork-commerce-app-sdk",
+          "surface": "app-api",
+          "credentialMode": "authenticated-app-api",
+          "role": "application-owned"
+        },
+        {
+          "id": "commerceOpen",
+          "workspace": "sdkwork-commerce-sdk",
+          "surface": "open-api",
+          "credentialMode": "protected-open-api-flexible",
+          "role": "application-owned"
+        },
+        {
+          "id": "iamApp",
+          "workspace": "sdkwork-iam-app-sdk",
+          "surface": "app-api",
+          "credentialMode": "authenticated-app-api",
+          "role": "dependency",
+          "sdkDependencyRef": "sdkwork-iam-app-sdk"
+        }
+      ],
+      "reusableModules": [],
+      "hostAdapters": [],
+      "dependencyApiExports": [],
+      "dependencyApiSurfaces": []
+    },
+    {
+      "surface": "backend-admin",
+      "corePackage": "@sdkwork/mall-pc-admin-core",
+      "sdkClients": [
+        {
+          "id": "commerceBackend",
+          "workspace": "sdkwork-commerce-backend-sdk",
+          "surface": "backend-api",
+          "credentialMode": "authenticated-backend-admin",
+          "role": "application-owned"
+        },
+        {
+          "id": "iamBackend",
+          "workspace": "sdkwork-iam-backend-sdk",
+          "surface": "backend-api",
+          "credentialMode": "authenticated-backend-admin",
+          "role": "dependency",
+          "sdkDependencyRef": "sdkwork-iam-backend-sdk"
+        }
+      ],
+      "reusableModules": [],
+      "hostAdapters": [],
+      "dependencyApiExports": [],
+      "dependencyApiSurfaces": []
+    }
+  ],
+  "buildToolEntries": {
+    "pnpm": {
+      "workspacePackages": [
+        "@sdkwork/mall-pc-core",
+        "@sdkwork/mall-pc-admin-core",
+        "@sdkwork/mall-pc-activity",
+        "@sdkwork/mall-pc-address",
+        "@sdkwork/mall-pc-admin-marketing",
+        "@sdkwork/mall-pc-admin-membership",
+        "@sdkwork/mall-pc-admin-orders",
+        "@sdkwork/mall-pc-admin-permissions",
+        "@sdkwork/mall-pc-admin-product",
+        "@sdkwork/mall-pc-admin-reports",
+        "@sdkwork/mall-pc-admin-risk",
+        "@sdkwork/mall-pc-admin-settlement",
+        "@sdkwork/mall-pc-admin-shell",
+        "@sdkwork/mall-pc-admin-shops",
+        "@sdkwork/mall-pc-after-sales",
+        "@sdkwork/mall-pc-billing",
+        "@sdkwork/mall-pc-cart",
+        "@sdkwork/mall-pc-catalog",
+        "@sdkwork/mall-pc-checkout",
+        "@sdkwork/mall-pc-cms",
+        "@sdkwork/mall-pc-commerce",
+        "@sdkwork/mall-pc-commons",
+        "@sdkwork/mall-pc-coupon",
+        "@sdkwork/mall-pc-entitlement",
+        "@sdkwork/mall-pc-home",
+        "@sdkwork/mall-pc-invoice",
+        "@sdkwork/mall-pc-membership",
+        "@sdkwork/mall-pc-membership-purchase",
+        "@sdkwork/mall-pc-merchant",
+        "@sdkwork/mall-pc-messages",
+        "@sdkwork/mall-pc-offer",
+        "@sdkwork/mall-pc-order",
+        "@sdkwork/mall-pc-payment",
+        "@sdkwork/mall-pc-points",
+        "@sdkwork/mall-pc-pricing",
+        "@sdkwork/mall-pc-reviews",
+        "@sdkwork/mall-pc-search",
+        "@sdkwork/mall-pc-shell",
+        "@sdkwork/mall-pc-shop",
+        "@sdkwork/mall-pc-subscription",
+        "@sdkwork/mall-pc-wallet"
+      ]
+    }
+  }
+}

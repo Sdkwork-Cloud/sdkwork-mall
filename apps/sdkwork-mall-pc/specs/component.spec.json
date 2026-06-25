@@ -152,7 +152,7 @@
     "sdkDependencies": [
       "sdkwork-commerce-app-sdk",
       "sdkwork-commerce-backend-sdk",
-      "sdkwork-appbase-app-sdk"
+      "sdkwork-iam-app-sdk"
     ],
     "dependencyApiExports": [],
     "dependencyApiSurfaces": [],
@@ -163,7 +163,8 @@
       "config/server/sdkwork-mall-pc.production.toml.example",
       "config/desktop/sdkwork-mall-pc.production.toml.example",
       "config/container/sdkwork-mall-pc.production.toml.example"
-    ]
+    ],
+    "dependencyComposition": "specs/dependency.composition.json"
   },
   "verification": {
     "commands": [

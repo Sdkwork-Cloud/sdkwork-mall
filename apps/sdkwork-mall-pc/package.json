@@ -5,7 +5,7 @@
   "type": "module",
   "description": "SDKWork Mall PC application composition root.",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5175",
+    "dev": "node ../../../sdkwork-iam/scripts/dev/run-pc-renderer-dev-with-bootstrap.mjs -- vite --host 127.0.0.1 --port 5175",
     "dev:server": "node -e \"console.log('Mall PC server development profile: apps/sdkwork-mall-pc/config/server/sdkwork-mall-pc.development.toml.example')\"",
     "build": "vite build",
     "build:staging": "node scripts/validate-runtime-config.mjs --profile staging && vite build --mode staging",
@@ -16,7 +16,7 @@
     "lint": "pnpm run typecheck"
   },
   "dependencies": {
-    "@sdkwork/appbase-app-sdk": "workspace:*",
+    "@sdkwork/iam-app-sdk": "workspace:*",
     "@sdkwork/appbase-pc-react": "workspace:*",
     "@sdkwork/auth-pc-react": "workspace:*",
     "@sdkwork/auth-runtime-pc-react": "workspace:*",

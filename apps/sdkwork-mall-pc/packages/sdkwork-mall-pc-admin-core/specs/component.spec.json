@@ -68,13 +68,14 @@
     "sdkClients": [],
     "sdkDependencies": [
       "sdkwork-commerce-backend-sdk",
-      "sdkwork-appbase-backend-sdk"
+      "sdkwork-iam-backend-sdk"
     ],
     "events": [],
     "configKeys": [
       "package.json#sdkwork"
     ],
-    "routeManifest": null
+    "routeManifest": null,
+    "dependencyComposition": "../../../specs/dependency.composition.json"
   },
   "integration": {
     "authority": "Mall PC admin core owns backend-admin SDK metadata and operator runtime boundaries.",

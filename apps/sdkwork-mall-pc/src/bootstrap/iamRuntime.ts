@@ -1,4 +1,4 @@
-import { createClient as createAppbaseAppClient, type SdkworkAppClient } from "@sdkwork/appbase-app-sdk";
+import { createClient as createAppbaseAppClient, type SdkworkAppClient } from "@sdkwork/iam-app-sdk";
 import {
   createSdkworkAppbasePcAuthRuntime,
   type SdkworkAppbasePcAuthRuntimeComposition,
@@ -19,7 +19,7 @@ import {
 import { createSdkworkMallPcSessionTokenManager } from "./sessionTokenManager";
 import type { SdkworkMallPcSdkClientInventory } from "./sdkClients";
 
-const APPBASE_APP_SDK_FAMILY_ID = "sdkwork-appbase-app-sdk";
+const APPBASE_APP_SDK_FAMILY_ID = "sdkwork-iam-app-sdk";
 const APP_API_PREFIX = "/app/v3/api";
 const BACKEND_API_PREFIX = "/backend/v3/api";
 
@@ -111,8 +111,8 @@ export function createSdkworkMallPcSdkClientsWithTokenManager(
     commerceAppClient,
     commerceBackendClient,
     sdkFamilies: {
-      app: ["sdkwork-commerce-app-sdk", "sdkwork-appbase-app-sdk"],
-      backendAdmin: ["sdkwork-commerce-backend-sdk", "sdkwork-appbase-backend-sdk"],
+      app: ["sdkwork-commerce-app-sdk", "sdkwork-iam-app-sdk"],
+      backendAdmin: ["sdkwork-commerce-backend-sdk", "sdkwork-iam-backend-sdk"],
     },
   };
 }

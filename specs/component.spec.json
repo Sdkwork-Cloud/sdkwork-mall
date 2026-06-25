@@ -49,7 +49,7 @@
     "sdkDependencies": [
       "sdkwork-commerce-app-sdk",
       "sdkwork-commerce-backend-sdk",
-      "sdkwork-appbase-app-sdk"
+      "sdkwork-iam-app-sdk"
     ],
     "dependencyApiSurfaces": [
       {

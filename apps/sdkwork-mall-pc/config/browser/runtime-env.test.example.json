@@ -12,10 +12,10 @@
     "appApiBaseUrl": "http://127.0.0.1:19082/app/v3/api",
     "backendApiBaseUrl": "http://127.0.0.1:19083/backend/v3/api",
     "dependencySdkBaseUrls": {
-      "sdkwork-appbase-app-sdk": {
+      "sdkwork-iam-app-sdk": {
         "appApiBaseUrl": "http://127.0.0.1:19082/app/v3/api"
       },
-      "sdkwork-appbase-backend-sdk": {
+      "sdkwork-iam-backend-sdk": {
         "backendApiBaseUrl": "http://127.0.0.1:19083/backend/v3/api"
       }
     }

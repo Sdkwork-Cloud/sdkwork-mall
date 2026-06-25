@@ -65,7 +65,8 @@
     "sdkClients": [],
     "sdkDependencies": [
       "sdkwork-commerce-app-sdk",
-      "sdkwork-appbase-app-sdk"
+      "sdkwork-commerce-sdk",
+      "sdkwork-iam-app-sdk"
     ],
     "dependencyApiExports": [],
     "dependencyApiSurfaces": [],
@@ -73,7 +74,8 @@
     "configKeys": [
       "package.json#sdkwork"
     ],
-    "routeManifest": null
+    "routeManifest": null,
+    "dependencyComposition": "../../../specs/dependency.composition.json"
   },
   "integration": {
     "authority": "Mall PC core owns app-side runtime metadata and app SDK inventory only.",

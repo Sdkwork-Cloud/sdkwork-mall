@@ -17,7 +17,7 @@
     "verify": "pnpm check && pnpm --dir apps/sdkwork-mall-pc run test:config && pnpm test:vitest"
   },
   "devDependencies": {
-    "@sdkwork/appbase-app-sdk": "workspace:*",
+    "@sdkwork/iam-app-sdk": "workspace:*",
     "@sdkwork/appbase-pc-react": "workspace:*",
     "@sdkwork/runtime-bootstrap": "workspace:*",
     "@sdkwork/sdk-common": "workspace:*",
