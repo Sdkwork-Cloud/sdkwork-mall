@@ -1,13 +1,11 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
 
 import {
   defaultMallCmsConfig,
   type MallCmsConfig,
   writeMallCmsConfig,
 } from "./cms-config";
+import { getSdkworkCmsRemotePort } from "./cms-remote-port";
 
 export const MALL_CMS_OFFER_MARKER = "sdkwork-mall-pc-cms-config";
 
@@ -99,9 +97,9 @@ function serializeMallCmsOfferBody(config: MallCmsConfig): Record<string, unknow
 }
 
 async function findAdminCmsOffer(): Promise<{ id: string; record: Record<string, unknown> } | null> {
-  const service = getSdkworkCommerceService();
-  const response = await service.admin.promotions.offers.management.list({ page: 1, page_size: 50 });
-  const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+  const remote = getSdkworkCmsRemotePort();
+  const response = await remote.listAdminPromotionOffers({ page: 1, page_size: 50 });
+  const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
   const offer = payload.items?.find(isMallCmsOffer);
   if (!offer) {
     return null;
@@ -110,9 +108,9 @@ async function findAdminCmsOffer(): Promise<{ id: string; record: Record<string,
 }
 
 async function findStorefrontCmsOffer(): Promise<Record<string, unknown> | null> {
-  const service = getSdkworkCommerceService();
-  const response = await service.promotions.offers.list({ page: 1, page_size: 50, status: "active" });
-  const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+  const remote = getSdkworkCmsRemotePort();
+  const response = await remote.listStorefrontPromotionOffers({ page: 1, page_size: 50, status: "active" });
+  const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
   return payload.items?.find(isMallCmsOffer) ?? null;
 }
 
@@ -144,14 +142,14 @@ export async function saveMallCmsConfigRemote(config: MallCmsConfig): Promise<Ma
   cachedConfig = nextConfig;
 
   try {
-    const service = getSdkworkCommerceService();
+    const remote = getSdkworkCmsRemotePort();
     const existing = await findAdminCmsOffer();
     const body = serializeMallCmsOfferBody(nextConfig);
 
     if (existing?.id) {
-      await service.admin.promotions.offers.update(existing.id, body);
+      await remote.updateAdminPromotionOffer(existing.id, body);
     } else {
-      await service.admin.promotions.offers.create(body);
+      await remote.createAdminPromotionOffer(body);
     }
   } catch {
     // Persist locally even when admin API is unavailable in dev.

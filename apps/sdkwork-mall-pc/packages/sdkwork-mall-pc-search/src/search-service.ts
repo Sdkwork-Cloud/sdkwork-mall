@@ -1,7 +1,5 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkSearchRemotePort } from "./search-remote-port";
 
 export interface MallSearchProduct {
   id: string;
@@ -115,9 +113,8 @@ function readSearchProduct(record: Record<string, unknown>): MallSearchProduct {
 }
 
 export async function listMallCategories(): Promise<Array<{ id: string; name: string }>> {
-  const service = getSdkworkCommerceService();
-  const response = await service.catalog.categories.list({ page: 1, pageSize: 50, status: "active" });
-  const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+  const response = await getSdkworkSearchRemotePort().listCategories({ page: 1, pageSize: 50, status: "active" });
+  const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
   return (
     payload.items?.map((item) => ({
       id: String(item.id ?? ""),
@@ -134,19 +131,19 @@ export async function searchMallProducts(input: {
   shopId?: string;
   sort?: string;
 }): Promise<MallSearchResult> {
-  const service = getSdkworkCommerceService();
+  const remote = getSdkworkSearchRemotePort();
   // SDK 的 catalog.spus.list 不支持 shop_id 服务端过滤，当指定 shopId 时
   // 拉取较大批次后在前端过滤，避免分页丢数据。
   const requestPageSize = input.shopId
     ? Math.max(input.pageSize ?? 20, 100)
     : input.pageSize ?? 20;
-  const response = await service.catalog.spus.list({
+  const response = await remote.listSpus({
     categoryId: input.categoryId,
     page: input.page ?? 1,
     pageSize: requestPageSize,
     q: input.query,
   });
-  const payload = unwrapSdkworkCommerceResponse(response) as {
+  const payload = unwrapSdkworkPaymentResponse(response) as {
     items?: Record<string, unknown>[];
     total?: number;
   };
@@ -208,13 +205,12 @@ export async function searchMallShops(input: {
   pageSize?: number;
   query?: string;
 }): Promise<{ items: MallSearchShop[]; total: number }> {
-  const service = getSdkworkCommerceService();
-  const response = await service.shops.list({
+  const response = await getSdkworkSearchRemotePort().listShops({
     page: input.page ?? 1,
     page_size: input.pageSize ?? 10,
     q: input.query,
   });
-  const payload = unwrapSdkworkCommerceResponse(response) as {
+  const payload = unwrapSdkworkPaymentResponse(response) as {
     items?: Record<string, unknown>[];
     total?: number;
   };

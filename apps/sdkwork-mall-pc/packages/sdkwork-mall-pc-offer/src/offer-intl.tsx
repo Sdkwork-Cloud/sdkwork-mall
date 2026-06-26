@@ -5,9 +5,9 @@ import {
   type PropsWithChildren,
 } from "react";
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-  formatSdkworkCommercePoints as formatSdkworkPoints,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountCurrencyCny as formatSdkworkCurrencyCny,
+  formatSdkworkAccountPoints as formatSdkworkPoints,
+} from "@sdkwork/account-service";
 import type { SdkworkOfferFilter } from "./offer";
 import {
   createSdkworkOfferMessages,

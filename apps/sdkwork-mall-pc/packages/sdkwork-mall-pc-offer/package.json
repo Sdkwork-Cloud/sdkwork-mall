@@ -25,7 +25,6 @@
   },
   "peerDependencies": {
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/mall-pc-coupon": "*",
     "@sdkwork/mall-pc-points": "*",
     "@sdkwork/mall-pc-subscription": "*",
@@ -37,9 +36,6 @@
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     },
     "@sdkwork/mall-pc-coupon": {

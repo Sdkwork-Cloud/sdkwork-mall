@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 interface AdminOrderRow {
   id: string;
@@ -21,9 +19,9 @@ export function SdkworkMallAdminOrdersPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkAdminRemotePort();
     const response = await service.admin.orders.management.list({ page: 1, page_size: 30 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setOrders(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -45,10 +43,10 @@ export function SdkworkMallAdminOrdersPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const response = await service.admin.orders.management.retrieve(selectedId!);
       if (active) {
-        setDetail(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void loadDetail();
@@ -61,7 +59,7 @@ export function SdkworkMallAdminOrdersPage() {
     setBusyId(orderId);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       if (action === "cancel") {
         await service.admin.orders.management.cancel(orderId, { reason: "platform-cancel" });
       } else {
@@ -145,9 +143,9 @@ export function SdkworkMallAdminAfterSalesPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkAdminRemotePort();
     const response = await service.admin.afterSales.management.list({ page: 1, page_size: 30 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setRows(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -170,10 +168,10 @@ export function SdkworkMallAdminAfterSalesPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const response = await service.admin.afterSales.management.retrieve(selectedId!);
       if (active) {
-        setDetail(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void loadDetail();
@@ -186,7 +184,7 @@ export function SdkworkMallAdminAfterSalesPage() {
     setBusyId(afterSalesId);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       await service.admin.afterSales.reviews.create(afterSalesId, {
         action,
         approvedAmount: action === "approve" ? String(detail?.requestedAmount ?? detail?.amount ?? "0") : undefined,

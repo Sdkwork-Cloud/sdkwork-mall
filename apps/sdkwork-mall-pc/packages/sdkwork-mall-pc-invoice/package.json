@@ -29,13 +29,17 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/account-service": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/ui-pc-react": "*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {
-    "@sdkwork/commerce-service": {
+    "@sdkwork/account-service": {
+      "optional": true
+    },
+    "@sdkwork/payment-service": {
       "optional": true
     },
     "@sdkwork/ui-pc-react": {

@@ -1,4 +1,4 @@
-import { formatSdkworkCommercePoints as formatSdkworkPoints } from "@sdkwork/commerce-service";
+import { formatSdkworkMembershipPoints as formatSdkworkPoints } from "@sdkwork/membership-service";
 
 export type SdkworkMembershipLocale = "en-US" | "zh-CN";
 

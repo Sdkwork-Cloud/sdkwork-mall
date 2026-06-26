@@ -14,8 +14,7 @@ Membership tiers, entitlements, and upgrade flows.
 ## Depends on
 
 - `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/commerce-service` for generated app/backend SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
+- `@sdkwork/membership-service` for membership plans, purchases, and response normalization via the T1 membership domain module
 
 ## Ownership
 
@@ -23,7 +22,7 @@ This package is implemented as an independent SDKWork commerce capability. It ow
 
 ## Runtime boundary
 
-All remote commerce access goes through `@sdkwork/commerce-service` or through sibling commerce services that use the same boundary. Generated SDK clients remain behind the shared service contract.
+All remote access goes through `@sdkwork/membership-service` or through sibling mall packages that compose the same T1 domain boundaries. Generated SDK clients remain behind the domain service contract.
 
 ## Verification
 

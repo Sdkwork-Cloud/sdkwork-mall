@@ -1,16 +1,16 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  requireSdkworkCommerceSession,
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceMutationStatus,
-  toSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
-  unwrapSdkworkCommerceResponse,
+  getSdkworkMembershipService,
+  hasSdkworkMembershipSession,
+  requireSdkworkMembershipSession,
+  toNullableSdkworkMembershipNumber,
+  toSdkworkMembershipMutationStatus,
+  toSdkworkMembershipNumber,
+  toSdkworkMembershipOptionalString,
+  unwrapSdkworkMembershipResponse,
   readSdkworkMediaResource,
-  type SdkworkCommerceService,
+  type SdkworkMembershipAppService,
   type SdkworkMediaResource,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/membership-service";
 import {
   createSdkworkMembershipMessages,
   type SdkworkMembershipMessages,
@@ -92,7 +92,7 @@ export interface SdkworkMembershipPurchaseResult {
 }
 
 export interface CreateSdkworkMembershipServiceOptions {
-  commerceService?: SdkworkCommerceService;
+  membershipService?: SdkworkMembershipAppService;
   locale?: string | null;
   messages?: SdkworkMembershipMessagesOverrides;
 }
@@ -170,18 +170,18 @@ interface RemoteMembershipPurchaseResult {
 }
 
 function mapPlan(membershipPackage: RemoteMembershipPackage): SdkworkMembershipPlan {
-  const packageId = toSdkworkCommerceNumber(membershipPackage.id);
+  const packageId = toSdkworkMembershipNumber(membershipPackage.id);
 
   return {
-    description: toSdkworkCommerceOptionalString(membershipPackage.description),
-    durationDays: toNullableSdkworkCommerceNumber(membershipPackage.durationDays),
+    description: toSdkworkMembershipOptionalString(membershipPackage.description),
+    durationDays: toNullableSdkworkMembershipNumber(membershipPackage.durationDays),
     id: `membership-package-${packageId}`,
-    includedPoints: toSdkworkCommerceNumber(membershipPackage.pointAmount),
-    levelName: toSdkworkCommerceOptionalString(membershipPackage.levelName),
-    name: toSdkworkCommerceOptionalString(membershipPackage.name) || "Membership package",
-    originalPriceCny: toNullableSdkworkCommerceNumber(membershipPackage.originalPrice),
+    includedPoints: toSdkworkMembershipNumber(membershipPackage.pointAmount),
+    levelName: toSdkworkMembershipOptionalString(membershipPackage.levelName),
+    name: toSdkworkMembershipOptionalString(membershipPackage.name) || "Membership package",
+    originalPriceCny: toNullableSdkworkMembershipNumber(membershipPackage.originalPrice),
     packageId,
-    priceCny: toSdkworkCommerceNumber(membershipPackage.price),
+    priceCny: toSdkworkMembershipNumber(membershipPackage.price),
     recommended: Boolean(membershipPackage.recommended),
     tags: Array.isArray(membershipPackage.tags)
       ? membershipPackage.tags.map((tag) => tag.trim()).filter(Boolean)
@@ -218,21 +218,21 @@ function mapSummary(
   membershipStatus: RemoteMembershipStatus | null | undefined,
 ): SdkworkMembershipSummary {
   const isMember = Boolean(membershipStatus?.active || (membershipInfo?.membershipStatus || "").toUpperCase() === "ACTIVE");
-  const currentLevelValue = toNullableSdkworkCommerceNumber(membershipStatus?.planRank ?? membershipInfo?.planRank);
+  const currentLevelValue = toNullableSdkworkMembershipNumber(membershipStatus?.planRank ?? membershipInfo?.planRank);
 
   return {
-    currentLevelName: toSdkworkCommerceOptionalString(membershipInfo?.planName) || (isMember ? "Member" : "Free"),
+    currentLevelName: toSdkworkMembershipOptionalString(membershipInfo?.planName) || (isMember ? "Member" : "Free"),
     currentLevelValue,
-    expireTime: toSdkworkCommerceOptionalString(membershipStatus?.expireTime) || toSdkworkCommerceOptionalString(membershipInfo?.expireTime),
-    growthValue: toNullableSdkworkCommerceNumber(membershipInfo?.growthValue),
+    expireTime: toSdkworkMembershipOptionalString(membershipStatus?.expireTime) || toSdkworkMembershipOptionalString(membershipInfo?.expireTime),
+    growthValue: toNullableSdkworkMembershipNumber(membershipInfo?.growthValue),
     isAuthenticated: true,
     isMember,
-    pointBalance: toNullableSdkworkCommerceNumber(membershipStatus?.pointBalance),
-    points: toNullableSdkworkCommerceNumber(membershipInfo?.points),
-    remainingDays: toNullableSdkworkCommerceNumber(membershipInfo?.remainingDays),
+    pointBalance: toNullableSdkworkMembershipNumber(membershipStatus?.pointBalance),
+    points: toNullableSdkworkMembershipNumber(membershipInfo?.points),
+    remainingDays: toNullableSdkworkMembershipNumber(membershipInfo?.remainingDays),
     status: isMember ? "active" : "free",
-    totalSpent: toNullableSdkworkCommerceNumber(membershipInfo?.totalSpent),
-    upgradeGrowthValue: toNullableSdkworkCommerceNumber(membershipInfo?.upgradeGrowthValue),
+    totalSpent: toNullableSdkworkMembershipNumber(membershipInfo?.totalSpent),
+    upgradeGrowthValue: toNullableSdkworkMembershipNumber(membershipInfo?.upgradeGrowthValue),
   };
 }
 
@@ -241,62 +241,62 @@ function mapLevels(
   currentLevelValue: number | null,
 ): SdkworkMembershipLevel[] {
   return sortLevels(levels.map((level) => ({
-    badge: toSdkworkCommerceOptionalString(level.badge),
-    description: toSdkworkCommerceOptionalString(level.description),
+    badge: toSdkworkMembershipOptionalString(level.badge),
+    description: toSdkworkMembershipOptionalString(level.description),
     icon: readSdkworkMediaResource(level.icon),
-    id: `membership-level-${toSdkworkCommerceNumber(level.id)}`,
-    isCurrent: currentLevelValue !== null && toSdkworkCommerceNumber(level.levelValue) === currentLevelValue,
-    levelValue: toSdkworkCommerceNumber(level.levelValue),
-    name: toSdkworkCommerceOptionalString(level.name) || "Membership level",
-    requiredPoints: toNullableSdkworkCommerceNumber(level.requiredPoints),
+    id: `membership-level-${toSdkworkMembershipNumber(level.id)}`,
+    isCurrent: currentLevelValue !== null && toSdkworkMembershipNumber(level.levelValue) === currentLevelValue,
+    levelValue: toSdkworkMembershipNumber(level.levelValue),
+    name: toSdkworkMembershipOptionalString(level.name) || "Membership level",
+    requiredPoints: toNullableSdkworkMembershipNumber(level.requiredPoints),
   })));
 }
 
 function mapBenefits(benefits: RemoteMembershipBenefit[]): SdkworkMembershipBenefit[] {
   return sortBenefits(benefits.map((benefit) => ({
-    benefitKey: toSdkworkCommerceOptionalString(benefit.benefitKey),
+    benefitKey: toSdkworkMembershipOptionalString(benefit.benefitKey),
     claimed: Boolean(benefit.claimed),
-    description: toSdkworkCommerceOptionalString(benefit.description),
-    id: `membership-benefit-${toSdkworkCommerceNumber(benefit.id)}`,
-    name: toSdkworkCommerceOptionalString(benefit.name) || "Membership benefit",
-    type: toSdkworkCommerceOptionalString(benefit.type),
-    usageLimit: toNullableSdkworkCommerceNumber(benefit.usageLimit),
-    usedCount: toNullableSdkworkCommerceNumber(benefit.usedCount),
+    description: toSdkworkMembershipOptionalString(benefit.description),
+    id: `membership-benefit-${toSdkworkMembershipNumber(benefit.id)}`,
+    name: toSdkworkMembershipOptionalString(benefit.name) || "Membership benefit",
+    type: toSdkworkMembershipOptionalString(benefit.type),
+    usageLimit: toNullableSdkworkMembershipNumber(benefit.usageLimit),
+    usedCount: toNullableSdkworkMembershipNumber(benefit.usedCount),
   })));
 }
 
 function mapPurchaseResult(result: RemoteMembershipPurchaseResult | null | undefined): SdkworkMembershipPurchaseResult {
   return {
-    amountCny: toNullableSdkworkCommerceNumber(result?.amount),
-    durationDays: toNullableSdkworkCommerceNumber(result?.durationDays),
-    orderId: toSdkworkCommerceOptionalString(result?.orderId),
-    packageId: toNullableSdkworkCommerceNumber(result?.packageId),
-    packageName: toSdkworkCommerceOptionalString(result?.packageName),
-    status: toSdkworkCommerceMutationStatus(toSdkworkCommerceOptionalString(result?.status)),
-    targetLevelName: toSdkworkCommerceOptionalString(result?.targetLevelName),
+    amountCny: toNullableSdkworkMembershipNumber(result?.amount),
+    durationDays: toNullableSdkworkMembershipNumber(result?.durationDays),
+    orderId: toSdkworkMembershipOptionalString(result?.orderId),
+    packageId: toNullableSdkworkMembershipNumber(result?.packageId),
+    packageName: toSdkworkMembershipOptionalString(result?.packageName),
+    status: toSdkworkMembershipMutationStatus(toSdkworkMembershipOptionalString(result?.status)),
+    targetLevelName: toSdkworkMembershipOptionalString(result?.targetLevelName),
   };
 }
 
 async function runPurchaseMutation(
-  getCommerceService: () => SdkworkCommerceService,
+  getMembershipService: () => SdkworkMembershipAppService,
   copy: SdkworkMembershipMessages["service"],
   action: "purchase" | "renew" | "upgrade",
   input: SdkworkMembershipMutationInput,
 ): Promise<SdkworkMembershipPurchaseResult> {
-  requireSdkworkCommerceSession(copy.signInRequired);
-  const commerceService = getCommerceService();
+  requireSdkworkMembershipSession(copy.signInRequired);
+  const membershipService = getMembershipService();
   const body = {
-    couponId: toSdkworkCommerceOptionalString(input.couponId),
+    couponId: toSdkworkMembershipOptionalString(input.couponId),
     packageId: input.packageId,
-    paymentMethod: toSdkworkCommerceOptionalString(input.paymentMethod),
+    paymentMethod: toSdkworkMembershipOptionalString(input.paymentMethod),
   };
-  const result = unwrapSdkworkCommerceResponse<RemoteMembershipPurchaseResult>(
+  const result = unwrapSdkworkMembershipResponse<RemoteMembershipPurchaseResult>(
     await (
       action === "purchase"
-        ? commerceService.memberships.purchases.create(body)
+        ? membershipService.memberships.purchases.create(body)
         : action === "renew"
-          ? commerceService.memberships.purchases.renew(body)
-          : commerceService.memberships.purchases.upgrade(body)
+          ? membershipService.memberships.purchases.renew(body)
+          : membershipService.memberships.purchases.upgrade(body)
     ),
     action === "purchase"
       ? copy.purchaseFailed
@@ -333,15 +333,15 @@ export function createSdkworkMembershipService(
   options: CreateSdkworkMembershipServiceOptions = {},
 ): SdkworkMembershipService {
   const copy = createSdkworkMembershipMessages(options.locale, options.messages);
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getMembershipService = () => options.membershipService ?? getSdkworkMembershipService();
 
   return {
     async getDashboard() {
-      const commerceService = getCommerceService();
+      const membershipService = getMembershipService();
 
-      if (!hasSdkworkCommerceSession()) {
-        const packagesPayload = await commerceService.memberships.packages.list();
-        const packages = unwrapSdkworkCommerceResponse<RemoteMembershipPackage[]>(packagesPayload);
+      if (!hasSdkworkMembershipSession()) {
+        const packagesPayload = await membershipService.memberships.packages.list();
+        const packages = unwrapSdkworkMembershipResponse<RemoteMembershipPackage[]>(packagesPayload);
 
         return {
           ...createEmptyDashboard(),
@@ -350,17 +350,17 @@ export function createSdkworkMembershipService(
       }
 
       const [membershipInfoPayload, membershipStatusPayload, levelsPayload, benefitsPayload, packagesPayload] = await Promise.all([
-        commerceService.memberships.current.retrieve(),
-        commerceService.memberships.current.status.retrieve(),
-        commerceService.memberships.plans.list(),
-        commerceService.memberships.benefits.list(),
-        commerceService.memberships.packages.list(),
+        membershipService.memberships.current.retrieve(),
+        membershipService.memberships.current.status.retrieve(),
+        membershipService.memberships.plans.list(),
+        membershipService.memberships.benefits.list(),
+        membershipService.memberships.packages.list(),
       ]);
-      const membershipInfo = unwrapSdkworkCommerceResponse<RemoteMembershipInfo | null>(membershipInfoPayload);
-      const membershipStatus = unwrapSdkworkCommerceResponse<RemoteMembershipStatus | null>(membershipStatusPayload);
-      const levels = unwrapSdkworkCommerceResponse<RemoteMembershipLevel[]>(levelsPayload);
-      const benefits = unwrapSdkworkCommerceResponse<RemoteMembershipBenefit[]>(benefitsPayload);
-      const packages = unwrapSdkworkCommerceResponse<RemoteMembershipPackage[]>(packagesPayload);
+      const membershipInfo = unwrapSdkworkMembershipResponse<RemoteMembershipInfo | null>(membershipInfoPayload);
+      const membershipStatus = unwrapSdkworkMembershipResponse<RemoteMembershipStatus | null>(membershipStatusPayload);
+      const levels = unwrapSdkworkMembershipResponse<RemoteMembershipLevel[]>(levelsPayload);
+      const benefits = unwrapSdkworkMembershipResponse<RemoteMembershipBenefit[]>(benefitsPayload);
+      const packages = unwrapSdkworkMembershipResponse<RemoteMembershipPackage[]>(packagesPayload);
       const summary = mapSummary(membershipInfo, membershipStatus);
 
       return {
@@ -376,15 +376,15 @@ export function createSdkworkMembershipService(
     },
 
     async purchaseMembership(input) {
-      return runPurchaseMutation(getCommerceService, copy.service, "purchase", input);
+      return runPurchaseMutation(getMembershipService, copy.service, "purchase", input);
     },
 
     async renewMembership(input) {
-      return runPurchaseMutation(getCommerceService, copy.service, "renew", input);
+      return runPurchaseMutation(getMembershipService, copy.service, "renew", input);
     },
 
     async upgradeMembership(input) {
-      return runPurchaseMutation(getCommerceService, copy.service, "upgrade", input);
+      return runPurchaseMutation(getMembershipService, copy.service, "upgrade", input);
     },
   };
 }

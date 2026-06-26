@@ -30,25 +30,21 @@
   },
   "peerDependencies": {
     "@sdkwork/mall-pc-core": "*",
-    "@sdkwork/commerce-service": "*",
     "lucide-react": ">=0.468.0 <2.0.0",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0",
     "react-i18next": ">=13.0.0 <18.0.0",
     "react-router": ">=6.0.0 <8.0.0",
-    "react-router-dom": ">=6.0.0 <8.0.0"
+    "react-router-dom": ">=6.0.0 <8.0.0",
+    "@sdkwork/mall-pc-admin-core": "*"
   },
   "peerDependenciesMeta": {
     "@sdkwork/mall-pc-core": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     }
   },
   "devDependencies": {
     "@sdkwork/mall-pc-core": "workspace:*",
-    "@sdkwork/commerce-service": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "lucide-react": "catalog:",

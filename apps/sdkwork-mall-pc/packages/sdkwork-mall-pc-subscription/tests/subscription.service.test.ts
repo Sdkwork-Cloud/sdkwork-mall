@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configurePromotionServiceMockSession,
+  createPromotionServiceMock,
+  resetPromotionServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkSubscriptionService } from "../src";
 
@@ -12,11 +12,11 @@ describe("sdkwork-mall-pc-subscription service", () => {
   const RETIRED_TIER_ROOT = "v" + "ip";
 
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "subscription-auth-token" });
+    configurePromotionServiceMockSession({ authToken: "subscription-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetPromotionServiceMockSession();
   });
 
   it("does not retain legacy tier mutation operation labels in the subscription service implementation", () => {
@@ -37,7 +37,7 @@ describe("sdkwork-mall-pc-subscription service", () => {
   });
 
   it("maps membership dashboard data and checkout-ready coupons into a reusable subscription dashboard", async () => {
-    const commerceService = createCommerceServiceMock({
+    const promotionService = createPromotionServiceMock({
       promotions: {
         userCoupons: {
           wallet: {
@@ -85,7 +85,7 @@ describe("sdkwork-mall-pc-subscription service", () => {
     });
 
     const service = createSdkworkSubscriptionService({
-      commerceService,
+      promotionService,
       paymentService: {
         getDashboard: vi.fn().mockResolvedValue({
           clientType: "WEB",
@@ -454,7 +454,7 @@ describe("sdkwork-mall-pc-subscription service", () => {
   });
 
   it("localizes auth at subscription entry and uses membership-owned mutation fallback errors", async () => {
-    resetCommerceServiceMockSession();
+    resetPromotionServiceMockSession();
     const localizedAuthService = createSdkworkSubscriptionService({
       locale: "zh-CN",
     });
@@ -465,18 +465,16 @@ describe("sdkwork-mall-pc-subscription service", () => {
       }),
     ).rejects.toThrow("请先登录后再管理订阅。");
 
-    configureCommerceServiceMockSession({ authToken: "subscription-auth-token" });
+    configurePromotionServiceMockSession({ authToken: "subscription-auth-token" });
     const localizedMutationService = createSdkworkSubscriptionService({
-      commerceService: createCommerceServiceMock({
-        memberships: {
-          purchases: {
-            create: vi.fn().mockResolvedValue({
-              code: "5000",
-            }),
-          },
-        },
-      }),
       locale: "zh-CN",
+      membershipService: {
+        getDashboard: vi.fn(),
+        getEmptyDashboard: vi.fn(),
+        purchaseMembership: vi.fn().mockRejectedValue(new Error("购买会员失败。")),
+        renewMembership: vi.fn(),
+        upgradeMembership: vi.fn(),
+      },
     });
 
     await expect(

@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { configureSdkworkCommerceServiceProvider } from "@sdkwork/commerce-service";
+import { configureSdkworkMembershipAppServiceProvider } from "@sdkwork/membership-service";
 import { SdkworkThemeProvider } from "@sdkwork/ui-pc-react/theme";
 import { createSdkworkMembershipController } from "@sdkwork/mall-pc-membership";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureMembershipServiceMockSession,
+  createMembershipServiceMock,
+  resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import type { SdkworkMembershipPurchaseService } from "../src";
 import { SdkworkMembershipPurchaseHeaderEntry } from "../src";
@@ -97,8 +97,8 @@ function createMembershipPurchaseServiceStub(
 
 describe("sdkwork-mall-pc-membership-purchase header entry", () => {
   afterEach(() => {
-    configureSdkworkCommerceServiceProvider(null);
-    resetCommerceServiceMockSession();
+    configureSdkworkMembershipAppServiceProvider(null);
+    resetMembershipServiceMockSession();
   });
 
   it("opens the top-header membership purchase menu and purchases the selected package through the default purchase service", async () => {
@@ -117,8 +117,8 @@ describe("sdkwork-mall-pc-membership-purchase header entry", () => {
         status: "SUCCESS",
       },
     });
-    configureCommerceServiceMockSession({ authToken: "membership-purchase-auth-token" });
-    configureSdkworkCommerceServiceProvider(() => createCommerceServiceMock({
+    configureMembershipServiceMockSession({ authToken: "membership-purchase-auth-token" });
+    configureSdkworkMembershipAppServiceProvider(() => createMembershipServiceMock({
       memberships: {
         purchases: {
           create,

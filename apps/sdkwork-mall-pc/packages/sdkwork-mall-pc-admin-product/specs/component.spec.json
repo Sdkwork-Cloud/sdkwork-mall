@@ -107,7 +107,7 @@
   "integration": {
     "authority": "sdkwork-commerce owns product center admin UI and service orchestration.",
     "dependencyPolicy": "Consumers integrate through public package exports only.",
-    "sdkPolicy": "Services use @sdkwork/commerce-service backed by Commerce backend SDK clients. Raw HTTP, manual auth headers, and Claw Router backend SDK catalog calls are forbidden.",
+    "sdkPolicy": "Services use @sdkwork/mall-pc-admin-core admin remote port boundaries backed by Commerce backend SDK clients configured in mall PC bootstrap. Raw HTTP, manual auth headers, and Claw Router backend SDK catalog calls are forbidden.",
     "languagePolicy": "React and TypeScript source follows frontend and backend UI standards."
   },
   "verification": {

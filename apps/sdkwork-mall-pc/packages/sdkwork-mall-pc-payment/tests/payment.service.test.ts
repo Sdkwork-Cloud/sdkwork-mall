@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configurePaymentServiceMockSession,
+  createPaymentServiceMock,
+  resetPaymentServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import {
   createSdkworkPaymentService,
@@ -26,11 +26,11 @@ const alipayIcon = {
 
 describe("sdkwork-mall-pc-payment service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "payment-auth-token" });
+    configurePaymentServiceMockSession({ authToken: "payment-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetPaymentServiceMockSession();
   });
 
   it("maps payment methods, records, statistics, and digests into a reusable payment center snapshot", async () => {
@@ -77,7 +77,7 @@ describe("sdkwork-mall-pc-payment service", () => {
         },
       ],
     });
-    const commerceService = createCommerceServiceMock({
+    const paymentService = createPaymentServiceMock({
       payments: {
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
@@ -134,7 +134,7 @@ describe("sdkwork-mall-pc-payment service", () => {
     });
     const service = createSdkworkPaymentService({
       clientType: "WEB",
-      commerceService,
+      paymentService,
     });
 
     const dashboard = await service.getDashboard();
@@ -223,7 +223,7 @@ describe("sdkwork-mall-pc-payment service", () => {
         transactionId: "TXN-1001",
       },
     });
-    const commerceService = createCommerceServiceMock({
+    const paymentService = createPaymentServiceMock({
       payments: {
         close,
         create: createPayment,
@@ -314,7 +314,7 @@ describe("sdkwork-mall-pc-payment service", () => {
     });
     const service = createSdkworkPaymentService({
       clientType: "WEB",
-      commerceService,
+      paymentService,
     });
 
     await expect(
@@ -389,7 +389,7 @@ describe("sdkwork-mall-pc-payment service", () => {
   });
 
   it("returns a guest-safe empty payment dashboard without creating a client", async () => {
-    resetCommerceServiceMockSession();
+    resetPaymentServiceMockSession();
     const service = createSdkworkPaymentService();
 
     const dashboard = await service.getDashboard();
@@ -400,7 +400,7 @@ describe("sdkwork-mall-pc-payment service", () => {
   });
 
   it("uses copy overrides for payment fallback labels, auth errors, and service failure messages", async () => {
-    const commerceService = createCommerceServiceMock({
+    const paymentService = createPaymentServiceMock({
       payments: {
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
@@ -452,7 +452,7 @@ describe("sdkwork-mall-pc-payment service", () => {
     });
 
     const service = createSdkworkPaymentService({
-      commerceService,
+      paymentService,
       messages: {
         common: {
           payment: "Fallback method",
@@ -482,7 +482,7 @@ describe("sdkwork-mall-pc-payment service", () => {
     });
     expect(dashboard.records[0]?.statusLabel).toBe("Settled shut");
 
-    resetCommerceServiceMockSession();
+    resetPaymentServiceMockSession();
     const guestService = createSdkworkPaymentService({
       messages: {
         service: {
@@ -493,9 +493,9 @@ describe("sdkwork-mall-pc-payment service", () => {
 
     await expect(guestService.getPaymentDetail("1001")).rejects.toThrow("Override auth required");
 
-    configureCommerceServiceMockSession({ authToken: "payment-auth-token" });
+    configurePaymentServiceMockSession({ authToken: "payment-auth-token" });
     const failingService = createSdkworkPaymentService({
-      commerceService: createCommerceServiceMock({
+      paymentService: createPaymentServiceMock({
         payments: {
           close: vi.fn().mockResolvedValue({
             code: "5000",

@@ -13,9 +13,11 @@ Commerce workflows, offers, and pricing-aware capability composition.
 
 ## Depends on
 
+- `@sdkwork/account-service` for authenticated session checks and hub payment dashboard composition
+- `@sdkwork/payment-service` for buyer hub and payment dashboard response normalization
+- `@sdkwork/mall-pc-coupon`, `@sdkwork/mall-pc-invoice`, `@sdkwork/mall-pc-membership`, `@sdkwork/mall-pc-order`, `@sdkwork/mall-pc-points`, and `@sdkwork/mall-pc-wallet` for composed commerce hub surfaces
+- `@sdkwork/mall-pc-core` for buyer route composition
 - `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/commerce-service` for generated app/backend SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
 
 ## Ownership
 
@@ -23,7 +25,7 @@ This package is implemented as an independent SDKWork commerce capability. It ow
 
 ## Runtime boundary
 
-All remote commerce access goes through `@sdkwork/commerce-service` or through sibling commerce services that use the same boundary. Generated SDK clients remain behind the shared service contract.
+This package composes sibling mall domain packages and does not call `@sdkwork/commerce-service` directly.
 
 ## Verification
 

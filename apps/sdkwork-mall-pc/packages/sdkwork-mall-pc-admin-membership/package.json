@@ -30,15 +30,14 @@
   },
   "peerDependencies": {
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
     "react": ">=18.2.0 <20.0.0",
-    "react-dom": ">=18.2.0 <20.0.0"
+    "react-dom": ">=18.2.0 <20.0.0",
+    "@sdkwork/mall-pc-admin-core": "*",
+    "@sdkwork/payment-service": "*",
+    "@sdkwork/membership-service": "*"
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     }
   },

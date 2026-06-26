@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 export function SdkworkMallAdminDashboardPage() {
   const [overview, setOverview] = useState<Record<string, unknown> | null>(null);
@@ -14,10 +12,10 @@ export function SdkworkMallAdminDashboardPage() {
     let active = true;
     async function load() {
       try {
-        const service = getSdkworkCommerceService();
+        const service = getSdkworkAdminRemotePort();
         const response = await service.admin.reports.commerceOverview.retrieve({});
         if (active) {
-          setOverview(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+          setOverview(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
         }
       } finally {
         if (active) {

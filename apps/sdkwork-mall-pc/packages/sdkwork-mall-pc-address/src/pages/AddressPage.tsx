@@ -1,23 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, EmptyState, LoadingBlock, StatusNotice } from "@sdkwork/ui-pc-react";
 import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+  createSdkworkAddressService,
+  type SdkworkAddressInput,
+  type SdkworkAddressRecord,
+} from "../address-service";
 
-type AddressTag = "company" | "home" | "school" | "other";
-
-interface AddressRow {
-  city?: string;
-  detail?: string;
-  district?: string;
-  id: string;
-  isDefault: boolean;
-  name: string;
-  phone?: string;
-  province?: string;
-  tag?: AddressTag;
-}
+type AddressTag = NonNullable<SdkworkAddressRecord["tag"]>;
 
 interface AddressFormState {
   city: string;
@@ -66,32 +55,6 @@ function validatePhone(phone: string): boolean {
   return PHONE_PATTERN.test(phone.trim());
 }
 
-function mapAddressRow(item: Record<string, unknown>): AddressRow {
-  const rawTag = typeof item.tag === "string" ? item.tag.toLowerCase() : "";
-  let tag: AddressTag | undefined;
-  if (rawTag === "home" || rawTag === "company" || rawTag === "school" || rawTag === "other") {
-    tag = rawTag;
-  } else if (rawTag === "家") {
-    tag = "home";
-  } else if (rawTag === "公司") {
-    tag = "company";
-  } else if (rawTag === "学校") {
-    tag = "school";
-  }
-
-  return {
-    id: String(item.id ?? ""),
-    name: String(item.contactName ?? item.name ?? "收件人"),
-    phone: typeof item.phone === "string" ? item.phone : undefined,
-    province: typeof item.province === "string" ? item.province : undefined,
-    city: typeof item.city === "string" ? item.city : undefined,
-    district: typeof item.district === "string" ? item.district : undefined,
-    detail: typeof item.detail === "string" ? item.detail : undefined,
-    isDefault: Boolean(item.isDefault ?? item.default),
-    tag,
-  };
-}
-
 function validateForm(form: AddressFormState): AddressFormErrors {
   const errors: AddressFormErrors = {};
   if (!form.name.trim()) {
@@ -119,8 +82,21 @@ function validateForm(form: AddressFormState): AddressFormErrors {
   return errors;
 }
 
+function toAddressInput(form: AddressFormState): SdkworkAddressInput {
+  return {
+    contactName: form.name.trim(),
+    phone: form.phone.trim(),
+    province: form.province.trim() || undefined,
+    city: form.city.trim() || undefined,
+    district: form.district.trim() || undefined,
+    detail: form.detail.trim(),
+    tag: form.tag,
+  };
+}
+
 export function SdkworkMallAddressPage() {
-  const [addresses, setAddresses] = useState<AddressRow[]>([]);
+  const addressService = useMemo(() => createSdkworkAddressService(), []);
+  const [addresses, setAddresses] = useState<SdkworkAddressRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -132,21 +108,15 @@ export function SdkworkMallAddressPage() {
 
   async function refresh() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
-    const response = await service.addresses.list({});
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
-    setAddresses(payload.items?.map(mapAddressRow) ?? []);
+    setAddresses(await addressService.listAddresses());
     setLoading(false);
   }
 
   useEffect(() => {
     void refresh();
-  }, []);
+  }, [addressService]);
 
-  const fullAddress = useMemo(
-    () => [form.province, form.city, form.district, form.detail].filter(Boolean).join(" "),
-    [form.province, form.city, form.district, form.detail],
-  );
+  const fullAddress = [form.province, form.city, form.district, form.detail].filter(Boolean).join(" ");
 
   function openCreateForm() {
     setEditingId(null);
@@ -157,7 +127,7 @@ export function SdkworkMallAddressPage() {
     setMessage(null);
   }
 
-  function openEditForm(address: AddressRow) {
+  function openEditForm(address: SdkworkAddressRecord) {
     setEditingId(address.id);
     setForm({
       name: address.name,
@@ -206,20 +176,11 @@ export function SdkworkMallAddressPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      const body = {
-        contactName: form.name.trim(),
-        phone: form.phone.trim(),
-        province: form.province.trim() || undefined,
-        city: form.city.trim() || undefined,
-        district: form.district.trim() || undefined,
-        detail: form.detail.trim(),
-        tag: form.tag,
-      };
+      const body = toAddressInput(form);
       if (editingId) {
-        await service.addresses.update(editingId, body);
+        await addressService.updateAddress(editingId, body);
       } else {
-        await service.addresses.create(body);
+        await addressService.createAddress(body);
       }
       setShowForm(false);
       setEditingId(null);
@@ -239,8 +200,7 @@ export function SdkworkMallAddressPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      await service.addresses.delete(addressId);
+      await addressService.deleteAddress(addressId);
       if (editingId === addressId) {
         setShowForm(false);
         setEditingId(null);
@@ -261,8 +221,7 @@ export function SdkworkMallAddressPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      await service.addresses.defaultSelection.create({ addressId });
+      await addressService.setDefaultAddress(addressId);
       await refresh();
     } catch {
       setMessage("设置默认地址失败");

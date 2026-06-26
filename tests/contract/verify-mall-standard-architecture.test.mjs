@@ -71,6 +71,44 @@ const inactiveMallPackages = [
   "sdkwork-mall-pc-membership-purchase",
 ];
 
+const MALL_DOMAIN_MIGRATED_PACKAGES = [
+  "sdkwork-mall-pc-wallet",
+  "sdkwork-mall-pc-order",
+  "sdkwork-mall-pc-membership",
+  "sdkwork-mall-pc-coupon",
+  "sdkwork-mall-pc-payment",
+  "sdkwork-mall-pc-points",
+  "sdkwork-mall-pc-offer",
+  "sdkwork-mall-pc-subscription",
+  "sdkwork-mall-pc-membership-purchase",
+  "sdkwork-mall-pc-checkout",
+  "sdkwork-mall-pc-pricing",
+  "sdkwork-mall-pc-billing",
+  "sdkwork-mall-pc-invoice",
+  "sdkwork-mall-pc-address",
+  "sdkwork-mall-pc-shop",
+  "sdkwork-mall-pc-home",
+  "sdkwork-mall-pc-search",
+  "sdkwork-mall-pc-catalog",
+  "sdkwork-mall-pc-activity",
+  "sdkwork-mall-pc-reviews",
+  "sdkwork-mall-pc-messages",
+  "sdkwork-mall-pc-after-sales",
+  "sdkwork-mall-pc-cart",
+  "sdkwork-mall-pc-cms",
+  "sdkwork-mall-pc-merchant",
+  "sdkwork-mall-pc-admin-shops",
+  "sdkwork-mall-pc-admin-settlement",
+  "sdkwork-mall-pc-admin-risk",
+  "sdkwork-mall-pc-admin-reports",
+  "sdkwork-mall-pc-admin-orders",
+  "sdkwork-mall-pc-admin-marketing",
+  "sdkwork-mall-pc-admin-product",
+  "sdkwork-mall-pc-admin-membership",
+  "sdkwork-mall-pc-admin-permissions",
+  "sdkwork-mall-pc-commerce",
+];
+
 const buyerPageSubpathExports = [
   ["sdkwork-mall-pc-commerce", "buyer-dashboard-page"],
   ["sdkwork-mall-pc-commerce", "buyer-favorites-page"],
@@ -278,6 +316,50 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
   const runtimeSource = read("apps/sdkwork-mall-pc/src/bootstrap/runtime.ts");
   assert.match(runtimeSource, /@sdkwork\/commerce-service/);
 
+  const commerceProvidersSource = read("apps/sdkwork-mall-pc/src/bootstrap/commerceProviders.ts");
+  assert.doesNotMatch(commerceProvidersSource, /@sdkwork\/commerce-runtime/);
+  assert.match(commerceProvidersSource, /createSdkworkCommerceService/);
+  assert.match(commerceProvidersSource, /configureSdkworkMallPcCommerceBuyerHubRemotePort/);
+
+  const domainProvidersSource = read("apps/sdkwork-mall-pc/src/bootstrap/domain-service-providers.ts");
+  assert.match(domainProvidersSource, /@sdkwork\/account-service/);
+  assert.match(domainProvidersSource, /@sdkwork\/order-service/);
+  assert.match(domainProvidersSource, /@sdkwork\/membership-service/);
+  assert.match(domainProvidersSource, /@sdkwork\/payment-service/);
+
+  const paymentServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-payment/src/payment-service.ts");
+  assert.match(paymentServiceSource, /@sdkwork\/payment-service/);
+  assert.doesNotMatch(paymentServiceSource, /@sdkwork\/commerce-service/);
+
+  const couponServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-coupon/src/coupon-service.ts");
+  assert.match(couponServiceSource, /@sdkwork\/promotion-service/);
+  assert.doesNotMatch(couponServiceSource, /@sdkwork\/commerce-service/);
+
+  const membershipServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-membership/src/membership-service.ts");
+  assert.match(membershipServiceSource, /@sdkwork\/membership-service/);
+  assert.doesNotMatch(membershipServiceSource, /@sdkwork\/commerce-service/);
+
+  const checkoutServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-checkout/src/checkout-service.ts");
+  assert.doesNotMatch(checkoutServiceSource, /@sdkwork\/commerce-service/);
+  assert.match(checkoutServiceSource, /@sdkwork\/mall-pc-order/);
+  assert.match(checkoutServiceSource, /@sdkwork\/mall-pc-payment/);
+
+  const billingServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-billing/src/billing-service.ts");
+  assert.match(billingServiceSource, /@sdkwork\/account-service/);
+  assert.match(billingServiceSource, /@sdkwork\/payment-service/);
+  assert.doesNotMatch(billingServiceSource, /commerceService\?:/);
+
+  const walletServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-wallet/src/wallet-service.ts");
+  assert.match(walletServiceSource, /@sdkwork\/account-service/);
+  assert.doesNotMatch(walletServiceSource, /@sdkwork\/commerce-service/);
+
+  const orderServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-order/src/order-service.ts");
+  assert.match(orderServiceSource, /@sdkwork\/order-service/);
+  assert.doesNotMatch(orderServiceSource, /@sdkwork\/commerce-service/);
+
+  const mallAppPackageJson = readJson("apps/sdkwork-mall-pc/package.json");
+  assert.equal(mallAppPackageJson.dependencies["@sdkwork/commerce-runtime"], undefined);
+
   const shellSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-shell/src/index.tsx");
   assert.match(shellSource, /isAuthenticated/);
   assert.match(shellSource, /我的账户/);
@@ -306,7 +388,10 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
   assert.match(cmsServiceSource, /MALL_CMS_OFFER_MARKER/);
   assert.match(cmsServiceSource, /loadMallCmsConfigRemote/);
   assert.match(cmsServiceSource, /saveMallCmsConfigRemote/);
-  assert.match(cmsServiceSource, /admin\.promotions\.offers\.(create|update)/);
+  assert.match(cmsServiceSource, /getSdkworkCmsRemotePort/);
+  assert.match(cmsServiceSource, /createAdminPromotionOffer/);
+  assert.match(cmsServiceSource, /updateAdminPromotionOffer/);
+  assert.doesNotMatch(cmsServiceSource, /@sdkwork\/commerce-service/);
 
   const routePermissionsSource = read("apps/sdkwork-mall-pc/src/routePermissions.ts");
   assert.match(routePermissionsSource, /hasSdkworkMallPcRoutePermission/);
@@ -320,11 +405,19 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
   const activityServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-activity/src/activity-service.ts");
   assert.match(activityServiceSource, /MALL_CMS_OFFER_MARKER/);
   assert.match(activityServiceSource, /@sdkwork\/mall-pc-cms\/cms-service/);
+  assert.match(activityServiceSource, /getSdkworkActivityRemotePort/);
+  assert.match(activityServiceSource, /listPromotionOffers/);
 
-  const addressSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-address/src/pages/AddressPage.tsx");
-  assert.match(addressSource, /addresses\.create/);
-  assert.match(addressSource, /addresses\.update/);
-  assert.match(addressSource, /addresses\.delete/);
+  const addressServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-address/src/address-service.ts");
+  assert.match(addressServiceSource, /createSdkworkAddressService/);
+  assert.match(addressServiceSource, /getSdkworkAddressRemotePort/);
+  assert.match(addressServiceSource, /createAddress/);
+  assert.match(addressServiceSource, /updateAddress/);
+  assert.match(addressServiceSource, /deleteAddress/);
+
+  const addressPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-address/src/pages/AddressPage.tsx");
+  assert.match(addressPageSource, /createSdkworkAddressService/);
+  assert.doesNotMatch(addressPageSource, /@sdkwork\/commerce-service/);
 
   const merchantSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-merchant/src/pages/MerchantPage.tsx");
   assert.match(merchantSource, /shops\.current\.inventory\.stocks\.list/);
@@ -351,10 +444,13 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const catalogServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-catalog/src/catalog-service.ts");
   assert.match(catalogServiceSource, /loadMallProductCoupons/);
-  assert.match(catalogServiceSource, /promotions\.offers\.list/);
+  assert.match(catalogServiceSource, /getSdkworkCatalogRemotePort/);
+  assert.match(catalogServiceSource, /listPromotionOffers/);
+  assert.match(catalogServiceSource, /retrieveMallCategory/);
 
   const catalogPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-catalog/src/pages/CatalogPage.tsx");
-  assert.match(catalogPageSource, /catalog\.categories\.retrieve/);
+  assert.match(catalogPageSource, /retrieveMallCategory/);
+  assert.doesNotMatch(catalogPageSource, /@sdkwork\/commerce-service/);
   assert.match(catalogPageSource, /@sdkwork\/mall-pc-commerce\/favorites-service/);
 
   const adminShopsSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-shops/src/pages/AdminGovernancePages.tsx");
@@ -368,7 +464,8 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
   assert.match(searchSource, /相关店铺/);
 
   const homeSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-home/src/home-service.ts");
-  assert.match(homeSource, /shops\.list/);
+  assert.match(homeSource, /getSdkworkHomeRemotePort/);
+  assert.match(homeSource, /listShops/);
   assert.match(homeSource, /featuredShops/);
 
   const homePageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-home/src/pages/HomePage.tsx");
@@ -379,14 +476,31 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const searchServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-search/src/search-service.ts");
   assert.match(searchServiceSource, /searchMallShops/);
-  assert.match(searchServiceSource, /shops\.list/);
+  assert.match(searchServiceSource, /getSdkworkSearchRemotePort/);
+  assert.match(searchServiceSource, /listShops/);
+
+  const cartServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-cart/src/cart-service.ts");
+  assert.match(cartServiceSource, /getSdkworkCartRemotePort/);
+  assert.doesNotMatch(cartServiceSource, /@sdkwork\/commerce-service/);
+
+  const cartPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-cart/src/pages/CartPage.tsx");
+  assert.match(cartPageSource, /retrieveMallOrderPaymentSuccess/);
+  assert.match(cartPageSource, /retryMallOrderPayment/);
+  assert.doesNotMatch(cartPageSource, /@sdkwork\/commerce-service/);
 
   const adminOrdersSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-orders/src/pages/AdminOrdersPage.tsx");
+  assert.match(adminOrdersSource, /getSdkworkAdminRemotePort/);
   assert.match(adminOrdersSource, /orders\.management\.retrieve/);
   assert.match(adminOrdersSource, /afterSales\.reviews\.create/);
 
   const buyerDashboardSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/pages/BuyerDashboardPage.tsx");
-  assert.match(buyerDashboardSource, /orders\.statistics\.retrieve/);
+  assert.match(buyerDashboardSource, /loadMallBuyerDashboardSnapshot/);
+  assert.doesNotMatch(buyerDashboardSource, /@sdkwork\/commerce-service/);
+
+  const buyerHubServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/buyer-hub-service.ts");
+  assert.match(buyerHubServiceSource, /getSdkworkCommerceRemotePort/);
+  assert.match(buyerHubServiceSource, /orders\.statistics\.retrieve/);
+  assert.doesNotMatch(buyerHubServiceSource, /@sdkwork\/commerce-service/);
 
   const buyerFavoritesSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/pages/BuyerFavoritesPage.tsx");
   assert.match(buyerFavoritesSource, /关注店铺/);
@@ -394,10 +508,19 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
   const buyerGiftCardsSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/pages/BuyerGiftCardsPage.tsx");
   assert.match(buyerGiftCardsSource, /SdkworkMallGiftCardsPage/);
 
-  const afterSalesSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-after-sales/src/pages/AfterSalesPage.tsx");
-  assert.match(afterSalesSource, /afterSales\.requests\.retrieve/);
-  assert.match(afterSalesSource, /afterSales\.events\.list/);
-  assert.match(afterSalesSource, /afterSales\.returnShipments\.list/);
+  const afterSalesSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-after-sales/src/after-sales-service.ts");
+  assert.match(afterSalesSource, /getSdkworkAfterSalesRemotePort/);
+  assert.match(afterSalesSource, /retrieveAfterSalesRequest/);
+  assert.match(afterSalesSource, /listAfterSalesEvents/);
+  assert.match(afterSalesSource, /listReturnShipments/);
+
+  const reviewsServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-reviews/src/reviews-service.ts");
+  assert.match(reviewsServiceSource, /getSdkworkReviewsRemotePort/);
+  assert.match(reviewsServiceSource, /loadMallPendingReviewOrders/);
+
+  const messagesServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-messages/src/messages-service.ts");
+  assert.match(messagesServiceSource, /getSdkworkMessagesRemotePort/);
+  assert.match(messagesServiceSource, /loadMallMessageCenterRows/);
 
   const shopSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-shop/src/pages/ShopPage.tsx");
   assert.match(shopSource, /toggleMallShopFavorite/);
@@ -559,6 +682,30 @@ test("mall workspace metadata and packaging contract align with sdkwork-mall own
   }).map((filePath) => path.relative(workspaceRoot, filePath).replaceAll("\\", "/"));
 
   assert.deepEqual(staleCommercePcPaths, []);
+});
+
+test("mall domain-migrated packages must not declare stale commerce-service peers", () => {
+  const violations = [];
+
+  for (const directory of MALL_DOMAIN_MIGRATED_PACKAGES) {
+    const packageJson = readJson(`apps/sdkwork-mall-pc/packages/${directory}/package.json`);
+    if (packageJson.peerDependencies?.["@sdkwork/commerce-service"]) {
+      violations.push(`${directory}: peerDependencies still declares @sdkwork/commerce-service`);
+    }
+    if (packageJson.peerDependenciesMeta?.["@sdkwork/commerce-service"]) {
+      violations.push(`${directory}: peerDependenciesMeta still declares @sdkwork/commerce-service`);
+    }
+
+    const servicePath = path.join(mallPackagesRoot, directory, "src", `${directory.replace("sdkwork-mall-pc-", "")}-service.ts`);
+    if (existsSync(servicePath)) {
+      const source = readFileSync(servicePath, "utf8");
+      if (source.includes("@sdkwork/commerce-service")) {
+        violations.push(`${directory}/src: source still imports @sdkwork/commerce-service`);
+      }
+    }
+  }
+
+  assert.deepEqual(violations, []);
 });
 
 test("mall active packages declare sdkwork-mall workspace ownership", () => {

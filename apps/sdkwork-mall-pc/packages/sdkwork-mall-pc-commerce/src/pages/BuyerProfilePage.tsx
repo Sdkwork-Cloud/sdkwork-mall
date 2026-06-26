@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
 import { useEffect, useState } from "react";
 import { LoadingBlock } from "@sdkwork/ui-pc-react";
+import { loadMallBuyerAccountSummary } from "../buyer-hub-service";
 
 export function SdkworkMallProfilePage() {
   const [profile, setProfile] = useState<Record<string, unknown> | null>(null);
@@ -14,10 +11,9 @@ export function SdkworkMallProfilePage() {
     let active = true;
     async function load() {
       try {
-        const service = getSdkworkCommerceService();
-        const response = await service.accounts.current.summary.retrieve({});
+        const summary = await loadMallBuyerAccountSummary();
         if (active) {
-          setProfile(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+          setProfile(summary);
         }
       } finally {
         if (active) {

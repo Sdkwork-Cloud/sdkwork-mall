@@ -1,5 +1,5 @@
 import { EmptyState } from "@sdkwork/ui-pc-react";
-import { formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/commerce-service";
+import { formatSdkworkPaymentCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/payment-service";
 import type { SdkworkBillingBreakdownRow } from "../billing";
 import {
   createSdkworkBillingPanelStyle,

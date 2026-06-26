@@ -1,11 +1,9 @@
-import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+import { hasSdkworkAccountSession } from "@sdkwork/account-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
 import type { SdkworkCouponDashboardData } from "@sdkwork/mall-pc-coupon";
 import type { SdkworkMembershipDashboardData } from "@sdkwork/mall-pc-membership";
+
+import { getSdkworkCommerceRemotePort } from "./commerce-remote-port";
 
 export interface MallHubOfferDigest {
   couponOffers: number;
@@ -181,21 +179,19 @@ function summarizePaymentRecords(records: readonly MallHubPaymentRecord[]) {
   );
 }
 
-export async function loadMallHubPaymentDashboard(
-  commerceService?: SdkworkCommerceService,
-): Promise<MallHubPaymentDashboard> {
-  if (!hasSdkworkCommerceSession()) {
+export async function loadMallHubPaymentDashboard(): Promise<MallHubPaymentDashboard> {
+  if (!hasSdkworkAccountSession()) {
     return createMallHubEmptyPaymentDashboard();
   }
 
-  const service = commerceService ?? getSdkworkCommerceService();
+  const remote = getSdkworkCommerceRemotePort();
   const clientType = "WEB";
 
   try {
     const [methodsPayload, statisticsPayload, pagePayload] = await Promise.all([
-      service.payments.methods.list({ clientType }),
-      service.payments.statistics.retrieve(),
-      service.payments.records.list({
+      remote.payments.methods.list({ clientType }),
+      remote.payments.statistics.retrieve(),
+      remote.payments.records.list({
         page: 1,
         pageSize: 20,
         sortDirection: "desc",
@@ -203,9 +199,9 @@ export async function loadMallHubPaymentDashboard(
       }),
     ]);
 
-    const methods = unwrapSdkworkCommerceResponse<Record<string, unknown>[]>(methodsPayload);
-    const statistics = unwrapSdkworkCommerceResponse<Record<string, unknown> | null>(statisticsPayload);
-    const page = unwrapSdkworkCommerceResponse<{ content?: Record<string, unknown>[] }>(pagePayload);
+    const methods = unwrapSdkworkPaymentResponse<Record<string, unknown>[]>(methodsPayload);
+    const statistics = unwrapSdkworkPaymentResponse<Record<string, unknown> | null>(statisticsPayload);
+    const page = unwrapSdkworkPaymentResponse<{ content?: Record<string, unknown>[] }>(pagePayload);
 
     const records = (page.content ?? []).map((payment) => {
       const status = mapPaymentStatus(toOptionalString(payment.status));

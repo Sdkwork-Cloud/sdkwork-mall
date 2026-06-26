@@ -1,33 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Button, EmptyState, LoadingBlock, StatusNotice } from "@sdkwork/ui-pc-react";
+
 import {
-  getSdkworkCommerceService,
-  formatSdkworkCommerceCurrencyCny,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
-
-type AfterSalesType = "exchange" | "maintenance" | "refund" | "resend" | "return";
-
-type AfterSalesStatus =
-  | "approved"
-  | "cancelled"
-  | "completed"
-  | "pending"
-  | "rejected"
-  | "reviewing";
-
-interface AfterSalesRow {
-  createdAt?: string;
-  id: string;
-  orderId?: string;
-  reason?: string;
-  requestedAmountCny?: number | null;
-  status: AfterSalesStatus;
-  statusLabel: string;
-  type: AfterSalesType;
-  typeLabel: string;
-}
+  AFTER_SALES_TYPES,
+  createEmptyAfterSalesForm,
+  createMallAfterSalesRequest,
+  formatAfterSalesCurrencyCny,
+  listMallAfterSalesRows,
+  loadMallAfterSalesDetail,
+  revokeMallAfterSalesRequest,
+  STATUS_LABELS,
+  validateAfterSalesForm,
+  type AfterSalesFormErrors,
+  type AfterSalesFormState,
+  type AfterSalesRow,
+  type AfterSalesStatus,
+} from "../after-sales-service";
 
 interface EvidenceFile {
   id: string;
@@ -35,39 +24,6 @@ interface EvidenceFile {
   previewUrl?: string;
   size: number;
 }
-
-interface AfterSalesFormState {
-  description: string;
-  evidenceFiles: EvidenceFile[];
-  orderId: string;
-  reason: string;
-  requestedAmountCny: string;
-  requestType: AfterSalesType;
-}
-
-interface AfterSalesFormErrors {
-  description?: string;
-  orderId?: string;
-  reason?: string;
-  requestedAmountCny?: string;
-}
-
-const AFTER_SALES_TYPES: Array<{ label: string; value: AfterSalesType; description: string }> = [
-  { description: "商品未发货，申请退款", label: "仅退款", value: "refund" },
-  { description: "已收货，退回商品并获得退款", label: "退货退款", value: "return" },
-  { description: "更换同款商品（颜色/尺码等）", label: "换货", value: "exchange" },
-  { description: "商家重新发货（无需退回原商品）", label: "补发", value: "resend" },
-  { description: "商品质量问题，申请维修", label: "维修", value: "maintenance" },
-];
-
-const STATUS_LABELS: Record<AfterSalesStatus, string> = {
-  approved: "已通过",
-  cancelled: "已撤销",
-  completed: "已完成",
-  pending: "待审核",
-  rejected: "已拒绝",
-  reviewing: "审核中",
-};
 
 const STATUS_TONES: Record<AfterSalesStatus, string> = {
   approved: "text-[var(--sdk-color-state-success)] bg-[var(--sdk-color-state-success)]/10 border-[var(--sdk-color-state-success)]/30",
@@ -78,76 +34,8 @@ const STATUS_TONES: Record<AfterSalesStatus, string> = {
   reviewing: "text-[var(--sdk-color-brand-primary)] bg-[var(--sdk-color-brand-primary)]/10 border-[var(--sdk-color-brand-primary)]/30",
 };
 
-const TYPE_LABELS: Record<AfterSalesType, string> = {
-  exchange: "换货",
-  maintenance: "维修",
-  refund: "仅退款",
-  resend: "补发",
-  return: "退货退款",
-};
-
 const MAX_EVIDENCE_FILES = 6;
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-function mapStatus(raw: string): AfterSalesStatus {
-  const normalized = raw.trim().toLowerCase();
-  if (normalized === "approved" || normalized === "accept" || normalized === "accepted") {
-    return "approved";
-  }
-  if (normalized === "cancelled" || normalized === "canceled" || normalized === "revoked") {
-    return "cancelled";
-  }
-  if (normalized === "completed" || normalized === "done" || normalized === "finished") {
-    return "completed";
-  }
-  if (normalized === "rejected" || normalized === "deny" || normalized === "denied") {
-    return "rejected";
-  }
-  if (normalized === "reviewing" || normalized === "review" || normalized === "processing") {
-    return "reviewing";
-  }
-  return "pending";
-}
-
-function mapType(raw: string): AfterSalesType {
-  const normalized = raw.trim().toLowerCase();
-  if (normalized === "exchange" || normalized === "换货") {
-    return "exchange";
-  }
-  if (normalized === "maintenance" || normalized === "repair" || normalized === "维修") {
-    return "maintenance";
-  }
-  if (normalized === "resend" || normalized === "reship" || normalized === "补发") {
-    return "resend";
-  }
-  if (normalized === "return" || normalized === "退货退款" || normalized === "return_refund") {
-    return "return";
-  }
-  return "refund";
-}
-
-function mapRow(item: Record<string, unknown>): AfterSalesRow {
-  const rawType = String(item.type ?? item.requestType ?? item.afterSalesType ?? "refund");
-  const rawStatus = String(item.status ?? item.statusName ?? "pending");
-  const mappedType = mapType(rawType);
-  const mappedStatus = mapStatus(rawStatus);
-  return {
-    createdAt: typeof item.createdAt === "string" ? item.createdAt : undefined,
-    id: String(item.id ?? ""),
-    orderId: typeof item.orderId === "string" ? item.orderId : undefined,
-    reason: typeof item.reason === "string" ? item.reason : typeof item.reasonCode === "string" ? item.reasonCode : undefined,
-    requestedAmountCny:
-      typeof item.requestedAmount === "number"
-        ? item.requestedAmount
-        : typeof item.requested_amount === "number"
-          ? item.requested_amount
-          : null,
-    status: mappedStatus,
-    statusLabel: typeof item.statusName === "string" ? item.statusName : STATUS_LABELS[mappedStatus],
-    type: mappedType,
-    typeLabel: TYPE_LABELS[mappedType],
-  };
-}
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 function formatTimestamp(value: string | undefined): string {
   if (!value) {
@@ -160,45 +48,13 @@ function formatTimestamp(value: string | undefined): string {
   return date.toLocaleString();
 }
 
-const emptyForm = (): AfterSalesFormState => ({
-  description: "",
-  evidenceFiles: [],
-  orderId: "",
-  reason: "",
-  requestedAmountCny: "",
-  requestType: "refund",
-});
-
-function validateForm(form: AfterSalesFormState): AfterSalesFormErrors {
-  const errors: AfterSalesFormErrors = {};
-  if (!form.orderId.trim()) {
-    errors.orderId = "请填写订单号";
-  }
-  if (!form.reason.trim()) {
-    errors.reason = "请填写售后原因";
-  } else if (form.reason.trim().length < 5) {
-    errors.reason = "原因说明至少需要 5 个字符";
-  }
-  if (form.requestType === "refund" || form.requestType === "return") {
-    if (!form.requestedAmountCny.trim()) {
-      errors.requestedAmountCny = "请填写退款金额";
-    } else {
-      const amount = Number(form.requestedAmountCny);
-      if (!Number.isFinite(amount) || amount <= 0) {
-        errors.requestedAmountCny = "退款金额必须为正数";
-      }
-    }
-  }
-  return errors;
-}
-
 export function SdkworkMallAfterSalesPage() {
   const [searchParams] = useSearchParams();
   const [rows, setRows] = useState<AfterSalesRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState<AfterSalesFormState>(emptyForm);
+  const [form, setForm] = useState<AfterSalesFormState>(createEmptyAfterSalesForm());
   const [errors, setErrors] = useState<AfterSalesFormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [message, setMessage] = useState<string | null>(null);
@@ -209,10 +65,7 @@ export function SdkworkMallAfterSalesPage() {
   const [returnShipments, setReturnShipments] = useState<Array<{ id: string; status: string; tracking?: string }>>([]);
 
   const reload = useCallback(async () => {
-    const service = getSdkworkCommerceService();
-    const response = await service.afterSales.requests.list({});
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
-    setRows(payload.items?.map(mapRow) ?? []);
+    setRows(await listMallAfterSalesRows());
   }, []);
 
   useEffect(() => {
@@ -247,37 +100,13 @@ export function SdkworkMallAfterSalesPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
-      const [detailResult, eventsResult, returnResult] = await Promise.allSettled([
-        service.afterSales.requests.retrieve(selectedId),
-        service.afterSales.events.list(selectedId, { page: 1, page_size: 10 }),
-        service.afterSales.returnShipments.list(selectedId, { page: 1, page_size: 5 }),
-      ]);
+      const snapshot = await loadMallAfterSalesDetail(selectedId);
       if (!active) {
         return;
       }
-      if (detailResult.status === "fulfilled") {
-        setDetail(unwrapSdkworkCommerceResponse(detailResult.value) as Record<string, unknown>);
-      }
-      if (eventsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(eventsResult.value) as { items?: Record<string, unknown>[] };
-        setEvents(
-          payload.items?.map((item) => ({
-            action: String(item.eventType ?? item.action ?? item.toStatus ?? "event"),
-            at: typeof item.createdAt === "string" ? item.createdAt : undefined,
-          })) ?? [],
-        );
-      }
-      if (returnResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(returnResult.value) as { items?: Record<string, unknown>[] };
-        setReturnShipments(
-          payload.items?.map((item) => ({
-            id: String(item.id ?? item.returnShipmentNo ?? ""),
-            status: String(item.status ?? "pending"),
-            tracking: typeof item.trackingNo === "string" ? item.trackingNo : undefined,
-          })) ?? [],
-        );
-      }
+      setDetail(snapshot.detail);
+      setEvents(snapshot.events);
+      setReturnShipments(snapshot.returnShipments);
     }
     void loadDetail();
     return () => {
@@ -295,7 +124,7 @@ export function SdkworkMallAfterSalesPage() {
     setTouched((current) => ({ ...current, [field]: true }));
     setErrors((current) => {
       const nextForm = { ...form, [field]: value };
-      const nextErrors = validateForm(nextForm);
+      const nextErrors = validateAfterSalesForm(nextForm);
       const fieldError = field in nextErrors
         ? nextErrors[field as keyof AfterSalesFormErrors]
         : undefined;
@@ -339,7 +168,7 @@ export function SdkworkMallAfterSalesPage() {
   }
 
   async function handleCreate() {
-    const validationErrors = validateForm(form);
+    const validationErrors = validateAfterSalesForm(form);
     setErrors(validationErrors);
     setTouched({
       description: true,
@@ -354,26 +183,9 @@ export function SdkworkMallAfterSalesPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      const requestBody: Record<string, unknown> = {
-        orderId: form.orderId.trim(),
-        reasonCode: form.reason.trim() || "buyer-request",
-        requestType: form.requestType,
-        type: form.requestType,
-        description: form.description.trim() || undefined,
-      };
-      if (form.requestType === "refund" || form.requestType === "return") {
-        requestBody.requestedAmount = Number(form.requestedAmountCny);
-      }
-      if (form.evidenceFiles.length > 0) {
-        requestBody.evidenceFiles = form.evidenceFiles.map((file) => ({
-          fileName: file.name,
-          fileSize: file.size,
-        }));
-      }
-      await service.afterSales.requests.create(requestBody);
+      await createMallAfterSalesRequest(form);
       setShowForm(false);
-      setForm(emptyForm());
+      setForm(createEmptyAfterSalesForm());
       setErrors({});
       setTouched({});
       setMessage("售后申请已提交，请耐心等待商家审核");
@@ -389,11 +201,7 @@ export function SdkworkMallAfterSalesPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      await service.afterSales.requests.update(row.id, {
-        action: "cancel",
-        status: "cancelled",
-      });
+      await revokeMallAfterSalesRequest(row.id);
       setMessage("售后申请已撤销");
       await reload();
       if (selectedId === row.id) {
@@ -422,7 +230,7 @@ export function SdkworkMallAfterSalesPage() {
   }
 
   function openCreateForm() {
-    setForm(emptyForm());
+    setForm(createEmptyAfterSalesForm());
     setErrors({});
     setTouched({});
     setShowForm(true);
@@ -613,7 +421,7 @@ export function SdkworkMallAfterSalesPage() {
                 disabled={busy}
                 onClick={() => {
                   setShowForm(false);
-                  setForm(emptyForm());
+                  setForm(createEmptyAfterSalesForm());
                   setErrors({});
                   setTouched({});
                 }}
@@ -664,7 +472,7 @@ export function SdkworkMallAfterSalesPage() {
                   ) : null}
                   {row.requestedAmountCny != null ? (
                     <p className="mt-1 text-xs text-[var(--sdk-color-text-muted)]">
-                      申请金额：{formatSdkworkCommerceCurrencyCny(row.requestedAmountCny)}
+                      申请金额：{formatAfterSalesCurrencyCny(row.requestedAmountCny)}
                     </p>
                   ) : null}
                 </div>
@@ -748,7 +556,7 @@ export function SdkworkMallAfterSalesPage() {
             <div>
               <div className="text-xs text-[var(--sdk-color-text-muted)]">申请金额</div>
               <div className="mt-1 text-sm">
-                {formatSdkworkCommerceCurrencyCny(
+                {formatAfterSalesCurrencyCny(
                   typeof detail?.requestedAmount === "number"
                     ? detail.requestedAmount
                     : typeof detail?.requested_amount === "number"

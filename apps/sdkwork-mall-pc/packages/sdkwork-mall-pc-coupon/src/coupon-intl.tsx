@@ -5,9 +5,9 @@ import {
   type PropsWithChildren,
 } from "react";
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-  formatSdkworkCommercePoints as formatSdkworkPoints,
-} from "@sdkwork/commerce-service";
+  formatSdkworkPromotionCurrencyCny as formatSdkworkCurrencyCny,
+  formatSdkworkPromotionPoints as formatSdkworkPoints,
+} from "@sdkwork/promotion-service";
 import type {
   SdkworkCouponStatus,
   SdkworkCouponType,

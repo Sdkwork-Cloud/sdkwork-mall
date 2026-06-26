@@ -3,7 +3,7 @@
 Admin membership management package for SDKWork PC React applications.
 
 This package owns the admin-facing membership management surface. It uses the shared
-`@sdkwork/commerce-service` SDK boundary and calls `admin.memberships.*` resources for:
+`@sdkwork/membership-service` SDK boundary and calls `admin.memberships.*` resources for:
 
 - membership levels
 - membership packages

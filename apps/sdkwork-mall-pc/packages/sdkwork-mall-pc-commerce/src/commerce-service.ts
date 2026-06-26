@@ -1,7 +1,4 @@
 import {
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
-import {
   composeMallHubOfferDashboard,
   createMallHubEmptyOfferDashboard,
   loadMallHubPaymentDashboard,
@@ -162,11 +159,10 @@ export interface SdkworkCommercePaymentSummary {
 }
 
 export interface CreateSdkworkCommerceServiceOptions {
-  commerceService?: SdkworkCommerceService;
   couponService?: Pick<SdkworkCouponService, "getDashboard">;
   invoiceService?: Pick<SdkworkInvoiceService, "getDashboard">;
   locale?: string | null;
-  loadPaymentDashboard?: (commerceService?: SdkworkCommerceService) => Promise<MallHubPaymentDashboard>;
+  loadPaymentDashboard?: () => Promise<MallHubPaymentDashboard>;
   messages?: SdkworkCommerceMessagesOverrides;
   orderService?: Pick<SdkworkOrderService, "getDashboard">;
   pointsService?: Pick<SdkworkPointsService, "getDashboard">;
@@ -485,20 +481,12 @@ export function createSdkworkCommerceService(
 ): SdkworkCommerceHubService {
   const locale = options.locale ?? "en-US";
   const copy = createSdkworkCommerceMessages(locale, options.messages);
-  const childServiceOptions = {
-    commerceService: options.commerceService,
-    locale,
-  };
-  const walletService = options.walletService ?? createSdkworkWalletService({
-    commerceService: options.commerceService,
-  });
-  const couponService = options.couponService ?? createSdkworkCouponService(childServiceOptions);
-  const pointsService = options.pointsService ?? createSdkworkPointsService({
-    commerceService: options.commerceService,
-  });
-  const membershipService = options.membershipService ?? createSdkworkMembershipService(childServiceOptions);
-  const invoiceService = options.invoiceService ?? createSdkworkInvoiceService(childServiceOptions);
-  const orderService = options.orderService ?? createSdkworkOrderService(childServiceOptions);
+  const walletService = options.walletService ?? createSdkworkWalletService({ locale });
+  const couponService = options.couponService ?? createSdkworkCouponService({ locale });
+  const pointsService = options.pointsService ?? createSdkworkPointsService({ locale });
+  const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale });
+  const invoiceService = options.invoiceService ?? createSdkworkInvoiceService({ locale });
+  const orderService = options.orderService ?? createSdkworkOrderService({ locale });
   const loadPaymentDashboard = options.loadPaymentDashboard ?? loadMallHubPaymentDashboard;
 
   return {
@@ -518,7 +506,7 @@ export function createSdkworkCommerceService(
         membershipService.getDashboard(),
         invoiceService.getDashboard(),
         orderService.getDashboard(),
-        loadPaymentDashboard(options.commerceService),
+        loadPaymentDashboard(),
       ]);
       const offerDashboard = composeMallHubOfferDashboard({
         couponDashboard,

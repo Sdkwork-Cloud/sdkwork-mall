@@ -1,6 +1,4 @@
-import {
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+import type { SdkworkMediaResource } from "@sdkwork/order-service";
 import {
   createSdkworkCouponService,
   type SdkworkCouponService,
@@ -48,7 +46,6 @@ import {
   createSdkworkWalletService,
   type SdkworkWalletService,
 } from "@sdkwork/mall-pc-wallet";
-import type { SdkworkMediaResource } from "@sdkwork/commerce-service";
 import {
   buildSdkworkCheckoutSession,
   createEmptySdkworkCheckoutCatalog,
@@ -83,7 +80,6 @@ export interface SdkworkCheckoutSubmitResult {
 }
 
 export interface CreateSdkworkCheckoutServiceOptions {
-  commerceService?: SdkworkCommerceService;
   couponService?: Partial<Pick<SdkworkCouponService, "getDashboard" | "getEmptyDashboard">>;
   invoiceService?: Partial<Pick<SdkworkInvoiceService, "createInvoice">>;
   locale?: string | null;
@@ -445,7 +441,6 @@ export function createSdkworkCheckoutService(
   const messages = createSdkworkCheckoutMessages(options.locale, options.messages);
   const copy = messages.service;
   const childServiceOptions = {
-    commerceService: options.commerceService,
     locale: options.locale,
   };
   const pricingService = {
@@ -473,9 +468,7 @@ export function createSdkworkCheckoutService(
     ...options.paymentService,
   };
   const pointsService = {
-    ...createSdkworkPointsService({
-      commerceService: options.commerceService,
-    }),
+    ...createSdkworkPointsService({ locale: options.locale }),
     ...options.pointsService,
   };
   const subscriptionService = {
@@ -483,9 +476,7 @@ export function createSdkworkCheckoutService(
     ...options.subscriptionService,
   };
   const walletService = {
-    ...createSdkworkWalletService({
-      commerceService: options.commerceService,
-    }),
+    ...createSdkworkWalletService(),
     ...options.walletService,
   };
 

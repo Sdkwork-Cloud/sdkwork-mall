@@ -1,15 +1,15 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  requireSdkworkCommerceSession,
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
-  unwrapSdkworkCommerceResponse,
+  getSdkworkPaymentService,
+  hasSdkworkPaymentSession,
+  requireSdkworkPaymentSession,
+  toNullableSdkworkPaymentNumber,
+  toSdkworkPaymentNumber,
+  toSdkworkPaymentOptionalString,
+  unwrapSdkworkPaymentResponse,
   readSdkworkMediaResource,
   toExternalSdkworkMediaResource,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  type SdkworkPaymentAppService,
+} from "@sdkwork/payment-service";
 import {
   createSdkworkPaymentMessages,
   type SdkworkPaymentMessages,
@@ -69,7 +69,7 @@ export interface SdkworkPaymentCloseResult {
 
 export interface CreateSdkworkPaymentServiceOptions {
   clientType?: SdkworkPaymentClientType;
-  commerceService?: SdkworkCommerceService;
+  paymentService?: SdkworkPaymentAppService;
   locale?: string | null;
   messages?: SdkworkPaymentMessagesOverrides;
   pageSize?: number;
@@ -261,12 +261,12 @@ function formatProductTypeLabel(code: string | undefined, messages: SdkworkPayme
 }
 
 function createMethodId(method: RemotePaymentMethod): string {
-  const methodId = toSdkworkCommerceOptionalString(method.methodId);
+  const methodId = toSdkworkPaymentOptionalString(method.methodId);
   if (methodId) {
     return methodId;
   }
 
-  return (toSdkworkCommerceOptionalString(method.code) || "payment-method").toLowerCase().replaceAll("_", "-");
+  return (toSdkworkPaymentOptionalString(method.code) || "payment-method").toLowerCase().replaceAll("_", "-");
 }
 
 function chooseRecommendedProductType(
@@ -299,7 +299,7 @@ function mapProductTypes(
   return (productTypes ?? []).map((item) => ({
     available: item.available !== false,
     code: mapProductType(item.code),
-    label: toSdkworkCommerceOptionalString(item.name) || formatProductTypeLabel(item.code, messages),
+    label: toSdkworkPaymentOptionalString(item.name) || formatProductTypeLabel(item.code, messages),
   }));
 }
 
@@ -308,13 +308,13 @@ function mapMethod(method: RemotePaymentMethod, messages: SdkworkPaymentCopyCont
 
   return {
     available: method.available !== false,
-    code: toSdkworkCommerceOptionalString(method.code) || "UNKNOWN",
+    code: toSdkworkPaymentOptionalString(method.code) || "UNKNOWN",
     icon: readSdkworkMediaResource(method.methodIcon) || readSdkworkMediaResource(method.icon),
     id: createMethodId(method),
-    label: toSdkworkCommerceOptionalString(method.methodName) || messages.common.payment,
+    label: toSdkworkPaymentOptionalString(method.methodName) || messages.common.payment,
     productTypes,
     recommendedProductType: chooseRecommendedProductType(productTypes),
-    sort: toSdkworkCommerceNumber(method.sort),
+    sort: toSdkworkPaymentNumber(method.sort),
   };
 }
 
@@ -329,9 +329,9 @@ function sortMethods(methods: SdkworkPaymentMethod[]): SdkworkPaymentMethod[] {
 
 function derivePaymentUrl(detail: RemotePaymentDetail | null | undefined): string | undefined {
   const paymentParams = detail?.paymentParams ?? {};
-  return toSdkworkCommerceOptionalString(detail?.paymentUrl)
-    || toSdkworkCommerceOptionalString(paymentParams.payUrl)
-    || toSdkworkCommerceOptionalString(paymentParams.mwebUrl);
+  return toSdkworkPaymentOptionalString(detail?.paymentUrl)
+    || toSdkworkPaymentOptionalString(paymentParams.payUrl)
+    || toSdkworkPaymentOptionalString(paymentParams.mwebUrl);
 }
 
 function isQrImageLocator(value: string | undefined): boolean {
@@ -340,9 +340,9 @@ function isQrImageLocator(value: string | undefined): boolean {
 
 function deriveQrContent(detail: RemotePaymentDetail | null | undefined): string | undefined {
   const paymentParams = detail?.paymentParams ?? {};
-  const value = toSdkworkCommerceOptionalString(detail?.qrCode)
-    || toSdkworkCommerceOptionalString(paymentParams.qrCode)
-    || toSdkworkCommerceOptionalString(paymentParams.codeUrl);
+  const value = toSdkworkPaymentOptionalString(detail?.qrCode)
+    || toSdkworkPaymentOptionalString(paymentParams.qrCode)
+    || toSdkworkPaymentOptionalString(paymentParams.codeUrl);
   return isQrImageLocator(value) ? undefined : value;
 }
 
@@ -356,9 +356,9 @@ function deriveQrImage(detail: RemotePaymentDetail | null | undefined) {
   }
 
   const imageLocator = [
-    toSdkworkCommerceOptionalString(detail?.qrCode),
-    toSdkworkCommerceOptionalString(paymentParams.qrCode),
-    toSdkworkCommerceOptionalString(paymentParams.qrImage),
+    toSdkworkPaymentOptionalString(detail?.qrCode),
+    toSdkworkPaymentOptionalString(paymentParams.qrCode),
+    toSdkworkPaymentOptionalString(paymentParams.qrImage),
   ].find(isQrImageLocator);
 
   return toExternalSdkworkMediaResource(imageLocator, "image");
@@ -369,27 +369,27 @@ function mapSummary(
   messages: SdkworkPaymentCopyContext,
   fallback: Partial<SdkworkPaymentSummary> = {},
 ): SdkworkPaymentSummary {
-  const status = mapPaymentStatus(toSdkworkCommerceOptionalString(payment?.status));
+  const status = mapPaymentStatus(toSdkworkPaymentOptionalString(payment?.status));
 
   return {
-    amountCny: toNullableSdkworkCommerceNumber(payment?.amount) ?? fallback.amountCny ?? null,
+    amountCny: toNullableSdkworkPaymentNumber(payment?.amount) ?? fallback.amountCny ?? null,
     canClose: status === "default" || status === "pending",
     canReconcile: status === "default" || status === "pending" || status === "failed" || status === "timeout",
     canRefreshStatus: status === "default" || status === "pending",
-    createdAt: toSdkworkCommerceOptionalString(payment?.createdAt) || fallback.createdAt || new Date(0).toISOString(),
-    expireTime: toSdkworkCommerceOptionalString(payment?.expireTime) || fallback.expireTime,
-    id: toSdkworkCommerceOptionalString(payment?.paymentId) || fallback.id || "unknown-payment",
-    orderId: toSdkworkCommerceOptionalString(payment?.orderId) || fallback.orderId,
-    outTradeNo: toSdkworkCommerceOptionalString(payment?.outTradeNo) || fallback.outTradeNo,
-    paymentMethod: toSdkworkCommerceOptionalString(payment?.paymentMethod) || fallback.paymentMethod,
-    paymentProvider: toSdkworkCommerceOptionalString(payment?.paymentProvider) || fallback.paymentProvider,
-    paymentProviderLabel: toSdkworkCommerceOptionalString(payment?.paymentProviderName) || fallback.paymentProviderLabel,
-    paymentSn: toSdkworkCommerceOptionalString(payment?.paymentSn) || fallback.paymentSn,
-    productType: mapProductType(toSdkworkCommerceOptionalString(payment?.productType) || fallback.productType),
+    createdAt: toSdkworkPaymentOptionalString(payment?.createdAt) || fallback.createdAt || new Date(0).toISOString(),
+    expireTime: toSdkworkPaymentOptionalString(payment?.expireTime) || fallback.expireTime,
+    id: toSdkworkPaymentOptionalString(payment?.paymentId) || fallback.id || "unknown-payment",
+    orderId: toSdkworkPaymentOptionalString(payment?.orderId) || fallback.orderId,
+    outTradeNo: toSdkworkPaymentOptionalString(payment?.outTradeNo) || fallback.outTradeNo,
+    paymentMethod: toSdkworkPaymentOptionalString(payment?.paymentMethod) || fallback.paymentMethod,
+    paymentProvider: toSdkworkPaymentOptionalString(payment?.paymentProvider) || fallback.paymentProvider,
+    paymentProviderLabel: toSdkworkPaymentOptionalString(payment?.paymentProviderName) || fallback.paymentProviderLabel,
+    paymentSn: toSdkworkPaymentOptionalString(payment?.paymentSn) || fallback.paymentSn,
+    productType: mapProductType(toSdkworkPaymentOptionalString(payment?.productType) || fallback.productType),
     status,
-    statusLabel: toSdkworkCommerceOptionalString(payment?.statusName) || formatStatusLabel(status, messages),
-    successTime: toSdkworkCommerceOptionalString(payment?.successTime) || fallback.successTime,
-    transactionId: toSdkworkCommerceOptionalString(payment?.transactionId) || fallback.transactionId,
+    statusLabel: toSdkworkPaymentOptionalString(payment?.statusName) || formatStatusLabel(status, messages),
+    successTime: toSdkworkPaymentOptionalString(payment?.successTime) || fallback.successTime,
+    transactionId: toSdkworkPaymentOptionalString(payment?.transactionId) || fallback.transactionId,
   };
 }
 
@@ -404,27 +404,27 @@ function mapDetail(
     ...summary,
     needQuery: Boolean(payment?.needQuery ?? fallback.needQuery ?? summary.canRefreshStatus),
     paymentOrderId:
-      toSdkworkCommerceOptionalString(payment?.paymentOrderId)
-      || toSdkworkCommerceOptionalString(payment?.merchantOrderId)
+      toSdkworkPaymentOptionalString(payment?.paymentOrderId)
+      || toSdkworkPaymentOptionalString(payment?.merchantOrderId)
       || fallback.paymentOrderId,
     paymentParams: (payment?.paymentParams ?? fallback.paymentParams ?? {}) as Record<string, unknown>,
     paymentUrl: derivePaymentUrl(payment) || fallback.paymentUrl,
     qrContent: deriveQrContent(payment) || fallback.qrContent,
     qrImage: deriveQrImage(payment) || fallback.qrImage,
-    queryIntervalSeconds: toNullableSdkworkCommerceNumber(payment?.queryInterval) ?? fallback.queryIntervalSeconds ?? undefined,
-    remark: toSdkworkCommerceOptionalString(payment?.remark) || fallback.remark,
-    subject: toSdkworkCommerceOptionalString(payment?.subject) || fallback.subject,
+    queryIntervalSeconds: toNullableSdkworkPaymentNumber(payment?.queryInterval) ?? fallback.queryIntervalSeconds ?? undefined,
+    remark: toSdkworkPaymentOptionalString(payment?.remark) || fallback.remark,
+    subject: toSdkworkPaymentOptionalString(payment?.subject) || fallback.subject,
   };
 }
 
 function mapStatistics(statistics: RemotePaymentStatistics | null | undefined): SdkworkPaymentStatistics {
   return {
-    closedPayments: toSdkworkCommerceNumber(statistics?.closedPayments),
-    failedPayments: toSdkworkCommerceNumber(statistics?.failedPayments),
-    pendingPayments: toSdkworkCommerceNumber(statistics?.pendingPayments),
-    successPayments: toSdkworkCommerceNumber(statistics?.successPayments),
-    timeoutPayments: toSdkworkCommerceNumber(statistics?.timeoutPayments),
-    totalPayments: toSdkworkCommerceNumber(statistics?.totalPayments),
+    closedPayments: toSdkworkPaymentNumber(statistics?.closedPayments),
+    failedPayments: toSdkworkPaymentNumber(statistics?.failedPayments),
+    pendingPayments: toSdkworkPaymentNumber(statistics?.pendingPayments),
+    successPayments: toSdkworkPaymentNumber(statistics?.successPayments),
+    timeoutPayments: toSdkworkPaymentNumber(statistics?.timeoutPayments),
+    totalPayments: toSdkworkPaymentNumber(statistics?.totalPayments),
   };
 }
 
@@ -453,18 +453,18 @@ function resolveReconcilePayload(
   outTradeNo?: string;
   reconcileType: "ORDER_ID" | "OUT_TRADE_NO";
 } {
-  if (toSdkworkCommerceOptionalString(input.orderId)) {
+  if (toSdkworkPaymentOptionalString(input.orderId)) {
     return {
-      orderId: toSdkworkCommerceOptionalString(input.orderId),
+      orderId: toSdkworkPaymentOptionalString(input.orderId),
       outTradeNo: undefined,
       reconcileType: "ORDER_ID",
     };
   }
 
-  if (toSdkworkCommerceOptionalString(input.outTradeNo)) {
+  if (toSdkworkPaymentOptionalString(input.outTradeNo)) {
     return {
       orderId: undefined,
-      outTradeNo: toSdkworkCommerceOptionalString(input.outTradeNo),
+      outTradeNo: toSdkworkPaymentOptionalString(input.outTradeNo),
       reconcileType: "OUT_TRADE_NO",
     };
   }
@@ -483,13 +483,13 @@ export function createSdkworkPaymentService(
   const copy = messages.service;
   const clientType = options.clientType ?? "WEB";
   const pageSize = options.pageSize ?? 20;
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getPaymentService = () => options.paymentService ?? getSdkworkPaymentService();
 
   return {
     async closePayment(paymentId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      await unwrapSdkworkCommerceResponse<void>(
-        await getCommerceService().payments.close(paymentId),
+      requireSdkworkPaymentSession(copy.signInRequired);
+      await unwrapSdkworkPaymentResponse<void>(
+        await getPaymentService().payments.close(paymentId),
         copy.closeFailed,
       );
 
@@ -500,20 +500,20 @@ export function createSdkworkPaymentService(
     },
 
     async createPayment(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPaymentSession(copy.signInRequired);
       const payload = {
         amount: input.amountCny ?? undefined,
-        businessOrderId: toSdkworkCommerceOptionalString(input.businessOrderId),
-        businessType: toSdkworkCommerceOptionalString(input.businessType),
-        clientIp: toSdkworkCommerceOptionalString(input.clientIp),
+        businessOrderId: toSdkworkPaymentOptionalString(input.businessOrderId),
+        businessType: toSdkworkPaymentOptionalString(input.businessType),
+        clientIp: toSdkworkPaymentOptionalString(input.clientIp),
         orderId: input.orderId,
         paymentMethod: input.paymentMethod,
-        paymentProvider: toSdkworkCommerceOptionalString(input.paymentProvider),
-        paymentScene: toSdkworkCommerceOptionalString(input.paymentScene),
+        paymentProvider: toSdkworkPaymentOptionalString(input.paymentProvider),
+        paymentScene: toSdkworkPaymentOptionalString(input.paymentScene),
         productType: input.productType === "unknown" ? undefined : input.productType,
       };
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentDetail>(
-        await getCommerceService().payments.create(payload),
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentDetail>(
+        await getPaymentService().payments.create(payload),
         copy.createFailed,
       );
 
@@ -525,29 +525,29 @@ export function createSdkworkPaymentService(
     },
 
     async getDashboard() {
-      if (!hasSdkworkCommerceSession()) {
+      if (!hasSdkworkPaymentSession()) {
         return createEmptyDashboard(clientType);
       }
 
       const [methodsPayload, statisticsPayload, pagePayload] = await Promise.all([
-        getCommerceService().payments.methods.list({ clientType }),
-        getCommerceService().payments.statistics.retrieve(),
-        getCommerceService().payments.records.list({
+        getPaymentService().payments.methods.list({ clientType }),
+        getPaymentService().payments.statistics.retrieve(),
+        getPaymentService().payments.records.list({
             page: 1,
             pageSize,
             sortDirection: "desc",
             sortField: "createdAt",
         }),
       ]);
-      const methods = unwrapSdkworkCommerceResponse<RemotePaymentMethod[]>(
+      const methods = unwrapSdkworkPaymentResponse<RemotePaymentMethod[]>(
         methodsPayload,
         copy.requestFailed,
       );
-      const statistics = unwrapSdkworkCommerceResponse<RemotePaymentStatistics | null>(
+      const statistics = unwrapSdkworkPaymentResponse<RemotePaymentStatistics | null>(
         statisticsPayload,
         copy.requestFailed,
       );
-      const page = unwrapSdkworkCommerceResponse<RemotePageEnvelope<RemotePaymentRecord>>(
+      const page = unwrapSdkworkPaymentResponse<RemotePageEnvelope<RemotePaymentRecord>>(
         pagePayload,
         copy.requestFailed,
       );
@@ -570,9 +570,9 @@ export function createSdkworkPaymentService(
     },
 
     async getPaymentDetail(paymentId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentDetail>(
-        await getCommerceService().payments.records.retrieve(paymentId),
+      requireSdkworkPaymentSession(copy.signInRequired);
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentDetail>(
+        await getPaymentService().payments.records.retrieve(paymentId),
         copy.detailFailed,
       );
 
@@ -580,9 +580,9 @@ export function createSdkworkPaymentService(
     },
 
     async getPaymentStatus(paymentId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentStatus>(
-        await getCommerceService().payments.status.retrieve(paymentId),
+      requireSdkworkPaymentSession(copy.signInRequired);
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus>(
+        await getPaymentService().payments.status.retrieve(paymentId),
         copy.statusFailed,
       );
 
@@ -590,9 +590,9 @@ export function createSdkworkPaymentService(
     },
 
     async getPaymentStatusByOutTradeNo(outTradeNo) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentStatus>(
-        await getCommerceService().payments.status.retrieveByOutTradeNo(outTradeNo),
+      requireSdkworkPaymentSession(copy.signInRequired);
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus>(
+        await getPaymentService().payments.status.retrieveByOutTradeNo(outTradeNo),
         copy.statusByOutTradeNoFailed,
       );
 
@@ -600,9 +600,9 @@ export function createSdkworkPaymentService(
     },
 
     async listOrderPayments(orderId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentStatus[]>(
-        await getCommerceService().payments.orderPayments.list(orderId),
+      requireSdkworkPaymentSession(copy.signInRequired);
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus[]>(
+        await getPaymentService().payments.orderPayments.list(orderId),
         copy.historyFailed,
       );
 
@@ -612,10 +612,10 @@ export function createSdkworkPaymentService(
     },
 
     async reconcilePayment(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPaymentSession(copy.signInRequired);
       const payload = resolveReconcilePayload(input, copy);
-      const result = unwrapSdkworkCommerceResponse<RemotePaymentStatus>(
-        await getCommerceService().payments.reconcile(payload),
+      const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus>(
+        await getPaymentService().payments.reconcile(payload),
         copy.reconcileFailed,
       );
 

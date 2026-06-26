@@ -1,10 +1,10 @@
 import {
-  getSdkworkCommerceService,
-  requireSdkworkCommerceSession,
-  toSdkworkCommerceNumber,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  getSdkworkPromotionService,
+  requireSdkworkPromotionSession,
+  toSdkworkPromotionNumber,
+  unwrapSdkworkPromotionResponse,
+  type SdkworkPromotionAppService,
+} from "@sdkwork/promotion-service";
 import {
   createSdkworkPaymentService,
   type SdkworkPaymentMethod,
@@ -65,7 +65,7 @@ export interface SdkworkSubscriptionMutationInput {
 export type SdkworkSubscriptionPurchaseResult = SdkworkMembershipPurchaseResult;
 
 export interface CreateSdkworkSubscriptionServiceOptions {
-  commerceService?: SdkworkCommerceService;
+  promotionService?: SdkworkPromotionAppService;
   locale?: string | null;
   messages?: SdkworkSubscriptionMessagesOverrides;
   paymentService?: Partial<Pick<SdkworkPaymentService, "getDashboard" | "getEmptyDashboard">>;
@@ -127,7 +127,7 @@ function resolveBestCoupon(
     .sort(
       (left, right) =>
         right.discountAmountCny - left.discountAmountCny
-        || toSdkworkCommerceNumber(left.coupon.remainingDays, Number.MAX_SAFE_INTEGER) - toSdkworkCommerceNumber(right.coupon.remainingDays, Number.MAX_SAFE_INTEGER)
+        || toSdkworkPromotionNumber(left.coupon.remainingDays, Number.MAX_SAFE_INTEGER) - toSdkworkPromotionNumber(right.coupon.remainingDays, Number.MAX_SAFE_INTEGER)
         || left.coupon.name.localeCompare(right.coupon.name),
     )[0]?.coupon ?? null;
 }
@@ -277,25 +277,25 @@ export function createSdkworkSubscriptionService(
   options: CreateSdkworkSubscriptionServiceOptions = {},
 ): SdkworkSubscriptionService {
   const copy = createSdkworkSubscriptionMessages(options.locale, options.messages);
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getPromotionService = () => options.promotionService ?? getSdkworkPromotionService();
   const membershipService: SdkworkMembershipService = options.membershipService
     ? {
         ...createSdkworkMembershipService({
-          commerceService: options.commerceService,
+          promotionService: options.promotionService,
           locale: options.locale,
         }),
         ...options.membershipService,
       }
     : createSdkworkMembershipService({
-        commerceService: options.commerceService,
+        promotionService: options.promotionService,
         locale: options.locale,
       });
   const paymentService: SdkworkPaymentService = options.paymentService
     ? {
-        ...createSdkworkPaymentService({ commerceService: options.commerceService }),
+        ...createSdkworkPaymentService({ promotionService: options.promotionService }),
         ...options.paymentService,
       }
-    : createSdkworkPaymentService({ commerceService: options.commerceService });
+    : createSdkworkPaymentService({ promotionService: options.promotionService });
 
   return {
     async getDashboard() {
@@ -305,14 +305,14 @@ export function createSdkworkSubscriptionService(
       }
 
       const [couponPagePayload, paymentDashboard] = await Promise.all([
-        getCommerceService().promotions.userCoupons.wallet.list({
+        getPromotionService().promotions.userCoupons.wallet.list({
           page: 1,
           page_size: 20,
           status: "available",
         }),
         paymentService.getDashboard(),
       ]);
-      const couponPage = unwrapSdkworkCommerceResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
+      const couponPage = unwrapSdkworkPromotionResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
         couponPagePayload,
         copy.service.requestFailed,
       );
@@ -329,17 +329,17 @@ export function createSdkworkSubscriptionService(
     },
 
     async purchaseSubscription(input) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkPromotionSession(copy.service.signInRequired);
       return runMembershipMutation(membershipService, "memberships.purchase", input);
     },
 
     async renewSubscription(input) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkPromotionSession(copy.service.signInRequired);
       return runMembershipMutation(membershipService, "memberships.renew", input);
     },
 
     async upgradeSubscription(input) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkPromotionSession(copy.service.signInRequired);
       return runMembershipMutation(membershipService, "memberships.upgrade", input);
     },
   };

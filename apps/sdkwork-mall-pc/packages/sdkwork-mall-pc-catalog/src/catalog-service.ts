@@ -1,7 +1,5 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkCatalogRemotePort } from "./catalog-remote-port";
 
 /**
  * 规格参数行：品牌、型号、产地、材质等键值对。
@@ -228,9 +226,8 @@ function readReviewSummary(value: unknown): MallProductDetail["reviewSummary"] {
 }
 
 export async function loadMallProductDetail(productId: string): Promise<MallProductDetail> {
-  const service = getSdkworkCommerceService();
-  const response = await service.catalog.spus.retrieve({ spuId: productId });
-  const record = unwrapSdkworkCommerceResponse(response) as Record<string, unknown>;
+  const response = await getSdkworkCatalogRemotePort().retrieveSpu({ spuId: productId });
+  const record = unwrapSdkworkPaymentResponse(response) as Record<string, unknown>;
   const mediaList = Array.isArray(record.media) ? record.media : [];
   const images = mediaList
     .map((item) =>
@@ -309,13 +306,12 @@ export async function loadMallProductDetail(productId: string): Promise<MallProd
 
 export async function loadMallProductCoupons(): Promise<Array<{ id: string; title: string }>> {
   try {
-    const service = getSdkworkCommerceService();
-    const response = await service.promotions.offers.list({
+    const response = await getSdkworkCatalogRemotePort().listPromotionOffers({
       page: 1,
       page_size: 5,
       status: "active",
     });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     return (
       payload.items?.map((item) => ({
         id: String(item.id ?? item.offerId ?? ""),
@@ -332,10 +328,22 @@ export async function addMallProductToCart(input: {
   quantity: number;
   skuId: string;
 }) {
-  const service = getSdkworkCommerceService();
-  return service.cart.items.create({
+  return getSdkworkCatalogRemotePort().createCartItem({
     spuId: input.productId,
     skuId: input.skuId,
     quantity: input.quantity,
   });
+}
+
+export async function retrieveMallCategory(categoryId: string): Promise<{ id: string; name: string } | null> {
+  const response = await getSdkworkCatalogRemotePort().retrieveCategory({ categoryId });
+  const record = unwrapSdkworkPaymentResponse(response) as Record<string, unknown>;
+  if (!record?.id) {
+    return null;
+  }
+
+  return {
+    id: String(record.id ?? categoryId),
+    name: String(record.name ?? record.title ?? "类目"),
+  };
 }

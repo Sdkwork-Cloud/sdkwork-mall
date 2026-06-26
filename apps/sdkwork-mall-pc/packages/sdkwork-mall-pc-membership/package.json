@@ -30,7 +30,7 @@
   },
   "peerDependencies": {
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/membership-service": "*",
     "@sdkwork/ui-pc-react": "*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
@@ -39,7 +39,7 @@
     "@sdkwork/appbase-pc-react": {
       "optional": true
     },
-    "@sdkwork/commerce-service": {
+    "@sdkwork/membership-service": {
       "optional": true
     },
     "@sdkwork/ui-pc-react": {

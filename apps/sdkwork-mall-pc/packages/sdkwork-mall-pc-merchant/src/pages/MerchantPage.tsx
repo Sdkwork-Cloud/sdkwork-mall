@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkMerchantRemotePort } from "../merchant-remote-port";
 
 export function SdkworkMallMerchantDashboardPage() {
   const [metrics, setMetrics] = useState<Record<string, unknown> | null>(null);
@@ -15,17 +13,17 @@ export function SdkworkMallMerchantDashboardPage() {
     let active = true;
     async function load() {
       try {
-        const service = getSdkworkCommerceService();
+        const service = getSdkworkMerchantRemotePort();
         const [dashboardResult, readinessResult] = await Promise.allSettled([
           service.shops.current.dashboard.retrieve({}),
           service.shops.current.readiness.retrieve({}),
         ]);
         if (active) {
           if (dashboardResult.status === "fulfilled") {
-            setMetrics(unwrapSdkworkCommerceResponse(dashboardResult.value) as Record<string, unknown>);
+            setMetrics(unwrapSdkworkPaymentResponse(dashboardResult.value) as Record<string, unknown>);
           }
           if (readinessResult.status === "fulfilled") {
-            setReadiness(unwrapSdkworkCommerceResponse(readinessResult.value) as Record<string, unknown>);
+            setReadiness(unwrapSdkworkPaymentResponse(readinessResult.value) as Record<string, unknown>);
           }
         }
       } finally {
@@ -101,7 +99,7 @@ export function SdkworkMallMerchantOnboardingPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const [readinessResult, appsResult] = await Promise.allSettled([
         service.shops.current.readiness.retrieve({}),
         service.shops.current.applications.list({ page: 1, page_size: 1 }),
@@ -110,10 +108,10 @@ export function SdkworkMallMerchantOnboardingPage() {
         return;
       }
       if (readinessResult.status === "fulfilled") {
-        setReadiness(unwrapSdkworkCommerceResponse(readinessResult.value) as Record<string, unknown>);
+        setReadiness(unwrapSdkworkPaymentResponse(readinessResult.value) as Record<string, unknown>);
       }
       if (appsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(appsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(appsResult.value) as { items?: Record<string, unknown>[] };
         const first = payload.items?.[0];
         if (first) {
           setLatestApplication({
@@ -134,7 +132,7 @@ export function SdkworkMallMerchantOnboardingPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       await service.shops.current.applications.create({
         shopName,
         contactName,
@@ -237,9 +235,9 @@ export function SdkworkMallMerchantProductsPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkMerchantRemotePort();
     const response = await service.shops.current.products.list({ page: 1, page_size: 50 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setProducts(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -258,7 +256,7 @@ export function SdkworkMallMerchantProductsPage() {
     setBusyId(productId);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       if (action === "publish") {
         await service.shops.current.products.publish(productId, {});
       } else {
@@ -283,7 +281,7 @@ export function SdkworkMallMerchantProductsPage() {
       {message ? <p>{message}</p> : null}
       <Button
         onClick={async () => {
-          const service = getSdkworkCommerceService();
+          const service = getSdkworkMerchantRemotePort();
           await service.shops.current.products.create({ title: "新商品草稿" });
           await reload();
         }}
@@ -347,13 +345,13 @@ export function SdkworkMallMerchantOrdersPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkMerchantRemotePort();
     const response = await service.shops.current.orders.list({
       page: 1,
       page_size: 50,
       status: filter === "all" ? undefined : filter,
     });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setOrders(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -375,10 +373,10 @@ export function SdkworkMallMerchantOrdersPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const response = await service.shops.current.orders.retrieve(selectedOrderId);
       if (active) {
-        setOrderDetail(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setOrderDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void loadDetail();
@@ -391,7 +389,7 @@ export function SdkworkMallMerchantOrdersPage() {
     setBusyId(orderId);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       await service.shops.current.orders.fulfillments.create(orderId, {
         carrierCode: "default",
         trackingNumber: `SF${Date.now()}`,
@@ -470,9 +468,9 @@ export function SdkworkMallMerchantInventoryPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkMerchantRemotePort();
     const response = await service.shops.current.inventory.stocks.list({ page: 1, page_size: 50 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setStocks(
       payload.items?.map((item) => ({
         id: String(item.id ?? item.stockId ?? ""),
@@ -494,7 +492,7 @@ export function SdkworkMallMerchantInventoryPage() {
     }
     setBusyId(stockId);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       await service.shops.current.inventory.stocks.adjustments.create(stockId, {
         deltaQuantity: delta,
         reason: "merchant-adjustment",
@@ -559,9 +557,9 @@ export function SdkworkMallMerchantFulfillmentPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkMerchantRemotePort();
     const response = await service.shops.current.orders.list({ status: "paid", page: 1, page_size: 20 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setOrders(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -580,7 +578,7 @@ export function SdkworkMallMerchantFulfillmentPage() {
     setBusyId(orderId);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       await service.shops.current.orders.fulfillments.create(orderId, {
         carrierCode: "default",
         trackingNumber: `SF${Date.now()}`,
@@ -642,7 +640,7 @@ export function SdkworkMallMerchantSettlementPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const [settlementsResult, depositResult, profileResult] = await Promise.allSettled([
         service.shops.current.settlements.list({ page: 1, page_size: 10 }),
         service.shops.current.depositAccount.retrieve({}),
@@ -652,7 +650,7 @@ export function SdkworkMallMerchantSettlementPage() {
         return;
       }
       if (settlementsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(settlementsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(settlementsResult.value) as { items?: Record<string, unknown>[] };
         setSettlements(
           payload.items?.map((item) => ({
             id: String(item.id ?? ""),
@@ -662,10 +660,10 @@ export function SdkworkMallMerchantSettlementPage() {
         );
       }
       if (depositResult.status === "fulfilled") {
-        setDeposit(unwrapSdkworkCommerceResponse(depositResult.value) as Record<string, unknown>);
+        setDeposit(unwrapSdkworkPaymentResponse(depositResult.value) as Record<string, unknown>);
       }
       if (profileResult.status === "fulfilled") {
-        setSettlementProfile(unwrapSdkworkCommerceResponse(profileResult.value) as Record<string, unknown>);
+        setSettlementProfile(unwrapSdkworkPaymentResponse(profileResult.value) as Record<string, unknown>);
       }
       setLoading(false);
     }
@@ -731,16 +729,16 @@ export function SdkworkMallMerchantShopPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       try {
         const shopResponse = await service.shops.current.retrieve({});
-        const shop = unwrapSdkworkCommerceResponse(shopResponse) as Record<string, unknown>;
+        const shop = unwrapSdkworkPaymentResponse(shopResponse) as Record<string, unknown>;
         if (active) {
           setShopName(String(shop.name ?? shop.shopName ?? ""));
         }
 
         const channelsResponse = await service.shops.current.channels.list({ page: 1, page_size: 5 });
-        const channelsPayload = unwrapSdkworkCommerceResponse(channelsResponse) as {
+        const channelsPayload = unwrapSdkworkPaymentResponse(channelsResponse) as {
           items?: Record<string, unknown>[];
         };
         const channel = channelsPayload.items?.[0];
@@ -752,7 +750,7 @@ export function SdkworkMallMerchantShopPage() {
         }
 
         const policiesResponse = await service.shops.current.policies.list({ page: 1, page_size: 5 });
-        const policiesPayload = unwrapSdkworkCommerceResponse(policiesResponse) as {
+        const policiesPayload = unwrapSdkworkPaymentResponse(policiesResponse) as {
           items?: Record<string, unknown>[];
         };
         const announcementPolicy = policiesPayload.items?.find(
@@ -781,9 +779,9 @@ export function SdkworkMallMerchantShopPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const channelsResponse = await service.shops.current.channels.list({ page: 1, page_size: 1 });
-      const channelsPayload = unwrapSdkworkCommerceResponse(channelsResponse) as {
+      const channelsPayload = unwrapSdkworkPaymentResponse(channelsResponse) as {
         items?: Record<string, unknown>[];
       };
       const channel = channelsPayload.items?.[0];
@@ -848,9 +846,9 @@ export function SdkworkMallMerchantMarketingPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const response = await service.promotions.offers.list({ page: 1, page_size: 20, status: "active" });
-      const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+      const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
       if (active) {
         setOffers(
           payload.items?.map((item) => ({
@@ -912,10 +910,10 @@ export function SdkworkMallMerchantDataPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const response = await service.shops.current.dashboard.retrieve({});
       if (active) {
-        setMetrics(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setMetrics(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void load();
@@ -946,7 +944,7 @@ export function SdkworkMallMerchantServicePage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const [ordersResult, afterSalesResult, servicesResult] = await Promise.allSettled([
         service.shops.current.orders.list({ page: 1, page_size: 8 }),
         service.afterSales.requests.list({ page: 1, page_size: 8 }),
@@ -958,7 +956,7 @@ export function SdkworkMallMerchantServicePage() {
       }
 
       if (ordersResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(ordersResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(ordersResult.value) as { items?: Record<string, unknown>[] };
         setOrders(
           payload.items?.map((item) => ({
             id: String(item.id ?? item.orderNo ?? ""),
@@ -969,7 +967,7 @@ export function SdkworkMallMerchantServicePage() {
       }
 
       if (afterSalesResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(afterSalesResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(afterSalesResult.value) as { items?: Record<string, unknown>[] };
         setAfterSales(
           payload.items?.map((item) => ({
             id: String(item.id ?? ""),
@@ -981,7 +979,7 @@ export function SdkworkMallMerchantServicePage() {
       }
 
       if (servicesResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(servicesResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(servicesResult.value) as { items?: Record<string, unknown>[] };
         setCustomerServices(
           payload.items?.map((item) => ({
             channel: String(item.serviceChannel ?? item.service_channel ?? "在线客服"),
@@ -1102,9 +1100,9 @@ export function SdkworkMallMerchantAfterSalesPage() {
 
   async function reload() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkMerchantRemotePort();
     const response = await service.afterSales.requests.list({});
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setRows(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -1127,10 +1125,10 @@ export function SdkworkMallMerchantAfterSalesPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const response = await service.afterSales.requests.retrieve(selectedId);
       if (active) {
-        setDetail(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void loadDetail();
@@ -1202,7 +1200,7 @@ export function SdkworkMallMerchantSettingsPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkMerchantRemotePort();
       const [
         shopResult,
         appsResult,
@@ -1226,10 +1224,10 @@ export function SdkworkMallMerchantSettingsPage() {
       ]);
 
       if (shopResult.status === "fulfilled" && active) {
-        setShop(unwrapSdkworkCommerceResponse(shopResult.value) as Record<string, unknown>);
+        setShop(unwrapSdkworkPaymentResponse(shopResult.value) as Record<string, unknown>);
       }
       if (appsResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(appsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(appsResult.value) as { items?: Record<string, unknown>[] };
         setApplications(
           payload.items?.map((item) => ({
             id: String(item.id ?? item.applicationNo ?? ""),
@@ -1239,7 +1237,7 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (bindingsResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(bindingsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(bindingsResult.value) as { items?: Record<string, unknown>[] };
         setBindings(
           payload.items?.map((item) => ({
             category: String(item.platformCategoryName ?? item.platform_category_name ?? item.shopCategoryCode ?? "类目"),
@@ -1248,7 +1246,7 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (brandsResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(brandsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(brandsResult.value) as { items?: Record<string, unknown>[] };
         setBrands(
           payload.items?.map((item) => ({
             brand: String(item.brandName ?? item.brand_name ?? item.brandCode ?? "品牌"),
@@ -1257,7 +1255,7 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (qualificationsResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(qualificationsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(qualificationsResult.value) as { items?: Record<string, unknown>[] };
         setQualifications(
           payload.items?.map((item) => ({
             type: String(item.qualificationType ?? item.qualification_type ?? "资质"),
@@ -1266,7 +1264,7 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (shippingResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(shippingResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(shippingResult.value) as { items?: Record<string, unknown>[] };
         setShippingTemplates(
           payload.items?.map((item) => ({
             id: String(item.id ?? ""),
@@ -1276,7 +1274,7 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (returnResult.status === "fulfilled" && active) {
-        const payload = unwrapSdkworkCommerceResponse(returnResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(returnResult.value) as { items?: Record<string, unknown>[] };
         setReturnAddresses(
           payload.items?.map((item) => ({
             id: String(item.id ?? ""),
@@ -1286,10 +1284,10 @@ export function SdkworkMallMerchantSettingsPage() {
         );
       }
       if (fulfillmentResult.status === "fulfilled" && active) {
-        setFulfillmentProfile(unwrapSdkworkCommerceResponse(fulfillmentResult.value) as Record<string, unknown>);
+        setFulfillmentProfile(unwrapSdkworkPaymentResponse(fulfillmentResult.value) as Record<string, unknown>);
       }
       if (hoursResult.status === "fulfilled" && active) {
-        setBusinessHours(unwrapSdkworkCommerceResponse(hoursResult.value) as Record<string, unknown>);
+        setBusinessHours(unwrapSdkworkPaymentResponse(hoursResult.value) as Record<string, unknown>);
       }
       if (active) {
         setLoading(false);

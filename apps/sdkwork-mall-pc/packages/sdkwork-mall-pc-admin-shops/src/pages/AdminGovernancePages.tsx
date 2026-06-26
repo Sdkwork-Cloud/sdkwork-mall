@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 import { useEffect, useState } from "react";
 
 export function SdkworkMallAdminUsersPage() {
@@ -29,9 +27,9 @@ export function SdkworkMallAdminBrandsPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const shopsResponse = await service.admin.shops.management.list({ page: 1, page_size: 5 });
-      const shopsPayload = unwrapSdkworkCommerceResponse(shopsResponse) as { items?: Record<string, unknown>[] };
+      const shopsPayload = unwrapSdkworkPaymentResponse(shopsResponse) as { items?: Record<string, unknown>[] };
       const brandRows: Array<{ brandName: string; shopName: string; status: string }> = [];
 
       for (const shop of shopsPayload.items ?? []) {
@@ -44,7 +42,7 @@ export function SdkworkMallAdminBrandsPage() {
             page: 1,
             page_size: 5,
           });
-          const brandPayload = unwrapSdkworkCommerceResponse(brandResponse) as {
+          const brandPayload = unwrapSdkworkPaymentResponse(brandResponse) as {
             items?: Record<string, unknown>[];
           };
           for (const brand of brandPayload.items ?? []) {

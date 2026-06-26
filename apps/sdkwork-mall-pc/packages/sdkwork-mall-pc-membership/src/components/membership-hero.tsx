@@ -5,8 +5,8 @@ import {
 } from "lucide-react";
 import { Button } from "@sdkwork/ui-pc-react/components/ui/button";
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-} from "@sdkwork/commerce-service";
+  formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny,
+} from "@sdkwork/membership-service";
 import {
   createSdkworkMembershipGlassStyle,
   createSdkworkMembershipHeroStyle,

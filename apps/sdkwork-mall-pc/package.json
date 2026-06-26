@@ -20,7 +20,6 @@
     "@sdkwork/appbase-pc-react": "workspace:*",
     "@sdkwork/auth-pc-react": "workspace:*",
     "@sdkwork/auth-runtime-pc-react": "workspace:*",
-    "@sdkwork/commerce-runtime": "workspace:*",
     "@sdkwork/iam-contracts": "workspace:*",
     "@sdkwork/iam-runtime": "workspace:*",
     "@sdkwork/sdk-common": "workspace:*",

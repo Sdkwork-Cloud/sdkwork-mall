@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureMembershipServiceMockSession,
+  createMembershipServiceMock,
+  resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkMembershipService } from "../src";
 
@@ -15,15 +15,15 @@ const proLevelIcon = {
 
 describe("sdkwork-mall-pc-membership service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "membership-auth-token" });
+    configureMembershipServiceMockSession({ authToken: "membership-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
   });
 
   it("maps membership plans, benefits, and packages into a reusable membership dashboard", async () => {
-    const commerceService = createCommerceServiceMock({
+    const membershipService = createMembershipServiceMock({
       memberships: {
         current: {
           retrieve: vi.fn().mockResolvedValue({
@@ -144,7 +144,7 @@ describe("sdkwork-mall-pc-membership service", () => {
     });
 
     const service = createSdkworkMembershipService({
-      commerceService,
+      membershipService,
     });
 
     const dashboard = await service.getDashboard();
@@ -182,7 +182,7 @@ describe("sdkwork-mall-pc-membership service", () => {
   });
 
   it("returns a guest-safe membership dashboard with public package plans when the wallet overview is anonymous", async () => {
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
     const packagesList = vi.fn().mockResolvedValue({
       code: "2000",
       data: [
@@ -201,7 +201,7 @@ describe("sdkwork-mall-pc-membership service", () => {
       ],
     });
     const service = createSdkworkMembershipService({
-      commerceService: createCommerceServiceMock({
+      membershipService: createMembershipServiceMock({
         memberships: {
           packages: {
             list: packagesList,
@@ -263,7 +263,7 @@ describe("sdkwork-mall-pc-membership service", () => {
         targetLevelName: "Pro",
       },
     });
-    const commerceService = createCommerceServiceMock({
+    const membershipService = createMembershipServiceMock({
       memberships: {
         purchases: {
           create: purchase,
@@ -273,7 +273,7 @@ describe("sdkwork-mall-pc-membership service", () => {
       },
     });
     const service = createSdkworkMembershipService({
-      commerceService,
+      membershipService,
     });
 
     await expect(
@@ -330,7 +330,7 @@ describe("sdkwork-mall-pc-membership service", () => {
   });
 
   it("localizes membership auth and mutation fallback errors at the membership boundary", async () => {
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
     const localizedAuthService = createSdkworkMembershipService({
       locale: "zh-CN",
       messages: {
@@ -346,9 +346,9 @@ describe("sdkwork-mall-pc-membership service", () => {
       }),
     ).rejects.toThrow("Please sign in before managing memberships.");
 
-    configureCommerceServiceMockSession({ authToken: "membership-auth-token" });
+    configureMembershipServiceMockSession({ authToken: "membership-auth-token" });
     const localizedMutationService = createSdkworkMembershipService({
-      commerceService: createCommerceServiceMock({
+      membershipService: createMembershipServiceMock({
         memberships: {
           purchases: {
             create: vi.fn().mockResolvedValue({

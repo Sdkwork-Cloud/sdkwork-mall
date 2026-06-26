@@ -13,10 +13,8 @@ membership package purchase entry points for top-header menus, package selection
 
 ## Depends on
 
-- `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/mall-pc-membership` for membership dashboard types and membership mutation mapping
-- `@sdkwork/commerce-service` for generated app SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
+- `@sdkwork/appbase-pc-react` for shared workspace primitives
+- `@sdkwork/mall-pc-membership` for membership purchase, renew, and upgrade mutations
 
 ## Ownership
 
@@ -30,7 +28,7 @@ The purchase flow is intentionally service-first:
 
 ## Runtime Boundary
 
-Remote purchase, renew, and upgrade calls are routed through `@sdkwork/commerce-service` and `memberships.purchases.*` via the reusable membership service. This package does not create raw HTTP clients, mutate browser location, or own wallet state.
+Remote purchase, renew, and upgrade calls are routed through `@sdkwork/membership-service` and `memberships.purchases.*` via the reusable membership service. This package does not create raw HTTP clients, mutate browser location, or own wallet state.
 
 ## Verification
 

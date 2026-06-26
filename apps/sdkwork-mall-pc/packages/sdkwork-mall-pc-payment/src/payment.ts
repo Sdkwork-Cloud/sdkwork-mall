@@ -3,7 +3,7 @@ import {
   type CreateSdkworkAppCapabilityManifestOptions,
   type SdkworkAppCapabilityManifest,
 } from "@sdkwork/appbase-pc-react";
-import type { SdkworkMediaResource } from "@sdkwork/commerce-service";
+import type { SdkworkMediaResource } from "@sdkwork/payment-service";
 import {
   createSdkworkPaymentMessages,
   type SdkworkPaymentMessagesOverrides,

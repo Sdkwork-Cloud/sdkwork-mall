@@ -143,13 +143,14 @@ describe("sdkwork-mall-pc-admin-product service", () => {
     });
   });
 
-  it("keeps the product admin remote boundary on Commerce service only", () => {
+  it("keeps the product admin remote boundary on admin remote port only", () => {
     const source = readFileSync(
       "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-product/src/catalogService.ts",
       "utf8",
     );
 
-    expect(source).toContain("@sdkwork/commerce-service");
+    expect(source).toContain("@sdkwork/mall-pc-admin-core/admin-remote-port");
+    expect(source).toContain("getSdkworkAdminRemotePort");
     expect(source).toContain("catalog.products.management.retrieve");
     expect(source).toContain("catalog.categories.management.list");
     expect(source).toContain("catalog.attributes.management.list");

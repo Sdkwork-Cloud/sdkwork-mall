@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 interface RiskSignalRow {
   id: string;
@@ -21,9 +19,9 @@ export function SdkworkMallAdminRiskPage() {
 
   async function refresh() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkAdminRemotePort();
     const shopsResponse = await service.admin.shops.management.list({ page: 1, page_size: 10 });
-    const shopsPayload = unwrapSdkworkCommerceResponse(shopsResponse) as { items?: Record<string, unknown>[] };
+    const shopsPayload = unwrapSdkworkPaymentResponse(shopsResponse) as { items?: Record<string, unknown>[] };
     const shops = shopsPayload.items ?? [];
     const rows: RiskSignalRow[] = [];
 
@@ -34,7 +32,7 @@ export function SdkworkMallAdminRiskPage() {
       }
       try {
         const riskResponse = await service.admin.shops.riskSignals.list({ shopId, page: 1, page_size: 5 });
-        const riskPayload = unwrapSdkworkCommerceResponse(riskResponse) as { items?: Record<string, unknown>[] };
+        const riskPayload = unwrapSdkworkPaymentResponse(riskResponse) as { items?: Record<string, unknown>[] };
         for (const signal of riskPayload.items ?? []) {
           rows.push({
             id: String(signal.id ?? ""),
@@ -61,7 +59,7 @@ export function SdkworkMallAdminRiskPage() {
   async function resolveSignal(signal: RiskSignalRow) {
     setBusySignalId(signal.id);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       await service.admin.shops.riskSignals.resolve(signal.shopId, signal.id, {
         resolution: "reviewed",
       });

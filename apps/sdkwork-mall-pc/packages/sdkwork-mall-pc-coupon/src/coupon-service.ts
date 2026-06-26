@@ -1,12 +1,12 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  requireSdkworkCommerceSession,
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  getSdkworkPromotionService,
+  hasSdkworkPromotionSession,
+  requireSdkworkPromotionSession,
+  toNullableSdkworkPromotionNumber,
+  toSdkworkPromotionOptionalString,
+  unwrapSdkworkPromotionResponse,
+  type SdkworkPromotionAppService,
+} from "@sdkwork/promotion-service";
 import {
   normalizeSdkworkRemoteCoupon,
   normalizeSdkworkRemoteUserCoupon,
@@ -63,7 +63,7 @@ export interface SdkworkCouponUseInput {
 }
 
 export interface CreateSdkworkCouponServiceOptions {
-  commerceService?: SdkworkCommerceService;
+  promotionService?: SdkworkPromotionAppService;
   locale?: string | null;
   messages?: SdkworkCouponMessagesOverrides;
   pageSize?: number;
@@ -111,10 +111,10 @@ function createEmptyDashboard(): SdkworkCouponDashboardData {
 
 function mapStatistics(statistics: RemoteCouponStatistics | null | undefined): SdkworkCouponStatistics {
   return {
-    expiredCount: toNullableSdkworkCommerceNumber(statistics?.expiredCount) ?? 0,
-    totalCoupons: toNullableSdkworkCommerceNumber(statistics?.totalCoupons) ?? 0,
-    unusedCount: toNullableSdkworkCommerceNumber(statistics?.unusedCount) ?? 0,
-    usedCount: toNullableSdkworkCommerceNumber(statistics?.usedCount) ?? 0,
+    expiredCount: toNullableSdkworkPromotionNumber(statistics?.expiredCount) ?? 0,
+    totalCoupons: toNullableSdkworkPromotionNumber(statistics?.totalCoupons) ?? 0,
+    unusedCount: toNullableSdkworkPromotionNumber(statistics?.unusedCount) ?? 0,
+    usedCount: toNullableSdkworkPromotionNumber(statistics?.usedCount) ?? 0,
   };
 }
 
@@ -149,15 +149,15 @@ export function createSdkworkCouponService(
   options: CreateSdkworkCouponServiceOptions = {},
 ): SdkworkCouponService {
   const copy = createSdkworkCouponMessages(options.locale, options.messages).service;
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getPromotionService = () => options.promotionService ?? getSdkworkPromotionService();
   const pageSize = options.pageSize ?? 20;
 
   return {
     async cancelUseCoupon(userCouponId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedUserCouponId = stripPrefixedId(userCouponId, "user-coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.discountApplications.reversals.create({
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.discountApplications.reversals.create({
           userCouponId: normalizedUserCouponId,
         }),
         copy.cancelUseFailed,
@@ -167,11 +167,11 @@ export function createSdkworkCouponService(
     },
 
     async exchangeCouponByPoints(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const couponId = stripPrefixedId(input.couponId, "coupon-");
       const requestNo = input.requestNo ?? createRequestNo("coupon-points");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.userCoupons.claims.create({
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.userCoupons.claims.create({
           offerId: couponId,
           requestNo,
           sourceType: "points_exchange",
@@ -183,10 +183,10 @@ export function createSdkworkCouponService(
     },
 
     async getCouponDetail(couponId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedCouponId = stripPrefixedId(couponId, "coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteCouponLike>(
-        await getCommerceService().promotions.offers.retrieve(normalizedCouponId),
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteCouponLike>(
+        await getPromotionService().promotions.offers.retrieve(normalizedCouponId),
         copy.couponDetailFailed,
       );
 
@@ -194,34 +194,34 @@ export function createSdkworkCouponService(
     },
 
     async getDashboard() {
-      if (!hasSdkworkCommerceSession()) {
+      if (!hasSdkworkPromotionSession()) {
         return createEmptyDashboard();
       }
 
       const [catalogPayload, myPayload, availablePayload] = await Promise.all([
-        getCommerceService().promotions.offers.list({
+        getPromotionService().promotions.offers.list({
             page: 1,
             page_size: pageSize,
         }),
-        getCommerceService().promotions.userCoupons.wallet.list({
+        getPromotionService().promotions.userCoupons.wallet.list({
             page: 1,
             page_size: pageSize,
         }),
-        getCommerceService().promotions.userCoupons.wallet.list({
+        getPromotionService().promotions.userCoupons.wallet.list({
             page: 1,
             page_size: pageSize,
             status: "available",
         }),
       ]);
-      const catalogPage = unwrapSdkworkCommerceResponse<RemotePageEnvelope<SdkworkRemoteCouponLike>>(
+      const catalogPage = unwrapSdkworkPromotionResponse<RemotePageEnvelope<SdkworkRemoteCouponLike>>(
         catalogPayload,
         copy.requestFailed,
       );
-      const myPage = unwrapSdkworkCommerceResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
+      const myPage = unwrapSdkworkPromotionResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
         myPayload,
         copy.requestFailed,
       );
-      const availablePage = unwrapSdkworkCommerceResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
+      const availablePage = unwrapSdkworkPromotionResponse<RemotePageEnvelope<SdkworkRemoteUserCouponLike>>(
         availablePayload,
         copy.requestFailed,
       );
@@ -280,10 +280,10 @@ export function createSdkworkCouponService(
     },
 
     async getUserCouponDetail(userCouponId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedUserCouponId = stripPrefixedId(userCouponId, "user-coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.userCoupons.wallet.retrieve(normalizedUserCouponId),
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.userCoupons.wallet.retrieve(normalizedUserCouponId),
         copy.userCouponDetailFailed,
       );
 
@@ -291,10 +291,10 @@ export function createSdkworkCouponService(
     },
 
     async receiveCoupon(couponId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedCouponId = stripPrefixedId(couponId, "coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.userCoupons.claims.create({ offerId: normalizedCouponId }),
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.userCoupons.claims.create({ offerId: normalizedCouponId }),
         copy.receiveFailed,
       );
 
@@ -302,10 +302,10 @@ export function createSdkworkCouponService(
     },
 
     async redeemCoupon(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.codes.redemptions.create({
-          channel: toSdkworkCommerceOptionalString(input.channel),
+      requireSdkworkPromotionSession(copy.signInRequired);
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.codes.redemptions.create({
+          channel: toSdkworkPromotionOptionalString(input.channel),
           code: input.redeemCode,
         }),
         copy.redeemFailed,
@@ -315,11 +315,11 @@ export function createSdkworkCouponService(
     },
 
     async rollbackPointsExchange(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedUserCouponId = stripPrefixedId(input.userCouponId, "user-coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.discountApplications.reversals.create({
-          reason: toSdkworkCommerceOptionalString(input.reason),
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.discountApplications.reversals.create({
+          reason: toSdkworkPromotionOptionalString(input.reason),
           userCouponId: normalizedUserCouponId,
         }),
         copy.rollbackFailed,
@@ -329,10 +329,10 @@ export function createSdkworkCouponService(
     },
 
     async useCoupon(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkPromotionSession(copy.signInRequired);
       const normalizedUserCouponId = stripPrefixedId(input.userCouponId, "user-coupon-");
-      const result = unwrapSdkworkCommerceResponse<SdkworkRemoteUserCouponLike>(
-        await getCommerceService().promotions.discountApplications.create({
+      const result = unwrapSdkworkPromotionResponse<SdkworkRemoteUserCouponLike>(
+        await getPromotionService().promotions.discountApplications.create({
           orderId: input.orderId,
           userCouponId: normalizedUserCouponId,
         }),

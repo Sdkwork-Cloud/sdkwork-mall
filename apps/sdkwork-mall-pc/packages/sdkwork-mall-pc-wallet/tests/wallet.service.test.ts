@@ -1,22 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureAccountServiceMockSession,
+  createAccountServiceMock,
+  resetAccountServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkWalletService } from "../src";
 
 describe("sdkwork-mall-pc-wallet service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "wallet-auth-token" });
+    configureAccountServiceMockSession({ authToken: "wallet-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
   });
 
   it("maps account, points history, and recharge packages into a wallet-owned overview", async () => {
-    const commerceService = createCommerceServiceMock({
+    const accountService = createAccountServiceMock({
       accounts: {
         current: {
           summary: {
@@ -128,7 +128,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
     });
 
     const service = createSdkworkWalletService({
-      commerceService,
+      accountService,
     });
 
     const overview = await service.getOverview({
@@ -157,7 +157,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
   });
 
   it("returns a guest-safe empty overview when runtime auth is missing", async () => {
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
     const service = createSdkworkWalletService();
 
     const overview = await service.getOverview();
@@ -196,7 +196,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
         transactionId: "TXN-300",
       },
     });
-    const commerceService = createCommerceServiceMock({
+    const accountService = createAccountServiceMock({
       recharges: {
         orders: {
           create: rechargePoints,
@@ -209,7 +209,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
       },
     });
     const service = createSdkworkWalletService({
-      commerceService,
+      accountService,
     });
 
     await expect(
@@ -266,7 +266,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
   it("rejects withdraw requests missing required settlement fields before calling the wallet sdk", async () => {
     const withdraw = vi.fn();
     const service = createSdkworkWalletService({
-      commerceService: createCommerceServiceMock({
+      accountService: createAccountServiceMock({
         wallet: {
           withdrawalTransfers: {
             create: withdraw,

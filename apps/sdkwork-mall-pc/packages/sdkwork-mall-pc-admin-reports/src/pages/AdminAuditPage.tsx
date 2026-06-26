@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 export function SdkworkMallAdminAuditPage() {
   const [events, setEvents] = useState<Array<{ action: string; actor: string; id: string }>>([]);
@@ -12,9 +10,9 @@ export function SdkworkMallAdminAuditPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const response = await service.admin.audit.commerceEvents.list({ page: 1, page_size: 20 });
-      const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+      const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
       if (active) {
         setEvents(
           payload.items?.map((item) => ({

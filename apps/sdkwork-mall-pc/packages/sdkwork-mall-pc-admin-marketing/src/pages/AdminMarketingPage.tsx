@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 import { MALL_CMS_OFFER_MARKER } from "@sdkwork/mall-pc-cms/cms-service";
 
 interface MallCampaignRow {
@@ -29,9 +27,9 @@ export function SdkworkMallAdminMarketingPage() {
   const [message, setMessage] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkAdminRemotePort();
     const response = await service.admin.promotions.offers.management.list({ page: 1, page_size: 50 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setOffers(
       payload.items
         ?.filter((item) => !isCmsConfigOffer(item))
@@ -65,7 +63,7 @@ export function SdkworkMallAdminMarketingPage() {
     setBusy(true);
     setMessage(null);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       await service.admin.promotions.offers.create({
         code: code.trim() || undefined,
         description: "平台营销活动",

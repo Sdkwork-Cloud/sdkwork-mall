@@ -4,6 +4,18 @@ import {
   type SdkworkCommerceSessionTokens,
 } from "@sdkwork/commerce-service";
 import {
+  configureSdkworkAccountSessionTokenProvider,
+  type SdkworkAccountSessionTokens,
+} from "@sdkwork/account-service";
+import {
+  configureSdkworkMembershipSessionTokenProvider,
+  type SdkworkMembershipSessionTokens,
+} from "@sdkwork/membership-service";
+import {
+  configureSdkworkPromotionSessionTokenProvider,
+  type SdkworkPromotionSessionTokens,
+} from "@sdkwork/promotion-service";
+import {
   SDKWORK_COMMERCE_APP_SDK_REQUIRED_METHODS,
   SDKWORK_COMMERCE_BACKEND_SDK_REQUIRED_METHODS,
 } from "@sdkwork/commerce-sdk-ports";
@@ -81,4 +93,67 @@ function mergeCommerceService<T>(base: T, overrides: DeepPartial<T>): T {
   }
 
   return base;
+}
+
+export function createPaymentServiceMock(
+  overrides: DeepPartial<SdkworkCommerceService> = {},
+) {
+  return createCommerceServiceMock(overrides);
+}
+
+export const configurePaymentServiceMockSession = configureCommerceServiceMockSession;
+export const resetPaymentServiceMockSession = resetCommerceServiceMockSession;
+
+export function createOrderServiceMock(
+  overrides: DeepPartial<SdkworkCommerceService> = {},
+) {
+  return createCommerceServiceMock(overrides);
+}
+
+export function createMembershipServiceMock(
+  overrides: DeepPartial<SdkworkCommerceService> = {},
+) {
+  return createCommerceServiceMock(overrides);
+}
+
+export function createPromotionServiceMock(
+  overrides: DeepPartial<SdkworkCommerceService> = {},
+) {
+  return createCommerceServiceMock(overrides);
+}
+
+export function createAccountServiceMock(
+  overrides: DeepPartial<SdkworkCommerceService> = {},
+) {
+  return createCommerceServiceMock(overrides);
+}
+
+export const configureOrderServiceMockSession = configureCommerceServiceMockSession;
+export const resetOrderServiceMockSession = resetCommerceServiceMockSession;
+export function configureMembershipServiceMockSession(
+  tokens: SdkworkMembershipSessionTokens = { authToken: "membership-auth-token" },
+): void {
+  configureSdkworkMembershipSessionTokenProvider(() => tokens);
+}
+
+export function resetMembershipServiceMockSession(): void {
+  configureSdkworkMembershipSessionTokenProvider(null);
+}
+export function configurePromotionServiceMockSession(
+  tokens: SdkworkPromotionSessionTokens = { authToken: "promotion-auth-token" },
+): void {
+  configureSdkworkPromotionSessionTokenProvider(() => tokens);
+}
+
+export function resetPromotionServiceMockSession(): void {
+  configureSdkworkPromotionSessionTokenProvider(null);
+}
+export function configureAccountServiceMockSession(
+  tokens: SdkworkAccountSessionTokens = { authToken: "account-auth-token" },
+): void {
+  configureSdkworkAccountSessionTokenProvider(() => tokens);
+}
+
+export function resetAccountServiceMockSession(): void {
+  configureSdkworkAccountSessionTokenProvider(null);
 }

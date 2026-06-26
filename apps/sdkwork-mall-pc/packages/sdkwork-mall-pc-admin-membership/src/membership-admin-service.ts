@@ -1,11 +1,12 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  requireSdkworkCommerceSession,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceRequestParams,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  hasSdkworkMembershipSession,
+  requireSdkworkMembershipSession,
+} from "@sdkwork/membership-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import {
+  getSdkworkAdminRemotePort,
+  type SdkworkAdminRemotePort,
+} from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 import {
   createSdkworkMembershipAdminMessages,
   type SdkworkMembershipAdminMessages,
@@ -78,11 +79,13 @@ export interface SdkworkMembershipAdminEntitlement {
   status: SdkworkMembershipAdminStatus;
 }
 
-export type SdkworkMembershipAdminEntitlementsListParams = SdkworkCommerceRequestParams;
-export type SdkworkMembershipAdminLevelsListParams = SdkworkCommerceRequestParams;
-export type SdkworkMembershipAdminMembershipsListParams = SdkworkCommerceRequestParams;
-export type SdkworkMembershipAdminPackageGroupsListParams = SdkworkCommerceRequestParams;
-export type SdkworkMembershipAdminPackagesListParams = SdkworkCommerceRequestParams;
+export type SdkworkMembershipAdminRequestParams = Record<string, unknown>;
+
+export type SdkworkMembershipAdminEntitlementsListParams = SdkworkMembershipAdminRequestParams;
+export type SdkworkMembershipAdminLevelsListParams = SdkworkMembershipAdminRequestParams;
+export type SdkworkMembershipAdminMembershipsListParams = SdkworkMembershipAdminRequestParams;
+export type SdkworkMembershipAdminPackageGroupsListParams = SdkworkMembershipAdminRequestParams;
+export type SdkworkMembershipAdminPackagesListParams = SdkworkMembershipAdminRequestParams;
 
 export interface SdkworkMembershipAdminSummary {
   activeMemberships: number;
@@ -104,7 +107,7 @@ export interface SdkworkMembershipAdminDashboardData {
 }
 
 export interface CreateSdkworkMembershipAdminServiceOptions {
-  commerceService?: SdkworkCommerceService;
+  adminRemotePort?: SdkworkAdminRemotePort;
   locale?: string | null;
   messages?: SdkworkMembershipAdminMessagesOverrides;
 }
@@ -113,19 +116,19 @@ export interface SdkworkMembershipAdminService {
   assignPackagesToGroup(
     packages: SdkworkMembershipAdminPackage[],
     packageGroupId: string,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminPackage[]>;
-  createLevel(input: SdkworkMembershipAdminLevelUpdateInput, requestParams?: SdkworkCommerceRequestParams): Promise<SdkworkMembershipAdminLevel>;
-  createPackage(input: SdkworkMembershipAdminPackageUpdateInput, requestParams?: SdkworkCommerceRequestParams): Promise<SdkworkMembershipAdminPackage>;
+  createLevel(input: SdkworkMembershipAdminLevelUpdateInput, requestParams?: SdkworkMembershipAdminRequestParams): Promise<SdkworkMembershipAdminLevel>;
+  createPackage(input: SdkworkMembershipAdminPackageUpdateInput, requestParams?: SdkworkMembershipAdminRequestParams): Promise<SdkworkMembershipAdminPackage>;
   createPackageGroup(
     input: SdkworkMembershipAdminPackageGroupMutationInput,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminPackageGroup>;
-  deleteLevel(levelId: string, requestParams?: SdkworkCommerceRequestParams): Promise<SdkworkMembershipAdminLevelDeleteResult>;
-  deletePackage(packageId: string, requestParams?: SdkworkCommerceRequestParams): Promise<SdkworkMembershipAdminPackageDeleteResult>;
+  deleteLevel(levelId: string, requestParams?: SdkworkMembershipAdminRequestParams): Promise<SdkworkMembershipAdminLevelDeleteResult>;
+  deletePackage(packageId: string, requestParams?: SdkworkMembershipAdminRequestParams): Promise<SdkworkMembershipAdminPackageDeleteResult>;
   deletePackageGroup(
     packageGroupId: string,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminPackageGroupDeleteResult>;
   getDashboard(): Promise<SdkworkMembershipAdminDashboardData>;
   getEmptyDashboard(): SdkworkMembershipAdminDashboardData;
@@ -137,22 +140,22 @@ export interface SdkworkMembershipAdminService {
   updateLevel(
     levelId: string,
     input: SdkworkMembershipAdminLevelUpdateInput,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminLevel>;
   updateMembershipStatus(
     membershipId: string,
     input: SdkworkMembershipAdminMembershipUpdateInput,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminMembership>;
   updatePackage(
     packageId: string,
     input: SdkworkMembershipAdminPackageUpdateInput,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminPackage>;
   updatePackageGroup(
     packageGroupId: string,
     input: SdkworkMembershipAdminPackageGroupMutationInput,
-    requestParams?: SdkworkCommerceRequestParams,
+    requestParams?: SdkworkMembershipAdminRequestParams,
   ): Promise<SdkworkMembershipAdminPackageGroup>;
 }
 
@@ -229,7 +232,7 @@ function createPackageGroupAssignmentInput(
 }
 
 function unwrapAdminResponse<T>(payload: unknown, copy: SdkworkMembershipAdminCopyContext, fallbackMessage: string): T {
-  return unwrapSdkworkCommerceResponse<T>(payload, fallbackMessage || copy.service.loadFailed);
+  return unwrapSdkworkPaymentResponse<T>(payload, fallbackMessage || copy.service.loadFailed);
 }
 
 async function runMembershipAdminOperation<T>(
@@ -256,11 +259,11 @@ export function createSdkworkMembershipAdminService(
   options: CreateSdkworkMembershipAdminServiceOptions = {},
 ): SdkworkMembershipAdminService {
   const copy = createSdkworkMembershipAdminMessages(options.locale, options.messages);
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getAdminRemotePort = () => options.adminRemotePort ?? getSdkworkAdminRemotePort();
 
   const service: SdkworkMembershipAdminService = {
     async assignPackagesToGroup(packages, packageGroupId, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return Promise.all(
         packages.map((packageItem) => service.updatePackage(
           packageItem.id,
@@ -271,12 +274,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async createLevel(input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminLevel>(
           await (requestParams
-            ? getCommerceService().admin.memberships.plans.create(input, requestParams)
-            : getCommerceService().admin.memberships.plans.create(input)),
+            ? getAdminRemotePort().admin.memberships.plans.create(input, requestParams)
+            : getAdminRemotePort().admin.memberships.plans.create(input)),
           copy,
           copy.service.levelCreateFailed,
         ),
@@ -286,12 +289,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async createPackage(input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackage>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packages.create(input, requestParams)
-            : getCommerceService().admin.memberships.packages.create(input)),
+            ? getAdminRemotePort().admin.memberships.packages.create(input, requestParams)
+            : getAdminRemotePort().admin.memberships.packages.create(input)),
           copy,
           copy.service.packageCreateFailed,
         ),
@@ -301,12 +304,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async createPackageGroup(input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackageGroup>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packageGroups.create(input, requestParams)
-            : getCommerceService().admin.memberships.packageGroups.create(input)),
+            ? getAdminRemotePort().admin.memberships.packageGroups.create(input, requestParams)
+            : getAdminRemotePort().admin.memberships.packageGroups.create(input)),
           copy,
           copy.service.packageGroupCreateFailed,
         ),
@@ -316,12 +319,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async deleteLevel(levelId, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminLevelDeleteResult>(
           await (requestParams
-            ? getCommerceService().admin.memberships.plans.delete(levelId, requestParams)
-            : getCommerceService().admin.memberships.plans.delete(levelId)),
+            ? getAdminRemotePort().admin.memberships.plans.delete(levelId, requestParams)
+            : getAdminRemotePort().admin.memberships.plans.delete(levelId)),
           copy,
           copy.service.levelDeleteFailed,
         ),
@@ -331,12 +334,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async deletePackage(packageId, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackageDeleteResult>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packages.delete(packageId, requestParams)
-            : getCommerceService().admin.memberships.packages.delete(packageId)),
+            ? getAdminRemotePort().admin.memberships.packages.delete(packageId, requestParams)
+            : getAdminRemotePort().admin.memberships.packages.delete(packageId)),
           copy,
           copy.service.packageDeleteFailed,
         ),
@@ -346,12 +349,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async deletePackageGroup(packageGroupId, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackageGroupDeleteResult>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packageGroups.delete(packageGroupId, requestParams)
-            : getCommerceService().admin.memberships.packageGroups.delete(packageGroupId)),
+            ? getAdminRemotePort().admin.memberships.packageGroups.delete(packageGroupId, requestParams)
+            : getAdminRemotePort().admin.memberships.packageGroups.delete(packageGroupId)),
           copy,
           copy.service.packageGroupDeleteFailed,
         ),
@@ -361,7 +364,7 @@ export function createSdkworkMembershipAdminService(
     },
 
     async getDashboard() {
-      if (!hasSdkworkCommerceSession()) {
+      if (!hasSdkworkMembershipSession()) {
         return createEmptyDashboard();
       }
 
@@ -390,7 +393,7 @@ export function createSdkworkMembershipAdminService(
       return runMembershipAdminOperation(
         async () => extractRecords(
           unwrapAdminResponse<RemotePageEnvelope<SdkworkMembershipAdminEntitlement> | SdkworkMembershipAdminEntitlement[]>(
-            await getCommerceService().admin.entitlements.grants.list(params),
+            await getAdminRemotePort().admin.entitlements.grants.list(params),
             copy,
             copy.service.entitlementsLoadFailed,
           ),
@@ -404,7 +407,7 @@ export function createSdkworkMembershipAdminService(
       return runMembershipAdminOperation(
         async () => extractRecords(
           unwrapAdminResponse<RemotePageEnvelope<SdkworkMembershipAdminLevel> | SdkworkMembershipAdminLevel[]>(
-            await getCommerceService().admin.memberships.plans.management.list(params),
+            await getAdminRemotePort().admin.memberships.plans.management.list(params),
             copy,
             copy.service.levelsLoadFailed,
           ),
@@ -418,7 +421,7 @@ export function createSdkworkMembershipAdminService(
       return runMembershipAdminOperation(
         async () => extractRecords(
           unwrapAdminResponse<RemotePageEnvelope<SdkworkMembershipAdminMembership> | SdkworkMembershipAdminMembership[]>(
-            await getCommerceService().admin.memberships.members.list(params),
+            await getAdminRemotePort().admin.memberships.members.list(params),
             copy,
             copy.service.membershipsLoadFailed,
           ),
@@ -432,7 +435,7 @@ export function createSdkworkMembershipAdminService(
       return runMembershipAdminOperation(
         async () => extractRecords(
           unwrapAdminResponse<RemotePageEnvelope<SdkworkMembershipAdminPackageGroup> | SdkworkMembershipAdminPackageGroup[]>(
-            await getCommerceService().admin.memberships.packageGroups.management.list(params),
+            await getAdminRemotePort().admin.memberships.packageGroups.management.list(params),
             copy,
             copy.service.packageGroupsLoadFailed,
           ),
@@ -446,7 +449,7 @@ export function createSdkworkMembershipAdminService(
       return runMembershipAdminOperation(
         async () => extractRecords(
           unwrapAdminResponse<RemotePageEnvelope<SdkworkMembershipAdminPackage> | SdkworkMembershipAdminPackage[]>(
-            await getCommerceService().admin.memberships.packages.management.list(params),
+            await getAdminRemotePort().admin.memberships.packages.management.list(params),
             copy,
             copy.service.packagesLoadFailed,
           ),
@@ -457,12 +460,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async updateLevel(levelId, input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminLevel>(
           await (requestParams
-            ? getCommerceService().admin.memberships.plans.update(levelId, input, requestParams)
-            : getCommerceService().admin.memberships.plans.update(levelId, input)),
+            ? getAdminRemotePort().admin.memberships.plans.update(levelId, input, requestParams)
+            : getAdminRemotePort().admin.memberships.plans.update(levelId, input)),
           copy,
           copy.service.levelUpdateFailed,
         ),
@@ -472,12 +475,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async updateMembershipStatus(membershipId, input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminMembership>(
           await (requestParams
-            ? getCommerceService().admin.memberships.members.update(membershipId, input, requestParams)
-            : getCommerceService().admin.memberships.members.update(membershipId, input)),
+            ? getAdminRemotePort().admin.memberships.members.update(membershipId, input, requestParams)
+            : getAdminRemotePort().admin.memberships.members.update(membershipId, input)),
           copy,
           copy.service.membershipUpdateFailed,
         ),
@@ -487,12 +490,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async updatePackage(packageId, input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackage>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packages.update(packageId, input, requestParams)
-            : getCommerceService().admin.memberships.packages.update(packageId, input)),
+            ? getAdminRemotePort().admin.memberships.packages.update(packageId, input, requestParams)
+            : getAdminRemotePort().admin.memberships.packages.update(packageId, input)),
           copy,
           copy.service.packageUpdateFailed,
         ),
@@ -502,12 +505,12 @@ export function createSdkworkMembershipAdminService(
     },
 
     async updatePackageGroup(packageGroupId, input, requestParams) {
-      requireSdkworkCommerceSession(copy.service.signInRequired);
+      requireSdkworkMembershipSession(copy.service.signInRequired);
       return runMembershipAdminOperation(
         async () => unwrapAdminResponse<SdkworkMembershipAdminPackageGroup>(
           await (requestParams
-            ? getCommerceService().admin.memberships.packageGroups.update(packageGroupId, input, requestParams)
-            : getCommerceService().admin.memberships.packageGroups.update(packageGroupId, input)),
+            ? getAdminRemotePort().admin.memberships.packageGroups.update(packageGroupId, input, requestParams)
+            : getAdminRemotePort().admin.memberships.packageGroups.update(packageGroupId, input)),
           copy,
           copy.service.packageGroupUpdateFailed,
         ),

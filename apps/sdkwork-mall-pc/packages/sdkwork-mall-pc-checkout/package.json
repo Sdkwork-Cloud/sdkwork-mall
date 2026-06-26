@@ -25,12 +25,13 @@
   },
   "peerDependencies": {
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/mall-pc-coupon": "*",
     "@sdkwork/mall-pc-invoice": "*",
     "@sdkwork/mall-pc-offer": "*",
     "@sdkwork/mall-pc-order": "*",
     "@sdkwork/mall-pc-payment": "*",
+    "@sdkwork/order-service": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/mall-pc-points": "*",
     "@sdkwork/mall-pc-pricing": "*",
     "@sdkwork/mall-pc-subscription": "*",
@@ -41,9 +42,6 @@
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     },
     "@sdkwork/mall-pc-coupon": {
@@ -59,6 +57,12 @@
       "optional": true
     },
     "@sdkwork/mall-pc-payment": {
+      "optional": true
+    },
+    "@sdkwork/order-service": {
+      "optional": true
+    },
+    "@sdkwork/payment-service": {
       "optional": true
     },
     "@sdkwork/mall-pc-points": {

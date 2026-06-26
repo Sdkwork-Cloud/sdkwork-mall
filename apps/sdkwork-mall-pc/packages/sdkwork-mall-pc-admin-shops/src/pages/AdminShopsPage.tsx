@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 interface ShopRow {
   id: string;
@@ -41,9 +39,9 @@ export function SdkworkMallAdminShopsPage() {
 
   async function refresh() {
     setLoading(true);
-    const service = getSdkworkCommerceService();
+    const service = getSdkworkAdminRemotePort();
     const response = await service.admin.shops.management.list({ page: 1, page_size: 20 });
-    const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+    const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
     setShops(
       payload.items?.map((item) => ({
         id: String(item.id ?? ""),
@@ -66,10 +64,10 @@ export function SdkworkMallAdminShopsPage() {
     }
     let active = true;
     async function loadDetail() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const response = await service.admin.shops.management.retrieve(selectedShopId!);
       if (active) {
-        setShopDetail(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+        setShopDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
     }
     void loadDetail();
@@ -81,7 +79,7 @@ export function SdkworkMallAdminShopsPage() {
   async function mutateShop(shopId: string, action: "approve" | "suspend") {
     setBusyShopId(shopId);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       if (action === "approve") {
         await service.admin.shops.approve(shopId, {});
       } else {

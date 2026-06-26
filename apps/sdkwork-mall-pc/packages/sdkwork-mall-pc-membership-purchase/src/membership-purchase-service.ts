@@ -1,4 +1,3 @@
-import type { SdkworkCommerceService } from "@sdkwork/commerce-service";
 import {
   createSdkworkMembershipService,
   type SdkworkMembershipMutationInput,
@@ -23,7 +22,6 @@ export interface SdkworkMembershipPurchaseSubmitResult extends SdkworkMembership
 }
 
 export interface CreateSdkworkMembershipPurchaseServiceOptions {
-  commerceService?: SdkworkCommerceService;
   locale?: string | null;
   membershipService?: Pick<SdkworkMembershipService, "purchaseMembership" | "renewMembership" | "upgradeMembership">;
 }
@@ -56,9 +54,7 @@ async function withMode(
 export function createSdkworkMembershipPurchaseService(
   options: CreateSdkworkMembershipPurchaseServiceOptions = {},
 ): SdkworkMembershipPurchaseService {
-  const membershipService = options.membershipService ?? createSdkworkMembershipService({
-    commerceService: options.commerceService,
-    locale: options.locale,
+  const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale: options.locale,
   });
   const purchasePackage = (input: SdkworkMembershipMutationInput) =>
     withMode("purchase", membershipService.purchaseMembership(createMembershipPurchasePayload(input)));

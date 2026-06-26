@@ -1,7 +1,5 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkActivityRemotePort } from "./activity-remote-port";
 import { MALL_CMS_OFFER_MARKER } from "@sdkwork/mall-pc-cms/cms-service";
 
 /**
@@ -141,9 +139,8 @@ function readActivityOffer(item: Record<string, unknown>): MallActivityOffer {
 }
 
 export async function listMallActivities(): Promise<MallActivityOffer[]> {
-  const service = getSdkworkCommerceService();
-  const response = await service.promotions.offers.list({ page: 1, page_size: 20 });
-  const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
+  const response = await getSdkworkActivityRemotePort().listPromotionOffers({ page: 1, page_size: 20 });
+  const payload = unwrapSdkworkPaymentResponse(response) as { items?: Record<string, unknown>[] };
   return (
     payload.items
       ?.filter((item) => {
@@ -158,9 +155,8 @@ export async function listMallActivities(): Promise<MallActivityOffer[]> {
 }
 
 export async function retrieveMallActivity(eventId: string): Promise<MallActivityOffer | null> {
-  const service = getSdkworkCommerceService();
-  const response = await service.promotions.offers.retrieve({ offerId: eventId });
-  const item = unwrapSdkworkCommerceResponse(response) as Record<string, unknown>;
+  const response = await getSdkworkActivityRemotePort().retrievePromotionOffer({ offerId: eventId });
+  const item = unwrapSdkworkPaymentResponse(response) as Record<string, unknown>;
   if (!item || !item.id) {
     return null;
   }

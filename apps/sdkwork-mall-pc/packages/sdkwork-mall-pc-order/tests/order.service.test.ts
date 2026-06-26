@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureOrderServiceMockSession,
+  createOrderServiceMock,
+  resetOrderServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import {
   createSdkworkOrderService,
@@ -19,15 +19,15 @@ const productImage = {
 
 describe("sdkwork-mall-pc-order service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "order-auth-token" });
+    configureOrderServiceMockSession({ authToken: "order-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetOrderServiceMockSession();
   });
 
   it("maps orders, statistics, details, and payment actions into a reusable order center", async () => {
-    const commerceService = createCommerceServiceMock({
+    const orderService = createOrderServiceMock({
       orders: {
         cancel: vi.fn().mockResolvedValue({
           code: "2000",
@@ -147,7 +147,7 @@ describe("sdkwork-mall-pc-order service", () => {
     });
 
     const service = createSdkworkOrderService({
-      commerceService,
+      orderService,
     });
 
     const dashboard = await service.getDashboard();
@@ -200,7 +200,7 @@ describe("sdkwork-mall-pc-order service", () => {
   });
 
   it("returns a guest-safe empty order dashboard without creating a client", async () => {
-    resetCommerceServiceMockSession();
+    resetOrderServiceMockSession();
     const service = createSdkworkOrderService();
 
     const dashboard = await service.getDashboard();
@@ -210,7 +210,7 @@ describe("sdkwork-mall-pc-order service", () => {
   });
 
   it("uses copy overrides for order fallbacks, auth errors, and payment failure messages", async () => {
-    const commerceService = createCommerceServiceMock({
+    const orderService = createOrderServiceMock({
       orders: {
         retrieve: vi.fn().mockResolvedValue({
           code: "2000",
@@ -266,7 +266,7 @@ describe("sdkwork-mall-pc-order service", () => {
     });
 
     const service = createSdkworkOrderService({
-      commerceService,
+      orderService,
       messages: {
         service: {
           itemFallbackName: "Fallback order item",
@@ -290,7 +290,7 @@ describe("sdkwork-mall-pc-order service", () => {
     expect(detail.items[0]?.name).toBe("Fallback order item");
     expect(detail.statusLabel).toBe("Needs payment");
 
-    resetCommerceServiceMockSession();
+    resetOrderServiceMockSession();
     const guestService = createSdkworkOrderService({
       messages: {
         service: {
@@ -301,9 +301,9 @@ describe("sdkwork-mall-pc-order service", () => {
 
     await expect(guestService.getOrderDetail("ORDER-9")).rejects.toThrow("Override order auth required");
 
-    configureCommerceServiceMockSession({ authToken: "order-auth-token" });
+    configureOrderServiceMockSession({ authToken: "order-auth-token" });
     const failingService = createSdkworkOrderService({
-      commerceService: createCommerceServiceMock({
+      orderService: createOrderServiceMock({
         orders: {
           pay: vi.fn().mockResolvedValue({
             code: "5000",

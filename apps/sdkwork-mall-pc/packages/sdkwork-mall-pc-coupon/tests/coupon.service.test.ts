@@ -1,24 +1,24 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configurePromotionServiceMockSession,
+  createPromotionServiceMock,
+  resetPromotionServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkCouponService } from "../src";
 
 describe("sdkwork-mall-pc-coupon service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "coupon-auth-token" });
+    configurePromotionServiceMockSession({ authToken: "coupon-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetPromotionServiceMockSession();
   });
 
   it("maps coupon catalog, owned coupons, and statistics into a reusable coupon dashboard", async () => {
     const service = createSdkworkCouponService({
-      commerceService: createCommerceServiceMock({
+      promotionService: createPromotionServiceMock({
         promotions: {
           offers: {
             list: vi.fn().mockResolvedValue({
@@ -159,7 +159,7 @@ describe("sdkwork-mall-pc-coupon service", () => {
   });
 
   it("returns a guest-safe coupon dashboard when there is no authenticated session", async () => {
-    resetCommerceServiceMockSession();
+    resetPromotionServiceMockSession();
     const service = createSdkworkCouponService();
 
     const dashboard = await service.getDashboard();
@@ -171,7 +171,7 @@ describe("sdkwork-mall-pc-coupon service", () => {
   });
 
   it("routes coupon mutations and detail lookups through the commerce service boundary", async () => {
-    const commerceService = createCommerceServiceMock({
+    const promotionService = createPromotionServiceMock({
       promotions: {
         offers: {
           retrieve: vi.fn().mockResolvedValue({
@@ -252,7 +252,7 @@ describe("sdkwork-mall-pc-coupon service", () => {
       },
     });
     const service = createSdkworkCouponService({
-      commerceService,
+      promotionService,
     });
 
     await expect(service.receiveCoupon("200")).resolves.toMatchObject({
@@ -312,7 +312,7 @@ describe("sdkwork-mall-pc-coupon service", () => {
   });
 
   it("uses localized service errors for zh-CN mutations", async () => {
-    resetCommerceServiceMockSession();
+    resetPromotionServiceMockSession();
     const service = createSdkworkCouponService({
       locale: "zh-CN",
     });

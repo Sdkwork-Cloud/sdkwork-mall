@@ -1,7 +1,4 @@
 import {
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
-import {
   createCouponRouteIntent,
   createSdkworkCouponService,
   type SdkworkCouponCatalog,
@@ -49,7 +46,6 @@ export interface SdkworkOfferDashboardSources {
 }
 
 export interface CreateSdkworkOfferServiceOptions {
-  commerceService?: SdkworkCommerceService;
   couponService?: Pick<SdkworkCouponService, "getDashboard">;
   locale?: string | null;
   messages?: SdkworkOfferMessagesOverrides;
@@ -270,19 +266,13 @@ export function composeSdkworkOfferDashboard(
 export function createSdkworkOfferService(
   options: CreateSdkworkOfferServiceOptions = {},
 ): SdkworkOfferService {
-  const walletService = options.walletService ?? createSdkworkWalletService({
-    commerceService: options.commerceService,
+  const walletService = options.walletService ?? createSdkworkWalletService({,
   });
-  const couponService = options.couponService ?? createSdkworkCouponService({
-    commerceService: options.commerceService,
-    locale: options.locale,
+  const couponService = options.couponService ?? createSdkworkCouponService({ locale: options.locale,
   });
-  const pointsService = options.pointsService ?? createSdkworkPointsService({
-    commerceService: options.commerceService,
+  const pointsService = options.pointsService ?? createSdkworkPointsService({,
   });
-  const membershipService = options.membershipService ?? createSdkworkMembershipService({
-    commerceService: options.commerceService,
-    locale: options.locale,
+  const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale: options.locale,
   });
 
   return {

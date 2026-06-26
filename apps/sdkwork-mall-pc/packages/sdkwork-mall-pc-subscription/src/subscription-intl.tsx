@@ -6,9 +6,9 @@ import {
 } from "react";
 import type { SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership";
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-  formatSdkworkCommercePoints as formatSdkworkPoints,
-} from "@sdkwork/commerce-service";
+  formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny,
+  formatSdkworkMembershipPoints as formatSdkworkPoints,
+} from "@sdkwork/membership-service";
 import type {
   SdkworkSubscriptionAction,
   SdkworkSubscriptionPaymentMethodOption,

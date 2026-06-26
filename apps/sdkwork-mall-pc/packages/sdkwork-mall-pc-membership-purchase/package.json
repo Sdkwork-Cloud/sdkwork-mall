@@ -20,7 +20,6 @@
   },
   "peerDependencies": {
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/ui-pc-react": "*",
     "@sdkwork/mall-pc-membership": "*",
     "react": ">=18.2.0 <20.0.0",
@@ -28,9 +27,6 @@
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     },
     "@sdkwork/ui-pc-react": {

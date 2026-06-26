@@ -7,7 +7,7 @@ import {
   LoadingBlock,
   StatusNotice,
 } from "@sdkwork/ui-pc-react/components/ui/feedback/states";
-import { formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/commerce-service";
+import { formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/membership-service";
 import type { SdkworkMembershipMessagesOverrides } from "../membership-copy";
 import type { SdkworkMembershipController } from "../membership-controller";
 import {

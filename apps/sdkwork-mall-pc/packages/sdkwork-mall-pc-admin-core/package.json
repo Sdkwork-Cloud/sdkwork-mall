@@ -34,6 +34,11 @@
       "types": "./src/composition/index.ts",
       "import": "./src/composition/index.ts",
       "default": "./src/composition/index.ts"
+    },
+    "./admin-remote-port": {
+      "types": "./src/admin-remote-port.ts",
+      "import": "./src/admin-remote-port.ts",
+      "default": "./src/admin-remote-port.ts"
     }
   },
   "files": [

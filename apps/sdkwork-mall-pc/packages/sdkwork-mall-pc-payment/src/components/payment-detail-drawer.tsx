@@ -5,7 +5,7 @@ import {
 import * as QRCode from "qrcode";
 import {
   getSdkworkMediaDeliveryUrl,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/payment-service";
 import {
   Button,
   DetailDrawer,

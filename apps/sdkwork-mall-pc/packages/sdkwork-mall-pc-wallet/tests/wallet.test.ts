@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-  formatSdkworkCommerceCurrencyCny,
-  formatSdkworkCommercePoints,
-  formatSdkworkCommercePointsRate,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountCurrencyCny,
+  formatSdkworkAccountPoints,
+  formatSdkworkAccountPointsRate,
+} from "@sdkwork/account-service";
 import {
   createWalletRouteIntent,
   createWalletWorkspaceManifest,
@@ -14,9 +14,9 @@ import {
 
 describe("sdkwork-mall-pc-wallet headless contract", () => {
   it("formats points, currency, and rate in a Sdkwork-aligned commerce style", () => {
-    expect(formatSdkworkCommercePoints(5200)).toBe("5,200");
-    expect(formatSdkworkCommerceCurrencyCny(199)).toContain("199");
-    expect(formatSdkworkCommercePointsRate(200)).toBe("200 pts / CNY 1");
+    expect(formatSdkworkAccountPoints(5200)).toBe("5,200");
+    expect(formatSdkworkAccountCurrencyCny(199)).toContain("199");
+    expect(formatSdkworkAccountPointsRate(200)).toBe("200 pts / CNY 1");
     expect(formatSdkworkWalletDelta(1200)).toBe("+1,200");
     expect(formatSdkworkWalletDelta(-240)).toBe("-240");
     expect(

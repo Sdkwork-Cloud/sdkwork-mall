@@ -4,8 +4,8 @@ import {
   type SdkworkAppCapabilityManifest,
 } from "@sdkwork/appbase-pc-react";
 import {
-  formatSdkworkCommercePointsDelta,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountPointsDelta,
+} from "@sdkwork/account-service";
 import type { SdkworkWalletAccount } from "./wallet-service";
 
 export interface SdkworkWalletWorkspaceManifest extends SdkworkAppCapabilityManifest {
@@ -56,7 +56,7 @@ export function formatSdkworkWalletDelta(
   value: number,
   language = "en-US",
 ): string {
-  return formatSdkworkCommercePointsDelta(value, language);
+  return formatSdkworkAccountPointsDelta(value, language);
 }
 
 export function getSdkworkWalletAccountLevelLabel(

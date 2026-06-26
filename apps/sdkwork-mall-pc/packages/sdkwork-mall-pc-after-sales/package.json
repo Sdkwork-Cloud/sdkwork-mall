@@ -21,7 +21,7 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/ui-pc-react": "*",
     "react": ">=18.2.0 <20.0.0"

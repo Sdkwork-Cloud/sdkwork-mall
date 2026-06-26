@@ -1,7 +1,5 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkHomeRemotePort } from "./home-remote-port";
 
 export interface MallHomeProductCard {
   id: string;
@@ -53,16 +51,16 @@ function readProductCard(record: Record<string, unknown>): MallHomeProductCard {
 }
 
 export async function loadMallHomeSnapshot(): Promise<MallHomeSnapshot> {
-  const service = getSdkworkCommerceService();
+  const remote = getSdkworkHomeRemotePort();
   const [categoriesResult, hotResult, newResult, shopsResult] = await Promise.allSettled([
-    service.catalog.categories.list({ page: 1, page_size: 10 }),
-    service.catalog.spus.list({ page: 1, page_size: 8, sort: "sales" }),
-    service.catalog.spus.list({ page: 1, page_size: 8, sort: "created_at" }),
-    service.shops.list({ page: 1, page_size: 8 }),
+    remote.listCategories({ page: 1, page_size: 10 }),
+    remote.listSpus({ page: 1, page_size: 8, sort: "sales" }),
+    remote.listSpus({ page: 1, page_size: 8, sort: "created_at" }),
+    remote.listShops({ page: 1, page_size: 8 }),
   ]);
 
   const categoriesPayload = categoriesResult.status === "fulfilled"
-    ? (unwrapSdkworkCommerceResponse(categoriesResult.value) as { items?: Record<string, unknown>[] })
+    ? (unwrapSdkworkPaymentResponse(categoriesResult.value) as { items?: Record<string, unknown>[] })
     : { items: [] as Record<string, unknown>[] };
   const categories = categoriesPayload.items?.map((item) => ({
     id: String(item.id ?? ""),
@@ -70,17 +68,17 @@ export async function loadMallHomeSnapshot(): Promise<MallHomeSnapshot> {
   })) ?? [];
 
   const hotPayload = hotResult.status === "fulfilled"
-    ? (unwrapSdkworkCommerceResponse(hotResult.value) as { items?: Record<string, unknown>[] })
+    ? (unwrapSdkworkPaymentResponse(hotResult.value) as { items?: Record<string, unknown>[] })
     : { items: [] as Record<string, unknown>[] };
   const hotProducts = hotPayload.items?.map((item) => readProductCard(item)) ?? [];
 
   const newPayload = newResult.status === "fulfilled"
-    ? (unwrapSdkworkCommerceResponse(newResult.value) as { items?: Record<string, unknown>[] })
+    ? (unwrapSdkworkPaymentResponse(newResult.value) as { items?: Record<string, unknown>[] })
     : { items: [] as Record<string, unknown>[] };
   const newProducts = newPayload.items?.map((item) => readProductCard(item)) ?? [];
 
   const shopsPayload = shopsResult.status === "fulfilled"
-    ? (unwrapSdkworkCommerceResponse(shopsResult.value) as { items?: Record<string, unknown>[] })
+    ? (unwrapSdkworkPaymentResponse(shopsResult.value) as { items?: Record<string, unknown>[] })
     : { items: [] as Record<string, unknown>[] };
   const featuredShops =
     shopsPayload.items?.map((item) => ({

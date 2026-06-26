@@ -13,9 +13,11 @@ Orders, billing details, and transaction histories.
 
 ## Depends on
 
+- `@sdkwork/payment-service` for response envelope normalization
+- `@sdkwork/mall-pc-cms` for CMS offer marker filtering
+- `@sdkwork/mall-pc-core` for storefront route composition
+- `@sdkwork/mall-pc-search` for activity product discovery
 - `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/commerce-service` for generated app/backend SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
 
 ## Ownership
 
@@ -23,7 +25,7 @@ This package is implemented as an independent SDKWork commerce capability. It ow
 
 ## Runtime boundary
 
-All remote commerce access goes through `@sdkwork/commerce-service` or through sibling commerce services that use the same boundary. Generated SDK clients remain behind the shared service contract.
+This package composes sibling mall domain packages and does not call `@sdkwork/commerce-service` directly.
 
 ## Verification
 

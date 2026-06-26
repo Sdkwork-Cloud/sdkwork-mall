@@ -1,10 +1,13 @@
-import { getSdkworkCommerceService, type SdkworkCommerceService } from "@sdkwork/commerce-service";
+import {
+  getSdkworkAdminRemotePort,
+  type SdkworkAdminCatalogNamespace,
+} from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 export interface CreateCommerceProductAdminServiceOptions {
-  commerceService?: SdkworkCommerceService;
+  catalogAdmin?: SdkworkAdminCatalogNamespace;
 }
 
-type CatalogAdminService = SdkworkCommerceService["admin"]["catalog"];
+type CatalogAdminService = SdkworkAdminCatalogNamespace;
 
 export interface CommerceProductAdminService {
   listCategories(params?: Record<string, unknown>): Promise<unknown>;
@@ -34,7 +37,7 @@ export interface CommerceProductAdminService {
 export function createCommerceProductAdminService(
   options: CreateCommerceProductAdminServiceOptions = {},
 ): CommerceProductAdminService {
-  const catalog = resolveCatalogService(options.commerceService);
+  const catalog = resolveCatalogService(options.catalogAdmin);
   return {
     listCategories: (params) => catalog.categories.management.list(params),
     createCategory: (body) => catalog.categories.create(body),
@@ -70,8 +73,8 @@ export function createCommerceProductAdminWorkspaceManifest() {
   };
 }
 
-function resolveCatalogService(commerceService?: SdkworkCommerceService): CatalogAdminService {
-  return (commerceService ?? getSdkworkCommerceService()).admin.catalog;
+function resolveCatalogService(catalogAdmin?: SdkworkAdminCatalogNamespace): CatalogAdminService {
+  return catalogAdmin ?? getSdkworkAdminRemotePort().admin.catalog;
 }
 
 function defaultService(): CommerceProductAdminService {

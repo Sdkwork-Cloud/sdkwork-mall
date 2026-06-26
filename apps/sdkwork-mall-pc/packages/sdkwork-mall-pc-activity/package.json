@@ -21,7 +21,7 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/mall-pc-cms": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/mall-pc-search": "*",

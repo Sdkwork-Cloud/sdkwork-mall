@@ -1,4 +1,4 @@
-import { formatSdkworkCommercePoints as formatSdkworkPoints } from "@sdkwork/commerce-service";
+import { formatSdkworkAccountPoints as formatSdkworkPoints } from "@sdkwork/account-service";
 
 export type SdkworkPricingLocale = "en-US" | "zh-CN";
 type SdkworkPricingBillingModel = "hybrid" | "prepaid" | "subscription" | "usage";

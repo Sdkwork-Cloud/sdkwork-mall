@@ -20,6 +20,16 @@
       "import": "./src/favorites-service.ts",
       "default": "./src/favorites-service.ts"
     },
+    "./buyer-hub-service": {
+      "types": "./src/buyer-hub-service.ts",
+      "import": "./src/buyer-hub-service.ts",
+      "default": "./src/buyer-hub-service.ts"
+    },
+    "./commerce-remote-port": {
+      "types": "./src/commerce-remote-port.ts",
+      "import": "./src/commerce-remote-port.ts",
+      "default": "./src/commerce-remote-port.ts"
+    },
     "./buyer-pages": {
       "types": "./src/pages/BuyerPages.tsx",
       "import": "./src/pages/BuyerPages.tsx",
@@ -74,8 +84,9 @@
     "@sdkwork/mall-pc-subscription": "workspace:*"
   },
   "peerDependencies": {
+    "@sdkwork/account-service": "*",
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/mall-pc-coupon": "*",
     "@sdkwork/mall-pc-invoice": "*",
@@ -89,9 +100,6 @@
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
-      "optional": true
-    },
-    "@sdkwork/commerce-service": {
       "optional": true
     },
     "@sdkwork/mall-pc-core": {

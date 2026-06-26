@@ -5,10 +5,10 @@ import {
   type PropsWithChildren,
 } from "react";
 import {
-  formatSdkworkCommerceCurrencyCny,
-  formatSdkworkCommercePoints,
-  formatSdkworkCommercePointsRate,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountCurrencyCny,
+  formatSdkworkAccountPoints,
+  formatSdkworkAccountPointsRate,
+} from "@sdkwork/account-service";
 import type {
   SdkworkWalletAccount,
   SdkworkWalletRechargePackage,
@@ -106,11 +106,11 @@ function createSdkworkWalletIntlValue(
   const copy = createSdkworkWalletMessages(resolvedLocale, overrides);
 
   function formatCurrency(value: number | null | undefined): string {
-    return formatSdkworkCommerceCurrencyCny(value, resolvedLocale);
+    return formatSdkworkAccountCurrencyCny(value, resolvedLocale);
   }
 
   function formatPointsValue(value: number): string {
-    return formatSdkworkCommercePoints(value, resolvedLocale);
+    return formatSdkworkAccountPoints(value, resolvedLocale);
   }
 
   function resolveAccountLevelLabel(
@@ -176,7 +176,7 @@ function createSdkworkWalletIntlValue(
     },
     formatPointsRate(value) {
       if (!value || value <= 0) {
-        return formatSdkworkCommercePointsRate(value ?? 0, resolvedLocale);
+        return formatSdkworkAccountPointsRate(value ?? 0, resolvedLocale);
       }
 
       if (resolvedLocale === "zh-CN") {

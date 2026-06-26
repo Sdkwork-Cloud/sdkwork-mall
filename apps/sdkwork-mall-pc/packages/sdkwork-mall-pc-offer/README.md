@@ -13,9 +13,8 @@ Shared commercial offer cards, featured pricing opportunities, and reusable rout
 
 ## Depends on
 
-- `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/commerce-service` for generated app/backend SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
+- `@sdkwork/appbase-pc-react` for shared workspace primitives
+- `@sdkwork/mall-pc-coupon`, `@sdkwork/mall-pc-points`, `@sdkwork/mall-pc-subscription`, `@sdkwork/mall-pc-membership`, and `@sdkwork/mall-pc-wallet` for composed commercial offer surfaces
 
 ## Ownership
 
@@ -23,7 +22,7 @@ This package is implemented as an independent SDKWork commerce capability. It ow
 
 ## Runtime boundary
 
-All remote commerce access goes through `@sdkwork/commerce-service` or through sibling commerce services that use the same boundary. Generated SDK clients remain behind the shared service contract.
+This package composes sibling mall domain packages and does not call `composed mall domain packages` directly.
 
 ## Verification
 

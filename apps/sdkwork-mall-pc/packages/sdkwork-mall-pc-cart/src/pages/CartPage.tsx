@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Badge, Button, Checkbox, EmptyState, LoadingBlock, StatusNotice } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  formatSdkworkCommerceCurrencyCny,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { formatSdkworkPaymentCurrencyCny } from "@sdkwork/payment-service";
 import { searchMallProducts } from "@sdkwork/mall-pc-search/search-service";
 import {
   createMallCheckoutQuote,
   loadMallCart,
   loadMallCheckoutContext,
   removeMallCartItem,
+  retrieveMallOrderPaymentSuccess,
+  retryMallOrderPayment,
   submitMallCheckoutOrder,
   updateMallCartItem,
   type MallCartLine,
@@ -810,10 +808,9 @@ export function SdkworkMallPaymentResultPage() {
     let active = true;
     async function load() {
       try {
-        const service = getSdkworkCommerceService();
-        const response = await service.orders.paymentSuccess.retrieve(orderId!);
+        const info = await retrieveMallOrderPaymentSuccess(orderId!);
         if (active) {
-          setPaymentInfo(unwrapSdkworkCommerceResponse(response) as Record<string, unknown>);
+          setPaymentInfo(info);
         }
       } catch {
         if (active) {
@@ -860,10 +857,7 @@ export function SdkworkMallPaymentResultPage() {
     setRetrying(true);
     setRetryMessage(null);
     try {
-      const service = getSdkworkCommerceService();
-      const response = await service.orders.pay(orderId, { paymentMethod: "WECHAT_PAY" });
-      const result = unwrapSdkworkCommerceResponse(response) as Record<string, unknown>;
-      const newPaymentId = String(result.paymentId ?? result.payment_id ?? result.id ?? "");
+      const newPaymentId = await retryMallOrderPayment(orderId, "WECHAT_PAY");
       if (newPaymentId) {
         window.location.assign(`/payment/result?status=pending&orderId=${encodeURIComponent(orderId)}&paymentId=${encodeURIComponent(newPaymentId)}`);
       } else {

@@ -32,13 +32,13 @@
     "@sdkwork/appbase-pc-react": "workspace:*"
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/order-service": "*",
     "@sdkwork/ui-pc-react": "*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {
-    "@sdkwork/commerce-service": {
+    "@sdkwork/order-service": {
       "optional": true
     },
     "@sdkwork/ui-pc-react": {

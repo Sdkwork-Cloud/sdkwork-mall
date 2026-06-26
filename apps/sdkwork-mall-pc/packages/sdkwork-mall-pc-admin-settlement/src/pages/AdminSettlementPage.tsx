@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 interface SettlementShopRow {
   id: string;
@@ -23,7 +21,7 @@ export function SdkworkMallAdminSettlementPage() {
     let active = true;
 
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const [revenueResult, refundsResult, shopsResult] = await Promise.allSettled([
         service.admin.commerceReports.orderRevenue.list({ page: 1, page_size: 5 }),
         service.admin.commerceReports.refunds.list({ page: 1, page_size: 5 }),
@@ -31,7 +29,7 @@ export function SdkworkMallAdminSettlementPage() {
       ]);
 
       if (revenueResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(revenueResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(revenueResult.value) as { items?: Record<string, unknown>[] };
         setRevenue(
           payload.items?.map((item) => ({
             period: String(item.period ?? item.date ?? "-"),
@@ -41,7 +39,7 @@ export function SdkworkMallAdminSettlementPage() {
       }
 
       if (refundsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(refundsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(refundsResult.value) as { items?: Record<string, unknown>[] };
         setRefunds(
           payload.items?.map((item) => ({
             period: String(item.period ?? item.date ?? "-"),
@@ -51,7 +49,7 @@ export function SdkworkMallAdminSettlementPage() {
       }
 
       if (shopsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(shopsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(shopsResult.value) as { items?: Record<string, unknown>[] };
         const depositRows: Array<{ paid: string; required: string; shopName: string }> = [];
         const profileRows: SettlementShopRow[] = [];
 
@@ -69,7 +67,7 @@ export function SdkworkMallAdminSettlementPage() {
 
           try {
             const depositResponse = await service.admin.shops.depositAccount.retrieve({ shopId });
-            const deposit = unwrapSdkworkCommerceResponse(depositResponse) as Record<string, unknown>;
+            const deposit = unwrapSdkworkPaymentResponse(depositResponse) as Record<string, unknown>;
             depositRows.push({
               shopName: String(shop.name ?? shop.title ?? shopId),
               required: String(deposit.requiredAmount ?? "-"),
@@ -102,7 +100,7 @@ export function SdkworkMallAdminSettlementPage() {
   async function approveSettlementProfile(shopId: string) {
     setBusyShopId(shopId);
     try {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       await service.admin.shops.settlementProfile.approve(shopId, {});
       setProfiles((current) =>
         current.map((profile) =>

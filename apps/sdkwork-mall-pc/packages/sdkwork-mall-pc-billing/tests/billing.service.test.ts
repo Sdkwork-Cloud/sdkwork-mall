@@ -1,24 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureAccountServiceMockSession,
+  resetAccountServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import * as billingModule from "../src";
 
 describe("sdkwork-mall-pc-billing service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "billing-token" });
+    configureAccountServiceMockSession({ authToken: "billing-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
   });
 
   it("returns a guest-safe empty billing dashboard when the wallet session is anonymous", async () => {
     const { createSdkworkBillingService } = billingModule;
 
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
     const service = createSdkworkBillingService({
       walletService: {
         getOverview: vi.fn().mockResolvedValue({
@@ -389,24 +388,13 @@ describe("sdkwork-mall-pc-billing service", () => {
     const { createSdkworkBillingService } = billingModule;
 
     const service = createSdkworkBillingService({
-      commerceService: createCommerceServiceMock({
-        billing: {
-          history: {
-            list: vi.fn().mockResolvedValue({
-              code: "2000",
-              data: {
-                content: [
-                  {
-                    costAmount: 12,
-                    id: "usage-zh-1",
-                    usageAt: "2026-04-15T07:00:00.000Z",
-                  },
-                ],
-              },
-            }),
-          },
+      loadUsageRecords: vi.fn().mockResolvedValue([
+        {
+          costCny: 12,
+          id: "usage-zh-1",
+          usageAt: "2026-04-15T07:00:00.000Z",
         },
-      }),
+      ]),
       invoiceService: {
         getDashboard: vi.fn().mockResolvedValue({
           digest: {

@@ -1,7 +1,4 @@
 import {
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
-import {
   createSdkworkWalletService,
   type SdkworkWalletRechargeInput,
   type SdkworkWalletRechargePackage,
@@ -111,7 +108,6 @@ export interface SdkworkPointsUpgradeResult {
 }
 
 export interface CreateSdkworkPointsServiceOptions {
-  commerceService?: SdkworkCommerceService;
   locale?: string | null;
   now?: () => string;
   rechargePresets?: number[];
@@ -321,11 +317,8 @@ export function filterSdkworkPointsTransactions(
 export function createSdkworkPointsService(
   options: CreateSdkworkPointsServiceOptions = {},
 ): SdkworkPointsService {
-  const walletService = options.walletService ?? createSdkworkWalletService({
-    commerceService: options.commerceService,
-  });
+  const walletService = options.walletService ?? createSdkworkWalletService({});
   const membershipService = options.membershipService ?? createSdkworkMembershipService({
-    commerceService: options.commerceService,
     locale: options.locale,
   });
   const now = options.now ?? (() => new Date().toISOString());

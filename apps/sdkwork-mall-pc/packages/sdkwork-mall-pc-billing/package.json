@@ -24,12 +24,13 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@sdkwork/account-service": "*",
     "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/mall-pc-invoice": "*",
     "@sdkwork/mall-pc-offer": "*",
     "@sdkwork/mall-pc-payment": "*",
+    "@sdkwork/payment-service": "*",
     "@sdkwork/mall-pc-subscription": "*",
     "@sdkwork/ui-pc-react": "*",
     "@sdkwork/mall-pc-wallet": "*",
@@ -37,10 +38,13 @@
     "react-dom": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {
+    "@sdkwork/account-service": {
+      "optional": true
+    },
     "@sdkwork/appbase-pc-react": {
       "optional": true
     },
-    "@sdkwork/commerce-service": {
+    "@sdkwork/payment-service": {
       "optional": true
     },
     "@sdkwork/mall-pc-core": {

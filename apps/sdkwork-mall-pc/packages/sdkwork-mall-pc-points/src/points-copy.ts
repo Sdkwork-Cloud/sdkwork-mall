@@ -1,8 +1,8 @@
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-  formatSdkworkCommercePoints as formatSdkworkPoints,
-  formatSdkworkCommercePointsRate as formatSdkworkPointsRate,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountCurrencyCny as formatSdkworkCurrencyCny,
+  formatSdkworkAccountPoints as formatSdkworkPoints,
+  formatSdkworkAccountPointsRate as formatSdkworkPointsRate,
+} from "@sdkwork/account-service";
 import type { SdkworkPointsCurrentPlan } from "./points-service";
 
 export type SdkworkPointsLocale = "en-US" | "zh-CN";

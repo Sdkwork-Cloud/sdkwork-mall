@@ -15,7 +15,7 @@ Read `apps/sdkwork-mall-pc/sdkwork.app.config.json` before changing application 
 - `AGENTS.md`: repository agent entrypoint.
 - `apps/sdkwork-mall-pc/`: PC application root (`sdkwork-mall-pc`).
 - `apps/sdkwork-mall-pc/packages/`: `@sdkwork/mall-pc-*` feature packages.
-- `../sdkwork-commerce/`: commerce foundation SDKs and services (consumer dependency).
+- `../sdkwork-clawrouter/vendor/sdkwork-commerce/`: commerce foundation SDKs and services (consumer dependency).
 - `.sdkwork/`: repository workspace skills and plugins.
 - `specs/`: repository component contract.
 - `tests/contract/`: cross-package architecture verification.

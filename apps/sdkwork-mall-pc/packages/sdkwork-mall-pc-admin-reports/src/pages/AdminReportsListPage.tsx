@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-remote-port";
 
 export function SdkworkMallAdminReportsPage() {
   const [revenue, setRevenue] = useState<Array<{ period: string; amount: string }>>([]);
@@ -13,7 +11,7 @@ export function SdkworkMallAdminReportsPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
+      const service = getSdkworkAdminRemotePort();
       const [revenueResult, refundsResult] = await Promise.allSettled([
         service.admin.commerceReports.orderRevenue.list({ page: 1, page_size: 10 }),
         service.admin.commerceReports.refunds.list({ page: 1, page_size: 10 }),
@@ -22,7 +20,7 @@ export function SdkworkMallAdminReportsPage() {
         return;
       }
       if (revenueResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(revenueResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(revenueResult.value) as { items?: Record<string, unknown>[] };
         setRevenue(
           payload.items?.map((item) => ({
             period: String(item.period ?? item.date ?? "-"),
@@ -31,7 +29,7 @@ export function SdkworkMallAdminReportsPage() {
         );
       }
       if (refundsResult.status === "fulfilled") {
-        const payload = unwrapSdkworkCommerceResponse(refundsResult.value) as { items?: Record<string, unknown>[] };
+        const payload = unwrapSdkworkPaymentResponse(refundsResult.value) as { items?: Record<string, unknown>[] };
         setRefunds(
           payload.items?.map((item) => ({
             period: String(item.period ?? item.date ?? "-"),

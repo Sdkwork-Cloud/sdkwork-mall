@@ -1,18 +1,34 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
+  configureAccountServiceMockSession,
   createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  resetAccountServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkInvoiceService } from "../src";
+import type { SdkworkInvoiceRemotePort } from "../src/invoice-remote-port";
+
+function createInvoiceRemotePortFromCommerceMock(
+  commerceService: ReturnType<typeof createCommerceServiceMock>,
+): SdkworkInvoiceRemotePort {
+  return {
+    cancelInvoice: (invoiceId, body) => commerceService.invoices.cancellations.create(invoiceId, body),
+    createInvoice: (body) => commerceService.invoices.create(body),
+    listInvoiceItems: (invoiceId) => commerceService.invoices.items.list(invoiceId),
+    listMineInvoices: (query) => commerceService.invoices.mine.list(query),
+    retrieveInvoice: (invoiceId) => commerceService.invoices.retrieve(invoiceId),
+    retrieveStatistics: () => commerceService.invoices.statistics.retrieve(),
+    submitInvoice: (invoiceId) => commerceService.invoices.submissions.create(invoiceId, {}),
+    updateInvoice: (invoiceId, body) => commerceService.invoices.update(invoiceId, body),
+  };
+}
 
 describe("sdkwork-mall-pc-invoice service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "invoice-auth-token" });
+    configureAccountServiceMockSession({ authToken: "invoice-auth-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
   });
 
   it("maps invoice dashboard data, backend statistics, and status digests into a reusable invoice center snapshot", async () => {
@@ -67,7 +83,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
     });
 
     const service = createSdkworkInvoiceService({
-      commerceService,
+      remotePort: createInvoiceRemotePortFromCommerceMock(commerceService),
     });
 
     const dashboard = await service.getDashboard();
@@ -154,7 +170,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
     });
 
     const service = createSdkworkInvoiceService({
-      commerceService,
+      remotePort: createInvoiceRemotePortFromCommerceMock(commerceService),
     });
 
     const detail = await service.getInvoiceDetail("INV-1002");
@@ -222,7 +238,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
       },
     });
     const service = createSdkworkInvoiceService({
-      commerceService,
+      remotePort: createInvoiceRemotePortFromCommerceMock(commerceService),
     });
 
     await expect(
@@ -349,7 +365,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
     });
 
     const zhDashboardService = createSdkworkInvoiceService({
-      commerceService: zhCommerceService,
+      remotePort: createInvoiceRemotePortFromCommerceMock(zhCommerceService),
       locale: "zh-CN",
     });
 
@@ -368,7 +384,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
       name: "\u53d1\u7968\u884c\u9879",
     });
 
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
     const signInRequiredService = createSdkworkInvoiceService({
       locale: "zh-CN",
     });
@@ -379,15 +395,15 @@ describe("sdkwork-mall-pc-invoice service", () => {
       }),
     ).rejects.toThrow("\u8bf7\u5148\u767b\u5f55\u540e\u518d\u7ba1\u7406\u53d1\u7968\u3002");
 
-    configureCommerceServiceMockSession({ authToken: "invoice-auth-token" });
+    configureAccountServiceMockSession({ authToken: "invoice-auth-token" });
     const mutationFailureService = createSdkworkInvoiceService({
-      commerceService: createCommerceServiceMock({
+      remotePort: createInvoiceRemotePortFromCommerceMock(createCommerceServiceMock({
         invoices: {
           create: vi.fn().mockResolvedValue({
             code: "5000",
           }),
         },
-      }),
+      })),
       locale: "zh-CN",
     });
 

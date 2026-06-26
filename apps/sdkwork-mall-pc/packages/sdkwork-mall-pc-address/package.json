@@ -21,10 +21,21 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
+    "@sdkwork/account-service": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/ui-pc-react": "*",
     "react": ">=18.2.0 <20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@sdkwork/account-service": {
+      "optional": true
+    },
+    "@sdkwork/mall-pc-core": {
+      "optional": true
+    },
+    "@sdkwork/ui-pc-react": {
+      "optional": true
+    }
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

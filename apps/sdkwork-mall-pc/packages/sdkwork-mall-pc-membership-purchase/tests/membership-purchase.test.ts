@@ -7,9 +7,8 @@ import {
   membershipPurchasePackageMeta,
 } from "../src";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureMembershipServiceMockSession,
+  resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { vi } from "vitest";
 
@@ -68,53 +67,40 @@ describe("sdkwork-mall-pc-membership-purchase headless contract", () => {
   });
 
   it("submits package purchase, renewal, and upgrade through the membership purchase service boundary", async () => {
-    configureCommerceServiceMockSession({ authToken: "membership-purchase-auth-token" });
+    configureMembershipServiceMockSession({ authToken: "membership-purchase-auth-token" });
     const purchase = vi.fn().mockResolvedValue({
-      code: "2000",
-      data: {
-        amount: "199.00",
-        durationDays: 30,
-        orderId: "MEMBERSHIP-PURCHASE-2",
-        packageId: 2,
-        packageName: "Pro Monthly",
-        status: "SUCCESS",
-        targetLevelName: "Pro",
-      },
+      amountCny: 199,
+      durationDays: 30,
+      orderId: "MEMBERSHIP-PURCHASE-2",
+      packageId: 2,
+      packageName: "Pro Monthly",
+      status: "completed",
+      targetLevelName: "Pro",
     });
     const renew = vi.fn().mockResolvedValue({
-      code: "2000",
-      data: {
-        amount: 399,
-        durationDays: 365,
-        orderId: "MEMBERSHIP-RENEW-3",
-        packageId: 3,
-        packageName: "Pro Annual",
-        status: "SUCCESS",
-        targetLevelName: "Pro",
-      },
+      amountCny: 399,
+      durationDays: 365,
+      orderId: "MEMBERSHIP-RENEW-3",
+      packageId: 3,
+      packageName: "Pro Annual",
+      status: "completed",
+      targetLevelName: "Pro",
     });
     const upgrade = vi.fn().mockResolvedValue({
-      code: "2000",
-      data: {
-        amount: 99,
-        durationDays: 30,
-        orderId: "MEMBERSHIP-UPGRADE-4",
-        packageId: 4,
-        packageName: "Team Plus",
-        status: "PENDING",
-        targetLevelName: "Team",
-      },
+      amountCny: 99,
+      durationDays: 30,
+      orderId: "MEMBERSHIP-UPGRADE-4",
+      packageId: 4,
+      packageName: "Team Plus",
+      status: "pending",
+      targetLevelName: "Team",
     });
     const service = createSdkworkMembershipPurchaseService({
-      commerceService: createCommerceServiceMock({
-        memberships: {
-          purchases: {
-            create: purchase,
-            renew,
-            upgrade,
-          },
-        },
-      }),
+      membershipService: {
+        purchaseMembership: purchase,
+        renewMembership: renew,
+        upgradeMembership: upgrade,
+      },
     });
 
     await expect(
@@ -188,28 +174,21 @@ describe("sdkwork-mall-pc-membership-purchase headless contract", () => {
       paymentMethod: "WECHAT",
     });
 
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
   });
 
   it("keeps the package purchase submit method safe when passed as a callback", async () => {
-    configureCommerceServiceMockSession({ authToken: "membership-purchase-auth-token" });
+    configureMembershipServiceMockSession({ authToken: "membership-purchase-auth-token" });
     const purchase = vi.fn().mockResolvedValue({
-      code: "2000",
-      data: {
-        amount: 199,
-        orderId: "MEMBERSHIP-PURCHASE-CALLBACK-1",
-        packageId: 2,
-        status: "SUCCESS",
-      },
+      amountCny: 199,
+      orderId: "MEMBERSHIP-PURCHASE-CALLBACK-1",
+      packageId: 2,
+      status: "completed",
     });
     const service = createSdkworkMembershipPurchaseService({
-      commerceService: createCommerceServiceMock({
-        memberships: {
-          purchases: {
-            create: purchase,
-          },
-        },
-      }),
+      membershipService: {
+        purchaseMembership: purchase,
+      },
     });
     const { submitPackagePurchase } = service;
 
@@ -231,6 +210,6 @@ describe("sdkwork-mall-pc-membership-purchase headless contract", () => {
       packageId: 2,
       paymentMethod: undefined,
     });
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
   });
 });

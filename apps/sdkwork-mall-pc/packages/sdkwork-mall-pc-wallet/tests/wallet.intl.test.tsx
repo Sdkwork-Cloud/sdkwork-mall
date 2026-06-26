@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { formatSdkworkCommercePointsRate } from "@sdkwork/commerce-service";
+import { formatSdkworkAccountPointsRate } from "@sdkwork/account-service";
 import { SdkworkThemeProvider } from "@sdkwork/ui-pc-react/theme";
 import {
   SdkworkWalletIntlProvider,

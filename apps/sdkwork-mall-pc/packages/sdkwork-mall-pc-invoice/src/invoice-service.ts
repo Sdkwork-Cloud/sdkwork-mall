@@ -1,13 +1,17 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  requireSdkworkCommerceSession,
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  hasSdkworkAccountSession,
+  requireSdkworkAccountSession,
+} from "@sdkwork/account-service";
+import {
+  toNullableSdkworkPaymentNumber,
+  toSdkworkPaymentNumber,
+  toSdkworkPaymentOptionalString,
+  unwrapSdkworkPaymentResponse,
+} from "@sdkwork/payment-service";
+import {
+  getSdkworkInvoiceRemotePort,
+  type SdkworkInvoiceRemotePort,
+} from "./invoice-remote-port";
 import {
   createSdkworkInvoiceMessages,
   type SdkworkInvoiceMessages,
@@ -116,9 +120,9 @@ export interface SdkworkInvoiceCancelResult {
 }
 
 export interface CreateSdkworkInvoiceServiceOptions {
-  commerceService?: SdkworkCommerceService;
   locale?: string | null;
   messages?: SdkworkInvoiceMessagesOverrides;
+  remotePort?: SdkworkInvoiceRemotePort;
 }
 
 export interface SdkworkInvoiceService {
@@ -186,7 +190,7 @@ interface RemoteInvoiceStatistics {
 type SdkworkInvoiceCopyContext = Pick<SdkworkInvoiceMessages, "service" | "status">;
 
 function toNullableAmount(value: unknown): number | null {
-  const amount = toNullableSdkworkCommerceNumber(value);
+  const amount = toNullableSdkworkPaymentNumber(value);
   if (amount === null) {
     return null;
   }
@@ -343,18 +347,18 @@ function mapSummary(
     canDownload: status === "completed",
     canEdit: canEditInvoice(status),
     canSubmit: canSubmitInvoice(status),
-    createdAt: toSdkworkCommerceOptionalString(invoice?.createdAt) || new Date(0).toISOString(),
-    currency: toSdkworkCommerceOptionalString(invoice?.currency) || messages.service.defaultCurrency,
-    id: toSdkworkCommerceOptionalString(invoice?.invoiceId) || "unknown-invoice",
-    invoiceCode: toSdkworkCommerceOptionalString(invoice?.invoiceCode),
-    invoiceNo: toSdkworkCommerceOptionalString(invoice?.invoiceNo),
+    createdAt: toSdkworkPaymentOptionalString(invoice?.createdAt) || new Date(0).toISOString(),
+    currency: toSdkworkPaymentOptionalString(invoice?.currency) || messages.service.defaultCurrency,
+    id: toSdkworkPaymentOptionalString(invoice?.invoiceId) || "unknown-invoice",
+    invoiceCode: toSdkworkPaymentOptionalString(invoice?.invoiceCode),
+    invoiceNo: toSdkworkPaymentOptionalString(invoice?.invoiceNo),
     status,
     statusLabel: formatStatusLabel(status, messages),
-    title: toSdkworkCommerceOptionalString(invoice?.title) || messages.service.summaryFallbackTitle,
+    title: toSdkworkPaymentOptionalString(invoice?.title) || messages.service.summaryFallbackTitle,
     titleType: mapTitleType(invoice?.titleType),
     totalAmountCny: toNullableAmount(invoice?.totalAmount),
     type: mapInvoiceType(invoice?.type),
-    updatedAt: toSdkworkCommerceOptionalString(invoice?.updatedAt),
+    updatedAt: toSdkworkPaymentOptionalString(invoice?.updatedAt),
   };
 }
 
@@ -365,14 +369,14 @@ function mapItem(
 ): SdkworkInvoiceItem {
   return {
     amountExcludingTaxCny: toNullableAmount(item?.amountExcludingTax),
-    id: toSdkworkCommerceOptionalString(item?.itemId) || `invoice-item-${index + 1}`,
-    name: toSdkworkCommerceOptionalString(item?.productName) || messages.service.itemFallbackName,
-    quantity: toSdkworkCommerceNumber(item?.quantity, 1),
-    specification: toSdkworkCommerceOptionalString(item?.specification),
+    id: toSdkworkPaymentOptionalString(item?.itemId) || `invoice-item-${index + 1}`,
+    name: toSdkworkPaymentOptionalString(item?.productName) || messages.service.itemFallbackName,
+    quantity: toSdkworkPaymentNumber(item?.quantity, 1),
+    specification: toSdkworkPaymentOptionalString(item?.specification),
     taxAmountCny: toNullableAmount(item?.taxAmount),
-    taxRate: toNullableSdkworkCommerceNumber(item?.taxRate),
+    taxRate: toNullableSdkworkPaymentNumber(item?.taxRate),
     totalAmountCny: toNullableAmount(item?.totalAmount),
-    unit: toSdkworkCommerceOptionalString(item?.unit),
+    unit: toSdkworkPaymentOptionalString(item?.unit),
     unitPriceExcludingTaxCny: toNullableAmount(item?.unitPriceExcludingTax),
   };
 }
@@ -388,25 +392,25 @@ function mapDetail(
   return {
     ...summary,
     amountExcludingTaxCny: toNullableAmount(detail?.amountExcludingTax),
-    bankAccount: toSdkworkCommerceOptionalString(detail?.bankAccount),
-    bankName: toSdkworkCommerceOptionalString(detail?.bankName),
-    electronicUrl: toSdkworkCommerceOptionalString(detail?.electronicUrl),
-    invoiceTime: toSdkworkCommerceOptionalString(detail?.invoiceTime),
+    bankAccount: toSdkworkPaymentOptionalString(detail?.bankAccount),
+    bankName: toSdkworkPaymentOptionalString(detail?.bankName),
+    electronicUrl: toSdkworkPaymentOptionalString(detail?.electronicUrl),
+    invoiceTime: toSdkworkPaymentOptionalString(detail?.invoiceTime),
     items: itemsSource.map((item, index) => mapItem(item, index, messages)),
-    registerAddress: toSdkworkCommerceOptionalString(detail?.registerAddress),
-    registerPhone: toSdkworkCommerceOptionalString(detail?.registerPhone),
+    registerAddress: toSdkworkPaymentOptionalString(detail?.registerAddress),
+    registerPhone: toSdkworkPaymentOptionalString(detail?.registerPhone),
     taxAmountCny: toNullableAmount(detail?.taxAmount),
-    taxNo: toSdkworkCommerceOptionalString(detail?.taxNo),
-    taxRate: toNullableSdkworkCommerceNumber(detail?.taxRate),
+    taxNo: toSdkworkPaymentOptionalString(detail?.taxNo),
+    taxRate: toNullableSdkworkPaymentNumber(detail?.taxRate),
   };
 }
 
 function mapStatistics(statistics: RemoteInvoiceStatistics | null | undefined): SdkworkInvoiceStatistics {
   return {
-    completedInvoices: toSdkworkCommerceNumber(statistics?.completedInvoices),
-    pendingInvoices: toSdkworkCommerceNumber(statistics?.pendingInvoices),
+    completedInvoices: toSdkworkPaymentNumber(statistics?.completedInvoices),
+    pendingInvoices: toSdkworkPaymentNumber(statistics?.pendingInvoices),
     totalAmountCny: toNullableAmount(statistics?.totalAmount),
-    totalInvoices: toSdkworkCommerceNumber(statistics?.totalInvoices),
+    totalInvoices: toSdkworkPaymentNumber(statistics?.totalInvoices),
   };
 }
 
@@ -457,14 +461,14 @@ export function createSdkworkInvoiceService(
 ): SdkworkInvoiceService {
   const messages = createSdkworkInvoiceMessages(options.locale, options.messages);
   const copy = messages.service;
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
+  const getRemotePort = () => options.remotePort ?? getSdkworkInvoiceRemotePort();
 
   return {
     async cancelInvoice(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      await unwrapSdkworkCommerceResponse<void>(
-        await getCommerceService().invoices.cancellations.create(input.invoiceId, {
-          cancelReason: toSdkworkCommerceOptionalString(input.cancelReason),
+      requireSdkworkAccountSession(copy.signInRequired);
+      await unwrapSdkworkPaymentResponse<void>(
+        await getRemotePort().cancelInvoice(input.invoiceId, {
+          cancelReason: toSdkworkPaymentOptionalString(input.cancelReason),
         }),
         copy.cancelFailed,
       );
@@ -476,16 +480,16 @@ export function createSdkworkInvoiceService(
     },
 
     async createInvoice(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkAccountSession(copy.signInRequired);
       const payload = {
-        taxNo: toSdkworkCommerceOptionalString(input.taxNo),
+        taxNo: toSdkworkPaymentOptionalString(input.taxNo),
         title: input.title.trim(),
         titleType: toRemoteTitleType(input.titleType),
         totalAmount: toNullableAmount(input.totalAmountCny),
         type: toRemoteInvoiceType(input.type),
       };
-      const result = unwrapSdkworkCommerceResponse<RemoteInvoice>(
-        await getCommerceService().invoices.create(payload),
+      const result = unwrapSdkworkPaymentResponse<RemoteInvoice>(
+        await getRemotePort().createInvoice(payload),
         copy.createFailed,
       );
 
@@ -498,22 +502,22 @@ export function createSdkworkInvoiceService(
     },
 
     async getDashboard() {
-      if (!hasSdkworkCommerceSession()) {
+      if (!hasSdkworkAccountSession()) {
         return createEmptyDashboard();
       }
 
       const [invoicePagePayload, statisticsPayload] = await Promise.all([
-        getCommerceService().invoices.mine.list({
+        getRemotePort().listMineInvoices({
               page: 1,
               pageSize: 20,
         }),
-        getCommerceService().invoices.statistics.retrieve(),
+        getRemotePort().retrieveStatistics(),
       ]);
-      const invoicePage = unwrapSdkworkCommerceResponse<RemotePageEnvelope<RemoteInvoice>>(
+      const invoicePage = unwrapSdkworkPaymentResponse<RemotePageEnvelope<RemoteInvoice>>(
         invoicePagePayload,
         copy.requestFailed,
       );
-      const statistics = unwrapSdkworkCommerceResponse<RemoteInvoiceStatistics | null>(
+      const statistics = unwrapSdkworkPaymentResponse<RemoteInvoiceStatistics | null>(
         statisticsPayload,
         copy.requestFailed,
       );
@@ -534,21 +538,21 @@ export function createSdkworkInvoiceService(
     },
 
     async getInvoiceDetail(invoiceId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkAccountSession(copy.signInRequired);
       const [detailPayload, itemsPayload] = await Promise.all([
-        getCommerceService().invoices.retrieve(invoiceId),
-        getCommerceService().invoices.items.list(invoiceId),
+        getRemotePort().retrieveInvoice(invoiceId),
+        getRemotePort().listInvoiceItems(invoiceId),
       ]);
-      const detail = unwrapSdkworkCommerceResponse<RemoteInvoiceDetail | null>(detailPayload, copy.requestFailed);
-      const items = unwrapSdkworkCommerceResponse<RemoteInvoiceItem[] | null>(itemsPayload, copy.requestFailed);
+      const detail = unwrapSdkworkPaymentResponse<RemoteInvoiceDetail | null>(detailPayload, copy.requestFailed);
+      const items = unwrapSdkworkPaymentResponse<RemoteInvoiceItem[] | null>(itemsPayload, copy.requestFailed);
 
       return mapDetail(detail, items, messages);
     },
 
     async submitInvoice(invoiceId) {
-      requireSdkworkCommerceSession(copy.signInRequired);
-      await unwrapSdkworkCommerceResponse<unknown>(
-        await getCommerceService().invoices.submissions.create(invoiceId, {}),
+      requireSdkworkAccountSession(copy.signInRequired);
+      await unwrapSdkworkPaymentResponse<unknown>(
+        await getRemotePort().submitInvoice(invoiceId),
         copy.submitFailed,
       );
 
@@ -559,17 +563,17 @@ export function createSdkworkInvoiceService(
     },
 
     async updateInvoice(input) {
-      requireSdkworkCommerceSession(copy.signInRequired);
+      requireSdkworkAccountSession(copy.signInRequired);
       const payload = {
-        bankAccount: toSdkworkCommerceOptionalString(input.bankAccount),
-        bankName: toSdkworkCommerceOptionalString(input.bankName),
-        registerAddress: toSdkworkCommerceOptionalString(input.registerAddress),
-        registerPhone: toSdkworkCommerceOptionalString(input.registerPhone),
-        taxNo: toSdkworkCommerceOptionalString(input.taxNo),
-        title: toSdkworkCommerceOptionalString(input.title),
+        bankAccount: toSdkworkPaymentOptionalString(input.bankAccount),
+        bankName: toSdkworkPaymentOptionalString(input.bankName),
+        registerAddress: toSdkworkPaymentOptionalString(input.registerAddress),
+        registerPhone: toSdkworkPaymentOptionalString(input.registerPhone),
+        taxNo: toSdkworkPaymentOptionalString(input.taxNo),
+        title: toSdkworkPaymentOptionalString(input.title),
       };
-      const result = unwrapSdkworkCommerceResponse<RemoteInvoice>(
-        await getCommerceService().invoices.update(input.invoiceId, payload),
+      const result = unwrapSdkworkPaymentResponse<RemoteInvoice>(
+        await getRemotePort().updateInvoice(input.invoiceId, payload),
         copy.updateFailed,
       );
 

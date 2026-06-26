@@ -1,12 +1,13 @@
 import {
-  getSdkworkCommerceService,
-  hasSdkworkCommerceSession,
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
-  unwrapSdkworkCommerceResponse,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  hasSdkworkAccountSession,
+} from "@sdkwork/account-service";
+import {
+  getSdkworkBillingUsageRecordsLoader,
+  type LoadSdkworkBillingUsageRecordsOptions,
+} from "./billing-usage-loader";
+import {
+  toSdkworkPaymentNumber,
+} from "@sdkwork/payment-service";
 import {
   createSdkworkInvoiceService,
   type SdkworkInvoiceService,
@@ -89,13 +90,10 @@ export interface GetSdkworkBillingDashboardOptions {
   referenceDate?: Date | string;
 }
 
-export interface LoadSdkworkBillingUsageRecordsOptions {
-  referenceDate?: Date | string;
-}
+export type { LoadSdkworkBillingUsageRecordsOptions } from "./billing-usage-loader";
 
 export interface CreateSdkworkBillingServiceOptions {
   budgetPolicy?: Partial<SdkworkBillingBudgetPolicy>;
-  commerceService?: SdkworkCommerceService;
   invoiceService?: Partial<Pick<SdkworkInvoiceService, "getDashboard">>;
   loadUsageRecords?: (options?: LoadSdkworkBillingUsageRecordsOptions) => Promise<SdkworkBillingUsageRecord[]>;
   locale?: string | null;
@@ -109,26 +107,6 @@ export interface CreateSdkworkBillingServiceOptions {
 export interface SdkworkBillingService {
   getDashboard(options?: GetSdkworkBillingDashboardOptions): Promise<SdkworkBillingDashboardData>;
   getEmptyDashboard(): SdkworkBillingDashboardData;
-}
-
-interface RemoteUsageRecord {
-  capability?: string;
-  cost?: number | string;
-  costAmount?: number | string;
-  costCny?: number | string;
-  id?: string;
-  model?: string;
-  provider?: string;
-  title?: string;
-  unitLabel?: string;
-  units?: number | string;
-  usageAt?: string;
-  workspace?: string;
-}
-
-interface RemoteUsageListEnvelope {
-  content?: RemoteUsageRecord[];
-  items?: RemoteUsageRecord[];
 }
 
 type SdkworkBillingServiceCopy = ReturnType<typeof createSdkworkBillingMessages>["service"];
@@ -169,49 +147,6 @@ function createEmptyDashboard(
   };
 }
 
-function mapRemoteUsageRecord(
-  record: RemoteUsageRecord,
-  index: number,
-  copy: SdkworkBillingServiceCopy,
-): SdkworkBillingUsageRecord {
-  return {
-    capability: toSdkworkCommerceOptionalString(record.capability) || copy.defaultCapability,
-    costCny: Math.max(0, toSdkworkCommerceNumber(record.costCny ?? record.costAmount ?? record.cost)),
-    id: toSdkworkCommerceOptionalString(record.id) || `usage-${index + 1}`,
-    model: toSdkworkCommerceOptionalString(record.model) || copy.defaultModel,
-    provider: toSdkworkCommerceOptionalString(record.provider) || copy.defaultProvider,
-    title: toSdkworkCommerceOptionalString(record.title) || toSdkworkCommerceOptionalString(record.model) || copy.defaultUsageTitle,
-    unitLabel: toSdkworkCommerceOptionalString(record.unitLabel) || copy.defaultUnitLabel,
-    units: Math.max(0, Math.round(toSdkworkCommerceNumber(record.units))),
-    usageAt: toSdkworkCommerceOptionalString(record.usageAt) || new Date(0).toISOString(),
-    workspace: toSdkworkCommerceOptionalString(record.workspace) || copy.defaultWorkspace,
-  };
-}
-
-async function loadUsageRecordsFromCommerceService(
-  commerceService: SdkworkCommerceService,
-  copy: SdkworkBillingServiceCopy,
-  options: LoadSdkworkBillingUsageRecordsOptions = {},
-): Promise<SdkworkBillingUsageRecord[]> {
-  const payload = unwrapSdkworkCommerceResponse<RemoteUsageListEnvelope | RemoteUsageRecord[] | null>(
-    await commerceService.billing.history.list({
-      referenceDate:
-        typeof options.referenceDate === "string"
-          ? options.referenceDate
-          : options.referenceDate instanceof Date
-          ? options.referenceDate.toISOString()
-          : undefined,
-    }),
-    copy.loadUsageFailed,
-  );
-
-  const records = Array.isArray(payload)
-    ? payload
-    : payload?.items ?? payload?.content ?? [];
-
-  return records.map((record, index) => mapRemoteUsageRecord(record, index, copy));
-}
-
 function sumOutstandingAmount(records: readonly SdkworkPaymentSummary[]): number {
   return Math.round(
     records.reduce((sum, record) => {
@@ -219,7 +154,7 @@ function sumOutstandingAmount(records: readonly SdkworkPaymentSummary[]): number
         return sum;
       }
 
-      return sum + toSdkworkCommerceNumber(record.amountCny);
+      return sum + toSdkworkPaymentNumber(record.amountCny);
     }, 0) * 100,
   ) / 100;
 }
@@ -247,17 +182,15 @@ export function createSdkworkBillingService(
 ): SdkworkBillingService {
   const copy = createSdkworkBillingMessages(options.locale, options.messages).service;
   const resolvedBudgetPolicy = createSdkworkBillingBudgetPolicy(options.budgetPolicy);
-  const getCommerceService = () => options.commerceService ?? getSdkworkCommerceService();
   const childServiceOptions = {
-    commerceService: options.commerceService,
     locale: options.locale,
   };
   const walletService: Pick<SdkworkWalletService, "getOverview"> = options.walletService
     ? {
-        ...createSdkworkWalletService({ commerceService: options.commerceService }),
+        ...createSdkworkWalletService(),
         ...options.walletService,
       }
-    : createSdkworkWalletService({ commerceService: options.commerceService });
+    : createSdkworkWalletService();
   const subscriptionService: Pick<SdkworkSubscriptionService, "getDashboard"> = options.subscriptionService
     ? {
         ...createSdkworkSubscriptionService(childServiceOptions),
@@ -282,8 +215,13 @@ export function createSdkworkBillingService(
         ...options.offerService,
       }
     : createSdkworkOfferService(childServiceOptions);
-  const loadUsageRecords = options.loadUsageRecords ?? ((config?: LoadSdkworkBillingUsageRecordsOptions) =>
-    loadUsageRecordsFromCommerceService(getCommerceService(), copy, config));
+  const loadUsageRecords = options.loadUsageRecords ?? ((config?: LoadSdkworkBillingUsageRecordsOptions) => {
+    const loader = getSdkworkBillingUsageRecordsLoader();
+    if (!loader) {
+      return Promise.resolve([]);
+    }
+    return loader(config);
+  });
 
   return {
     getEmptyDashboard() {
@@ -291,7 +229,7 @@ export function createSdkworkBillingService(
     },
 
     async getDashboard(config = {}) {
-      if (!hasSdkworkCommerceSession()) {
+      if (!hasSdkworkAccountSession()) {
         return createEmptyDashboard(resolvedBudgetPolicy, copy);
       }
 

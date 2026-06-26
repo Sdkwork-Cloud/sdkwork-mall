@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, EmptyState, LoadingBlock } from "@sdkwork/ui-pc-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
 
 import { clearMallFootprint, readMallFootprint } from "../footprint-service";
+import { loadMallPendingReviewOrders } from "../reviews-service";
 
 export function SdkworkMallReviewsPage() {
   const [pending, setPending] = useState<Array<{ id: string; status: string; title: string }>>([]);
@@ -15,20 +12,15 @@ export function SdkworkMallReviewsPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const service = getSdkworkCommerceService();
-      const response = await service.orders.list({ page: 1, page_size: 20 });
-      const payload = unwrapSdkworkCommerceResponse(response) as { items?: Record<string, unknown>[] };
-      if (active) {
-        setPending(
-          payload.items
-            ?.filter((item) => String(item.status ?? "") === "completed")
-            .map((item) => ({
-              id: String(item.id ?? ""),
-              title: String(item.subject ?? item.title ?? "订单"),
-              status: "pending-review",
-            })) ?? [],
-        );
-        setLoading(false);
+      try {
+        const rows = await loadMallPendingReviewOrders();
+        if (active) {
+          setPending(rows);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
       }
     }
     void load();
@@ -61,7 +53,7 @@ export function SdkworkMallReviewsPage() {
           </ul>
         )}
       </section>
-      <p>商品晒单与媒体上传需等待 commerce 商品评价 API 合约落地。</p>
+      <p>商品晒单与媒体上传需等待 T1 商品评价 API 合约落地。</p>
     </div>
   );
 }
@@ -101,7 +93,7 @@ export function SdkworkMallFootprintPage() {
           ))}
         </ul>
       )}
-      <p>浏览足迹暂存于本机浏览器，服务端同步需等待 commerce footprint API 合约落地。</p>
+      <p>浏览足迹暂存于本机浏览器，服务端同步需等待 T1 footprint API 合约落地。</p>
     </div>
   );
 }

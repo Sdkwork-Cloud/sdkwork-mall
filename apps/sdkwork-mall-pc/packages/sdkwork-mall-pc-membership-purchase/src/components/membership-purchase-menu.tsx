@@ -17,7 +17,7 @@ import {
   type SdkworkMembershipController,
   type SdkworkMembershipPlan,
 } from "@sdkwork/mall-pc-membership";
-import { formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/commerce-service";
+import { formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/membership-service";
 import { resolveSdkworkMembershipPurchaseMode } from "../membership-purchase";
 import { useSdkworkMembershipPurchaseIntl } from "../membership-purchase-intl";
 import {

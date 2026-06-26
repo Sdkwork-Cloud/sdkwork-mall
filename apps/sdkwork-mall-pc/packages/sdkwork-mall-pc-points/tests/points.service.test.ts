@@ -1,18 +1,27 @@
+import { configureSdkworkAccountAppServiceProvider } from "@sdkwork/account-service";
+import { configureSdkworkMembershipAppServiceProvider } from "@sdkwork/membership-service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  configureAccountServiceMockSession,
+  configureMembershipServiceMockSession,
+  createAccountServiceMock,
+  createMembershipServiceMock,
+  resetAccountServiceMockSession,
+  resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkPointsService } from "../src";
 
 describe("sdkwork-mall-pc-points service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "points-token" });
+    configureAccountServiceMockSession({ authToken: "points-token" });
+    configureMembershipServiceMockSession({ authToken: "points-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    configureSdkworkAccountAppServiceProvider(null);
+    configureSdkworkMembershipAppServiceProvider(null);
+    resetAccountServiceMockSession();
+    resetMembershipServiceMockSession();
   });
 
   it("maps wallet overview into a reusable points dashboard with transactions, offers, and plans", async () => {
@@ -342,7 +351,7 @@ describe("sdkwork-mall-pc-points service", () => {
     });
   });
 
-  it("propagates one injected commerce service into default wallet and membership services", async () => {
+  it("composes wallet and membership domain boundaries for dashboard assembly", async () => {
     const rechargePackages = vi.fn().mockResolvedValue({
       code: "2000",
       data: [
@@ -368,17 +377,17 @@ describe("sdkwork-mall-pc-points service", () => {
         },
       ],
     });
-    const commerceService = createCommerceServiceMock({
+    configureSdkworkAccountAppServiceProvider(() => createAccountServiceMock({
       accounts: {
         current: {
           summary: {
             retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: {
-              cashAvailable: 20,
-              pointsAvailable: 1200,
-            },
-          }),
+              code: "2000",
+              data: {
+                cashAvailable: 20,
+                pointsAvailable: 1200,
+              },
+            }),
           },
         },
       },
@@ -401,15 +410,15 @@ describe("sdkwork-mall-pc-points service", () => {
         },
         accounts: {
           points: {
-          retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: {
-              availablePoints: 1200,
-              totalEarned: 1200,
-              totalPoints: 1200,
-              totalSpent: 0,
-            },
-          }),
+            retrieve: vi.fn().mockResolvedValue({
+              code: "2000",
+              data: {
+                availablePoints: 1200,
+                totalEarned: 1200,
+                totalPoints: 1200,
+                totalSpent: 0,
+              },
+            }),
           },
         },
       },
@@ -418,6 +427,8 @@ describe("sdkwork-mall-pc-points service", () => {
           list: rechargePackages,
         },
       },
+    }));
+    configureSdkworkMembershipAppServiceProvider(() => createMembershipServiceMock({
       memberships: {
         benefits: {
           list: vi.fn().mockResolvedValue({
@@ -456,10 +467,8 @@ describe("sdkwork-mall-pc-points service", () => {
           list: membershipPackages,
         },
       },
-    });
-    const service = createSdkworkPointsService({
-      commerceService,
-    });
+    }));
+    const service = createSdkworkPointsService();
 
     const dashboard = await service.getDashboard();
 
@@ -482,16 +491,16 @@ describe("sdkwork-mall-pc-points service", () => {
   });
 
   it("passes locale into the default membership mutation boundary used by plan upgrades", async () => {
-    const service = createSdkworkPointsService({
-      commerceService: createCommerceServiceMock({
-        memberships: {
-          purchases: {
-            create: vi.fn().mockResolvedValue({
-              code: "5000",
-            }),
-          },
+    configureSdkworkMembershipAppServiceProvider(() => createMembershipServiceMock({
+      memberships: {
+        purchases: {
+          create: vi.fn().mockResolvedValue({
+            code: "5000",
+          }),
         },
-      }),
+      },
+    }));
+    const service = createSdkworkPointsService({
       locale: "zh-CN",
     });
 

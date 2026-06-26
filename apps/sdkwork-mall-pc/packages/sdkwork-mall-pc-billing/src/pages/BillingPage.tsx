@@ -11,7 +11,7 @@ import {
   LoadingBlock,
   StatusNotice,
 } from "@sdkwork/ui-pc-react";
-import { formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/commerce-service";
+import { formatSdkworkPaymentCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/payment-service";
 import type { SdkworkBillingBreakdownKey } from "../billing";
 import type { SdkworkBillingMessagesOverrides } from "../billing-copy";
 import type { SdkworkBillingController } from "../billing-controller";

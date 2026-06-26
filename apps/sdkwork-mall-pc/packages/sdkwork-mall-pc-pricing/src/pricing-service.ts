@@ -1,9 +1,10 @@
 import {
-  formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny,
-  formatSdkworkCommercePoints as formatSdkworkPoints,
-  hasSdkworkCommerceSession,
-  type SdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+  formatSdkworkAccountPoints as formatSdkworkPoints,
+  hasSdkworkAccountSession,
+} from "@sdkwork/account-service";
+import {
+  formatSdkworkPaymentCurrencyCny as formatSdkworkCurrencyCny,
+} from "@sdkwork/payment-service";
 import {
   createBillingRouteIntent,
   createSdkworkBillingService,
@@ -53,7 +54,6 @@ import {
 
 export interface CreateSdkworkPricingServiceOptions {
   billingService?: Partial<Pick<SdkworkBillingService, "getDashboard" | "getEmptyDashboard">>;
-  commerceService?: SdkworkCommerceService;
   locale?: string | null;
   messages?: SdkworkPricingMessagesOverrides;
   offerService?: Partial<Pick<SdkworkOfferService, "getDashboard" | "getEmptyDashboard">>;
@@ -594,7 +594,6 @@ export function createSdkworkPricingService(
 ): SdkworkPricingService {
   const copy = createSdkworkPricingMessages(options.locale, options.messages);
   const childServiceOptions = {
-    commerceService: options.commerceService,
     locale: options.locale,
   };
   const billingService: Pick<SdkworkBillingService, "getDashboard" | "getEmptyDashboard"> = options.billingService
@@ -617,18 +616,14 @@ export function createSdkworkPricingService(
     : createSdkworkSubscriptionService(childServiceOptions);
   const walletService: Pick<SdkworkWalletService, "getOverview"> = options.walletService
     ? {
-        ...createSdkworkWalletService({
-          commerceService: options.commerceService,
-        }),
+        ...createSdkworkWalletService(),
         ...options.walletService,
       }
-    : createSdkworkWalletService({
-        commerceService: options.commerceService,
-      });
+    : createSdkworkWalletService();
 
   return {
     getEmptyCatalog() {
-      const hasSession = hasSdkworkCommerceSession();
+      const hasSession = hasSdkworkAccountSession();
       return createEmptySdkworkPricingCatalog({
         locale: options.locale,
         messages: options.messages,
@@ -639,7 +634,7 @@ export function createSdkworkPricingService(
     },
 
     async getCatalog() {
-      const hasSession = hasSdkworkCommerceSession();
+      const hasSession = hasSdkworkAccountSession();
 
       const [walletOverview, subscriptionDashboard, billingDashboard, offerDashboard] = await Promise.all([
         walletService.getOverview(),

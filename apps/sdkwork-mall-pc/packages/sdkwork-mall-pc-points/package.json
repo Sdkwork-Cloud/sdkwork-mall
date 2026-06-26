@@ -29,7 +29,6 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/ui-pc-react": "*",
     "@sdkwork/mall-pc-membership": "*",
     "@sdkwork/mall-pc-wallet": "*",
@@ -37,9 +36,6 @@
     "react-dom": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {
-    "@sdkwork/commerce-service": {
-      "optional": true
-    },
     "@sdkwork/ui-pc-react": {
       "optional": true
     },

@@ -14,16 +14,17 @@ Billing posture, metered usage, budget alerts, and reusable billing-center surfa
 ## Depends on
 
 - `@sdkwork/ui-pc-react` for shared UI primitives and patterns
-- `@sdkwork/commerce-service` for generated app/backend SDK boundaries, session checks, and response normalization
-- Lower-level foundation host packages only
+- `@sdkwork/account-service` for authenticated session checks via the T1 account domain module
+- `@sdkwork/payment-service` for currency normalization and payment dashboard composition
+- `@sdkwork/mall-pc-invoice`, `@sdkwork/mall-pc-offer`, `@sdkwork/mall-pc-payment`, `@sdkwork/mall-pc-subscription`, and `@sdkwork/mall-pc-wallet` for composed billing-center surfaces
 
 ## Ownership
 
-This package is implemented as an independent SDKWork commerce capability. It owns its public React/service contracts and consumes commerce data through injected service boundaries with wallet and membership ownership kept separate.
+This package owns billing posture, usage breakdown, budget alerts, and reusable billing-center surfaces. Child mall packages supply wallet, subscription, payment, invoice, and offer context.
 
 ## Runtime boundary
 
-All remote commerce access goes through `@sdkwork/commerce-service` or through sibling commerce services that use the same boundary. Generated SDK clients remain behind the shared service contract.
+Authenticated dashboards compose T1 domain-backed mall packages. Metered usage history still loads through the transitional commerce app SDK slice (`billing.history.list`) behind an injectable `loadUsageRecords` boundary.
 
 ## Verification
 

@@ -4,7 +4,7 @@ import {
   useMemo,
   type PropsWithChildren,
 } from "react";
-import { formatSdkworkCommerceCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/commerce-service";
+import { formatSdkworkOrderCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/order-service";
 import type { SdkworkOrderFilter } from "./order-controller";
 import {
   createSdkworkOrderMessages,

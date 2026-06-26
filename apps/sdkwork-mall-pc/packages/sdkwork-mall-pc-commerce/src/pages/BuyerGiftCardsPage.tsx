@@ -11,8 +11,8 @@ export function SdkworkMallGiftCardsPage() {
         title="礼品卡功能待 SDK 合约"
       />
       <p>
-        当前版本仅预留路由与页面占位。待 `@sdkwork/commerce-service` 提供 gift-cards / red-packet
-        相关方法后，将在此接入余额、领取记录与兑换流程。
+        当前版本仅预留路由与页面占位。待 commerce gift-cards / red-packet API 合约落地后，
+        将在此接入余额、领取记录与兑换流程。
       </p>
       <Link to="/buyer/wallet">查看我的钱包</Link>
     </div>

@@ -1,3 +1,4 @@
+export * from "./invoice-remote-port.ts";
 export * from "./invoice.ts";
 export * from "./invoice-appearance.ts";
 export * from "./invoice-controller.ts";

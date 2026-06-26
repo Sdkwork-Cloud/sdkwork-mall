@@ -1,7 +1,5 @@
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
+import { getSdkworkShopRemotePort } from "./shop-remote-port";
 
 /**
  * 店铺评分摘要（对齐 PRD 7.2.5 店铺首页 & 7.2.4 PDP 店铺信息）
@@ -80,9 +78,8 @@ function readShopRating(value: unknown): MallShopRatingSummary | null {
 }
 
 export async function retrieveMallShop(shopId: string): Promise<MallShopDetail | null> {
-  const service = getSdkworkCommerceService();
-  const response = await service.shops.retrieve({ shopId });
-  const item = unwrapSdkworkCommerceResponse(response) as Record<string, unknown>;
+  const response = await getSdkworkShopRemotePort().retrieveShop({ shopId });
+  const item = unwrapSdkworkPaymentResponse(response) as Record<string, unknown>;
   if (!item || !item.id) {
     return null;
   }

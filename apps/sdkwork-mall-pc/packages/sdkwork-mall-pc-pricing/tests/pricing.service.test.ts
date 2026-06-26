@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
-  resetCommerceServiceMockSession,
+  configureAccountServiceMockSession,
+  resetAccountServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import {
   createSdkworkPricingService,
@@ -9,11 +9,11 @@ import {
 
 describe("sdkwork-mall-pc-pricing service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "session-token" });
+    configureAccountServiceMockSession({ authToken: "session-token" });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetAccountServiceMockSession();
   });
 
   it("creates a reusable public baseline catalog and composes pricing plans from wallet, subscription, offer, and billing services", async () => {

@@ -1,4 +1,3 @@
-import { createCommerceRuntime } from "@sdkwork/commerce-runtime";
 import {
   configureSdkworkCommerceServiceProvider,
   configureSdkworkCommerceSessionTokenProvider,
@@ -6,6 +5,17 @@ import {
 } from "@sdkwork/commerce-service";
 import type { CommerceAppSdkClient, CommerceBackendSdkClient } from "@sdkwork/commerce-sdk-ports";
 
+import { configureSdkworkMallPcCommerceBuyerHubRemotePort } from "./commerce-buyer-hub-remote";
+import { configureSdkworkMallPcDomainServiceProviders } from "./domain-service-providers";
+import { configureSdkworkMallPcBillingUsageRecordsLoader } from "./billing-usage-records";
+import { configureSdkworkMallPcInvoiceRemotePort } from "./invoice-commerce-remote";
+import { configureSdkworkMallPcAdminCommerceRemotePort } from "./admin-commerce-remote";
+import { configureSdkworkMallPcAddressRemotePort } from "./address-commerce-remote";
+import { configureSdkworkMallPcBuyerCommerceRemotePorts } from "./buyer-commerce-remote";
+import { configureSdkworkMallPcCartCommerceRemotePort } from "./cart-commerce-remote";
+import { configureSdkworkMallPcCmsCommerceRemotePort } from "./cms-commerce-remote";
+import { configureSdkworkMallPcMerchantCommerceRemotePort } from "./merchant-commerce-remote";
+import { configureSdkworkMallPcStorefrontCommerceRemotePorts } from "./storefront-commerce-remote";
 import type { SdkworkMallPcIamRuntime } from "./iamRuntime";
 import type { SdkworkMallPcSdkClientInventory } from "./sdkClients";
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
@@ -31,21 +41,12 @@ export function configureSdkworkMallPcProviders(input: {
       } as unknown as CommerceBackendSdkClient)
     : undefined;
 
-  const commerceRuntime = createCommerceRuntime({
-    clients: {
-      app: appClient,
-      ...(backendClient ? { backend: backendClient } : {}),
-    },
-    config: {
-      appApiBaseUrl: input.config.appApiBaseUrl,
-      appId: input.config.appKey,
-      backendApiBaseUrl: input.config.backendApiBaseUrl,
-      deploymentMode: "saas",
-      environment: input.config.environment,
-    },
+  const commerceService = createSdkworkCommerceService({
+    appClient,
+    backendClient,
   });
 
-  configureSdkworkCommerceServiceProvider(() => commerceRuntime.service);
+  configureSdkworkCommerceServiceProvider(() => commerceService);
   configureSdkworkCommerceSessionTokenProvider(() => {
     const snapshot = input.iamRuntime.session.getSnapshot();
     return {
@@ -55,8 +56,31 @@ export function configureSdkworkMallPcProviders(input: {
     };
   });
 
+  configureSdkworkMallPcDomainServiceProviders(
+    () => commerceAppClient as CommerceAppSdkClient["commerce"],
+    () => {
+      const snapshot = input.iamRuntime.session.getSnapshot();
+      return {
+        accessToken: snapshot.accessToken,
+        authToken: snapshot.authToken,
+        refreshToken: snapshot.refreshToken,
+      };
+    },
+  );
+
+  configureSdkworkMallPcBillingUsageRecordsLoader();
+  configureSdkworkMallPcInvoiceRemotePort();
+  configureSdkworkMallPcAddressRemotePort();
+  configureSdkworkMallPcStorefrontCommerceRemotePorts();
+  configureSdkworkMallPcBuyerCommerceRemotePorts();
+  configureSdkworkMallPcCommerceBuyerHubRemotePort();
+  configureSdkworkMallPcCartCommerceRemotePort();
+  configureSdkworkMallPcMerchantCommerceRemotePort();
+  configureSdkworkMallPcAdminCommerceRemotePort();
+  configureSdkworkMallPcCmsCommerceRemotePort();
+
   return {
-    commerceService: commerceRuntime.service,
+    commerceService,
   };
 }
 

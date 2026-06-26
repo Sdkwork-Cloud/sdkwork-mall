@@ -21,11 +21,12 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/commerce-service": "*",
     "@sdkwork/mall-pc-cms": "*",
     "@sdkwork/mall-pc-core": "*",
     "@sdkwork/ui-pc-react": "*",
-    "react": ">=18.2.0 <20.0.0"
+    "react": ">=18.2.0 <20.0.0",
+    "@sdkwork/mall-pc-admin-core": "*",
+    "@sdkwork/payment-service": "*"
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

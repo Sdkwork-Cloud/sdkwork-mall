@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import { Shield } from "lucide-react";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
 import { useEffect, useState } from "react";
 import { LoadingBlock } from "@sdkwork/ui-pc-react";
+import { loadMallBuyerAccountSummary } from "../buyer-hub-service";
 
 export function SdkworkMallSecurityPage() {
   const [accountLabel, setAccountLabel] = useState("账户");
@@ -15,9 +12,7 @@ export function SdkworkMallSecurityPage() {
     let active = true;
     async function load() {
       try {
-        const service = getSdkworkCommerceService();
-        const response = await service.accounts.current.summary.retrieve({});
-        const payload = unwrapSdkworkCommerceResponse(response) as Record<string, unknown>;
+        const payload = await loadMallBuyerAccountSummary();
         if (active) {
           setAccountLabel(String(payload.displayName ?? payload.email ?? payload.phone ?? "账户"));
         }

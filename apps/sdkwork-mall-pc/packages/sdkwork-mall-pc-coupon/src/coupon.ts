@@ -2,7 +2,7 @@ import {
   toNullableSdkworkCommerceNumber,
   toSdkworkCommerceNumber,
   toSdkworkCommerceOptionalString,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/promotion-service";
 
 export interface SdkworkAppCapabilityManifest {
   description: string;

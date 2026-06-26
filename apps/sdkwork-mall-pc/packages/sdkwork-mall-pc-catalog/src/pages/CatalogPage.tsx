@@ -38,10 +38,6 @@ import {
   type KeyValueTableRowData,
 } from "@sdkwork/ui-pc-react";
 import { isMallFavorite, toggleMallFavorite } from "@sdkwork/mall-pc-commerce/favorites-service";
-import {
-  getSdkworkCommerceService,
-  unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
 import { listMallCategories, searchMallProducts, type MallSearchProduct } from "@sdkwork/mall-pc-search/search-service";
 import { recordMallFootprint } from "@sdkwork/mall-pc-reviews/footprint-service";
 import {
@@ -53,6 +49,7 @@ import {
   addMallProductToCart,
   loadMallProductCoupons,
   loadMallProductDetail,
+  retrieveMallCategory,
   type MallProductDetail,
   type MallShopRatingSummary,
 } from "../catalog-service";
@@ -201,18 +198,16 @@ export function SdkworkMallCategoryPage() {
     setLoading(true);
     setCategoryDetail(null);
     async function load() {
-      const service = getSdkworkCommerceService();
       const categoryList = await listMallCategories().catch(() => [] as Array<{ id: string; name: string }>);
       let detail: { description?: string; name: string } | null = null;
       if (categoryId) {
         try {
-          const categoryResponse = await service.catalog.categories.retrieve({ categoryId });
-          const categoryRecord = unwrapSdkworkCommerceResponse(categoryResponse) as Record<string, unknown>;
-          detail = {
-            name: String(categoryRecord.name ?? categoryRecord.title ?? "类目"),
-            description:
-              typeof categoryRecord.description === "string" ? categoryRecord.description : undefined,
-          };
+          const categoryRecord = await retrieveMallCategory(categoryId);
+          if (categoryRecord) {
+            detail = {
+              name: categoryRecord.name,
+            };
+          }
         } catch {
           // Fall back to list lookup when retrieve is unavailable.
         }
