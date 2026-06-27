@@ -6,9 +6,9 @@
     "displayName": "SDKWork Membership Purchase PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-membership-purchase",
-    "domain": "iam",
-    "declaredDomain": "iam",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-membership-purchase",
+    "domain": "commerce",
+    "declaredDomain": "commerce",
     "capability": "membership-purchase",
     "status": "ready",
     "languages": [

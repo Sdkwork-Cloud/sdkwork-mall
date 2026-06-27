@@ -6,7 +6,7 @@
     "displayName": "SDKWork Mall PC Shell",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-shell",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-shell",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "shell",

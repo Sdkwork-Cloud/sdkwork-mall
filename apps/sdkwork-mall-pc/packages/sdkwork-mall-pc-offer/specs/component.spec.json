@@ -6,7 +6,7 @@
     "displayName": "SDKWork Offer PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-offer",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-offer",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "offer",

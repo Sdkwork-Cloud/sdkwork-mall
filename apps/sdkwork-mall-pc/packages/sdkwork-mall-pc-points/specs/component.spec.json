@@ -6,7 +6,7 @@
     "displayName": "SDKWork Points PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-points",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-points",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "points",

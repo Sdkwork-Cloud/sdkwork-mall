@@ -6,7 +6,7 @@
     "displayName": "SDKWork Mall PC Core",
     "version": "0.1.0",
     "type": "typescript-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "core",

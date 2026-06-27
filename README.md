@@ -7,11 +7,11 @@ Independent SDKWork application repository for the **Mall PC** e-commerce platfo
 | Repository | Responsibility |
 | --- | --- |
 | **sdkwork-mall** (this repo) | Mall application UI, routes, packages under `apps/sdkwork-mall-pc/` |
-| **sdkwork-commerce** | Shared commerce foundation: product center, trading, payment, VIP, marketing, Rust APIs, database, generated SDKs |
+| **T1 capability repos** | Individual commerce capability backends: `sdkwork-shop`, `sdkwork-order`, `sdkwork-payment`, `sdkwork-merchandise`, `sdkwork-membership`, `sdkwork-promotion`, `sdkwork-invoice`, `sdkwork-inventory`, `sdkwork-account` |
 | **sdkwork-appbase** | IAM login/session, runtime bootstrap |
-| **sdkwork-utils** | Cross-cutting TypeScript utilities (via `@sdkwork/commerce-service`) |
+| **sdkwork-utils** | Cross-cutting TypeScript utilities |
 
-Mall consumes commerce through workspace sibling paths declared in `pnpm-workspace.yaml`. Do not fork generated SDK output or raw HTTP transport.
+The `sdkwork-commerce` monolith has been dissolved. Mall consumes T1 capability packages and SDKs through workspace sibling paths declared in `pnpm-workspace.yaml`. Transitional TypeScript packages and generated SDKs are sourced from the vendored snapshot at `../sdkwork-clawrouter/vendor/sdkwork-commerce/` until per-T1 SDK families fully replace the remaining surfaces. Do not fork generated SDK output or raw HTTP transport.
 
 ## Application root
 

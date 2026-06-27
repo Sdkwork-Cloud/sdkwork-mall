@@ -15,7 +15,7 @@ Read `apps/sdkwork-mall-pc/sdkwork.app.config.json` before changing application 
 - `AGENTS.md`: repository agent entrypoint.
 - `apps/sdkwork-mall-pc/`: PC application root (`sdkwork-mall-pc`).
 - `apps/sdkwork-mall-pc/packages/`: `@sdkwork/mall-pc-*` feature packages.
-- `../sdkwork-clawrouter/vendor/sdkwork-commerce/`: commerce foundation SDKs and services (consumer dependency).
+- `../sdkwork-clawrouter/vendor/sdkwork-commerce/`: archived transitional platform snapshot (vendored; see `../sdkwork-clawrouter/vendor/README.md` for debt tracking and removal criteria).
 - `.sdkwork/`: repository workspace skills and plugins.
 - `specs/`: repository component contract.
 - `tests/contract/`: cross-package architecture verification.
@@ -27,7 +27,7 @@ Read `apps/sdkwork-mall-pc/sdkwork.app.config.json` before changing application 
 - TypeScript/frontend: `../sdkwork-specs/TYPESCRIPT_CODE_SPEC.md`, `../sdkwork-specs/FRONTEND_CODE_SPEC.md`
 - Config/release: `../sdkwork-specs/CONFIG_SPEC.md`, `../sdkwork-specs/APP_MANIFEST_SPEC.md`, `../sdkwork-specs/GITHUB_WORKFLOW_SPEC.md`
 
-Commerce-owned HTTP/database/web-framework standards apply in `sdkwork-commerce`, not in this repository.
+HTTP/database/web-framework standards are defined in `../sdkwork-specs/` (e.g. `RUST_RPC_SPEC.md`, `DATABASE_FRAMEWORK_SPEC.md`, `WEB_FRAMEWORK_SPEC.md`), not in this repository.
 
 ## Documentation Canon
 
@@ -46,4 +46,4 @@ Run from this repository root:
 
 ## Agent Execution Rules
 
-Consume commerce capabilities only through generated SDKs and `@sdkwork/commerce-service`. No raw HTTP. No local SDK forks.
+Consume commerce capabilities only through generated T1 SDKs and the vendored `@sdkwork/commerce-service` transitional adapter. No raw HTTP. No local SDK forks.

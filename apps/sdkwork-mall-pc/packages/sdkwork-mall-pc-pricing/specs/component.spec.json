@@ -6,7 +6,7 @@
     "displayName": "SDKWork Pricing PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-pricing",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-pricing",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "pricing",

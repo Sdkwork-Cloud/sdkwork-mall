@@ -6,7 +6,7 @@
     "displayName": "SDKWork Mall PC Commons",
     "version": "0.1.0",
     "type": "typescript-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commons",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commons",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "commons",

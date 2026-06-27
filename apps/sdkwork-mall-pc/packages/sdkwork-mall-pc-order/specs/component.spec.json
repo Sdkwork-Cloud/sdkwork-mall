@@ -6,7 +6,7 @@
     "displayName": "SDKWork Order PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-order",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-order",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "order",

@@ -6,7 +6,7 @@
     "displayName": "SDKWork Coupon PC React",
     "version": "0.1.0",
     "type": "react-package",
-    "root": "sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-coupon",
+    "root": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-coupon",
     "domain": "commerce",
     "declaredDomain": "commerce",
     "capability": "coupon",

@@ -27,4 +27,4 @@ pnpm typecheck
 pnpm verify
 ```
 
-Consume commerce via `@sdkwork/commerce-service` and generated `sdkwork-commerce-*` SDKs — no raw HTTP. Currency formatting uses `@sdkwork/commerce-service` backed by `@sdkwork/utils`.
+Consume commerce via generated T1 SDKs (`@sdkwork/shop-*`, `@sdkwork/order-*`, `@sdkwork/payment-*`, etc.) and the vendored `@sdkwork/commerce-service` transitional adapter — no raw HTTP. Currency formatting uses `@sdkwork/commerce-service` backed by `@sdkwork/utils`.
