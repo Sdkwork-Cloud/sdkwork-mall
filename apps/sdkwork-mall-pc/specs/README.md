@@ -2,7 +2,7 @@
 
 This directory is the local component contract for `sdkwork-mall-pc`.
 
-- Component root: `sdkwork-commerce/apps/sdkwork-mall-pc`
+- Component root: `sdkwork-commerce (deleted)/apps/sdkwork-mall-pc`
 - Canonical standards: `../../../sdkwork-specs/README.md`
 - Machine-readable contract: `specs/component.spec.json`
 

@@ -11,7 +11,7 @@ Independent SDKWork application repository for the **Mall PC** e-commerce platfo
 | **sdkwork-appbase** | IAM login/session, runtime bootstrap |
 | **sdkwork-utils** | Cross-cutting TypeScript utilities |
 
-The `sdkwork-commerce` monolith has been dissolved. Mall consumes T1 capability packages and SDKs through workspace sibling paths declared in `pnpm-workspace.yaml`. Transitional TypeScript packages and generated SDKs are sourced from the vendored snapshot at `../sdkwork-clawrouter/vendor/sdkwork-commerce/` until per-T1 SDK families fully replace the remaining surfaces. Do not fork generated SDK output or raw HTTP transport.
+The `sdkwork-commerce (deleted)` monolith has been dissolved. Mall consumes T1 capability packages and SDKs through workspace sibling paths declared in `pnpm-workspace.yaml`. Transitional TypeScript packages and generated SDKs are sourced from the vendored snapshot at `../sdkwork-commerce (deleted)/` until per-T1 SDK families fully replace the remaining surfaces. Do not fork generated SDK output or raw HTTP transport.
 
 ## Application root
 

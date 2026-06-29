@@ -24,7 +24,7 @@ pnpm --dir apps/sdkwork-mall-pc run dev
 
 - **App 根**：薄组合层 `src/App.tsx` + `src/bootstrap/*`
 - **包**：`packages/sdkwork-mall-pc-*` 按能力拆分
-- **SDK**：`@sdkwork/commerce-service` 消费 `sdkwork-commerce-app-sdk` + `sdkwork-commerce-backend-sdk`，**禁止 raw HTTP**
+- **SDK**：`@sdkwork/commerce-service` 消费 `sdkwork-commerce (deleted)-app-sdk` + `sdkwork-commerce (deleted)-backend-sdk`，**禁止 raw HTTP**
 - **认证**：`src/AuthGate.tsx` → IAM `/auth/*`
 - **Shell**：`@sdkwork/mall-pc-shell` 按 surface 切换布局
 - **路由注册**：`src/bootstrap/routes.ts` 仅从各包 `./routes` 子路径聚合元数据；`AppRoutes.tsx` 通过 `./storefront-pages`、`./buyer-pages`、`./merchant-pages`、`./admin-pages`、`./catalog-admin` 等 page 子路径 lazy 加载屏幕；跨包能力调用使用 `./search-service`、`./footprint-service`、`./favorites-service` 等 service 子路径

@@ -384,41 +384,41 @@ importers:
         specifier: ^5.3.0
         version: 5.9.3
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-contracts: {}
+  ../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-contracts: {}
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-rpc-contracts: {}
+  ../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-rpc-contracts: {}
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-runtime:
+  ../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-runtime:
     dependencies:
       '@sdkwork/commerce-contracts':
         specifier: workspace:*
-        version: link:../sdkwork-clawrouter/vendor/sdkwork-commerce-contracts
+        version: link:../sdkwork-commerce-contracts
       '@sdkwork/commerce-sdk-ports':
         specifier: workspace:*
-        version: link:../sdkwork-clawrouter/vendor/sdkwork-commerce-sdk-ports
+        version: link:../sdkwork-commerce-sdk-ports
       '@sdkwork/commerce-service':
         specifier: workspace:*
-        version: link:../sdkwork-clawrouter/vendor/sdkwork-commerce-service
+        version: link:../sdkwork-commerce-service
       '@sdkwork/runtime-bootstrap':
         specifier: workspace:*
         version: link:../../../../../sdkwork-appbase/packages/common/foundation/sdkwork-runtime-bootstrap
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-sdk-ports:
+  ../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-sdk-ports:
     dependencies:
       '@sdkwork/commerce-contracts':
         specifier: workspace:*
-        version: link:../sdkwork-clawrouter/vendor/sdkwork-commerce-contracts
+        version: link:../sdkwork-commerce-contracts
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-service:
+  ../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-service:
     dependencies:
       '@sdkwork/commerce-sdk-ports':
         specifier: workspace:*
-        version: link:../sdkwork-clawrouter/vendor/sdkwork-commerce-sdk-ports
+        version: link:../sdkwork-commerce-sdk-ports
       '@sdkwork/utils':
         specifier: workspace:*
         version: link:../../../../../sdkwork-utils/packages/sdkwork-utils-typescript
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi:
+  ../sdkwork-clawrouter/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi:
     dependencies:
       '@sdkwork/sdk-common':
         specifier: ^1.0.2
@@ -434,7 +434,7 @@ importers:
         specifier: ^5.3.0
         version: 5.9.3
 
-  ../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi:
+  ../sdkwork-clawrouter/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi:
     dependencies:
       '@sdkwork/sdk-common':
         specifier: ^1.0.2
@@ -672,10 +672,10 @@ importers:
         version: link:../../../sdkwork-iam/apps/sdkwork-iam-pc/packages/sdkwork-auth-runtime-pc-react
       '@sdkwork/commerce-runtime':
         specifier: workspace:*
-        version: link:../../../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-runtime
+        version: link:../../packages/common/commerce/sdkwork-commerce-runtime
       '@sdkwork/commerce-service':
         specifier: workspace:*
-        version: link:../../../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-service
+        version: link:../../packages/common/commerce/sdkwork-commerce-service
       '@sdkwork/iam-contracts':
         specifier: workspace:*
         version: link:../../../sdkwork-iam/apps/sdkwork-iam-common/packages/sdkwork-iam-contracts
@@ -810,10 +810,10 @@ importers:
         version: 7.18.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       sdkwork-commerce-app-sdk-generated-typescript:
         specifier: workspace:*
-        version: link:../../../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi
+        version: link:../../sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi
       sdkwork-commerce-backend-sdk-generated-typescript:
         specifier: workspace:*
-        version: link:../../../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi
+        version: link:../../sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.2.2
@@ -858,7 +858,7 @@ importers:
     devDependencies:
       '@sdkwork/commerce-service':
         specifier: workspace:*
-        version: link:../../../../../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-service
+        version: link:../../../../packages/common/commerce/sdkwork-commerce-service
       '@sdkwork/mall-pc-core':
         specifier: workspace:*
         version: link:../sdkwork-mall-pc-core

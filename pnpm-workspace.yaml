@@ -1,9 +1,9 @@
 packages:
   - "apps/sdkwork-mall-pc"
   - "apps/sdkwork-mall-pc/packages/*"
-  - "../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/*"
-  - "../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi"
-  - "../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi"
+  - "../sdkwork-clawrouter/packages/common/commerce/*"
+  - "../sdkwork-clawrouter/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi"
+  - "../sdkwork-clawrouter/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi"
   - "../sdkwork-account/packages/common/account/*"
   - "../sdkwork-order/packages/common/order/*"
   - "../sdkwork-membership/packages/common/membership/*"

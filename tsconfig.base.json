@@ -32,13 +32,13 @@
         "../sdkwork-iam/apps/sdkwork-iam-common/packages/sdkwork-iam-runtime/src/index.ts"
       ],
       "@sdkwork/commerce-contracts": [
-        "../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-contracts/src/index.ts"
+        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-contracts/src/index.ts"
       ],
       "@sdkwork/commerce-sdk-ports": [
-        "../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-sdk-ports/src/index.ts"
+        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-sdk-ports/src/index.ts"
       ],
       "@sdkwork/commerce-service": [
-        "../sdkwork-clawrouter/vendor/sdkwork-commerce/packages/common/commerce/sdkwork-commerce-service/src/index.ts"
+        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-service/src/index.ts"
       ],
       "@sdkwork/account-service": [
         "../sdkwork-account/packages/common/account/sdkwork-account-service/src/index.ts"
@@ -107,10 +107,10 @@
         "../sdkwork-ui/sdkwork-ui-pc-react/src/theme/index.ts"
       ],
       "sdkwork-commerce-app-sdk-generated-typescript": [
-        "../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
+        "../sdkwork-clawrouter/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
       ],
       "sdkwork-commerce-backend-sdk-generated-typescript": [
-        "../sdkwork-clawrouter/vendor/sdkwork-commerce/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
+        "../sdkwork-clawrouter/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
       ],
       "@sdkwork/mall-pc-activity": [
         "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-activity\\src\\index.ts"

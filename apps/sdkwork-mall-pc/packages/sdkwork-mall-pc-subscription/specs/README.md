@@ -10,7 +10,7 @@ Root SDKWork standards remain authoritative. Local component specs can narrow or
 | --- | --- |
 | Name | `@sdkwork/mall-pc-subscription` |
 | Type | `react-package` |
-| Root | `sdkwork-commerce/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-subscription` |
+| Root | `sdkwork-commerce (deleted)/apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-subscription` |
 | Domain | `commerce` |
 | Capability | `subscription` |
 | Languages | `typescript` |

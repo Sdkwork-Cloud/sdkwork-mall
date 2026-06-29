@@ -8,7 +8,7 @@ const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
 const workspaceNodeModules = path.join(workspaceRoot, "node_modules");
 const workspacePnpmStore = path.join(workspaceNodeModules, ".pnpm");
 const appbaseRoot = path.resolve(workspaceRoot, "../sdkwork-appbase");
-const commerceRoot = path.resolve(workspaceRoot, "../sdkwork-clawrouter/vendor/sdkwork-commerce");
+const commerceRoot = path.resolve(workspaceRoot, "../sdkwork-clawrouter");
 const uiRoot = path.resolve(workspaceRoot, "../sdkwork-ui");
 const sdkRoot = path.resolve(workspaceRoot, "..");
 
