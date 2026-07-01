@@ -14,8 +14,8 @@ Read `apps/sdkwork-mall-pc/sdkwork.app.config.json` before changing application 
 
 - `AGENTS.md`: repository agent entrypoint.
 - `apps/sdkwork-mall-pc/`: PC application root (`sdkwork-mall-pc`).
-- `apps/sdkwork-mall-pc/packages/`: `@sdkwork/mall-pc-*` feature packages.
-- `../sdkwork-commerce (deleted)/`: archived transitional platform snapshot (vendored; see `../sdkwork-clawrouter/vendor/README.md` for debt tracking and removal criteria).
+- `apps/sdkwork-mall-pc/packages/`: `@sdkwork/mall-pc-*` feature packages plus `@sdkwork/mall-commerce-service` and `@sdkwork/mall-commerce-sdk-ports`.
+- `sdks/`: mall-owned generated commerce transport SDK families.
 - `.sdkwork/`: repository workspace skills and plugins.
 - `specs/`: repository component contract.
 - `tests/contract/`: cross-package architecture verification.
@@ -46,7 +46,7 @@ Run from this repository root:
 
 ## Agent Execution Rules
 
-Consume commerce capabilities only through generated T1 SDKs and the vendored `@sdkwork/commerce-service` transitional adapter. No raw HTTP. No local SDK forks.
+Consume commerce capabilities through generated mall transport SDKs (`sdkwork-commerce-app-sdk-generated-typescript`, `sdkwork-commerce-backend-sdk-generated-typescript`), `@sdkwork/mall-commerce-service`, and T1 domain services (`@sdkwork/account-service`, `@sdkwork/order-service`, …). No raw HTTP. No local SDK forks.
 
 ## HTTP API Response Envelope
 
@@ -77,29 +77,3 @@ node <sdkwork-specs>/tools/check-api-response-envelope.mjs --workspace <workspac
 ```
 
 Authority: `sdkwork-specs/API_SPEC.md` section 4.5 and sections 14–16, `SDK_SPEC.md` section 4.2, `FRONTEND_SPEC.md`, `MIGRATION_SPEC.md` section 4.2.
-
-## HTTP API Response Envelope
-
-All L2+ `app-api`, `backend-api`, and SDKWork-owned `open-api` success JSON bodies `MUST` use `SdkWorkResponse` from `API_SPEC.md` §15:
-
-- Envelope: `{ "data": <payload>, "requestId": "<server-uuid>" }`
-- Single resource: `data.item`
-- Lists: `data.items` + `data.pageInfo` (`PageInfo.mode` is `offset` or `cursor`)
-- Commands: `data.accepted` plus optional `resourceId` / `status`
-- Async accept (`202`): `data.operationId`, `data.status`, optional `pollUrl`
-
-Errors `MUST` use HTTP 4xx/5xx with `application/problem+json` (`ProblemDetail`). Business failures `MUST NOT` use HTTP 2xx with `success`, `code`, or `message`.
-
-Forbidden legacy envelopes: `PlusApiResult`, `AppbaseApiResult`, `StoreApiResult`, per-domain `*ApiResult`, bare domain DTOs at the HTTP root, and top-level `{ items, pageInfo, requestId }` without `data`.
-
-Handlers `MUST` serialize success and map errors through `sdkwork-web-framework` response mapping. Do not hand-build envelopes in controllers or route handlers.
-
-Generated HTTP SDKs (`--standard-profile sdkwork-v3`) unwrap `data` by default; use `.raw` only when correlation headers or the full envelope are required.
-
-Before completing API contract or handler work, run:
-
-```bash
-node <sdkwork-specs>/tools/check-api-response-envelope.mjs --workspace <workspace-root>
-```
-
-Authority: `sdkwork-specs/API_SPEC.md` §15–§16, `WEB_FRAMEWORK_SPEC.md`, `SDK_SPEC.md` §4.1, `MIGRATION_SPEC.md` §API Response Envelope Migration.

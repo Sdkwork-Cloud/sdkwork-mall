@@ -2,7 +2,7 @@ import {
   configureSdkworkCommerceSessionTokenProvider,
   type SdkworkCommerceService,
   type SdkworkCommerceSessionTokens,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/mall-commerce-service";
 import {
   configureSdkworkAccountSessionTokenProvider,
   type SdkworkAccountSessionTokens,
@@ -18,7 +18,7 @@ import {
 import {
   SDKWORK_COMMERCE_APP_SDK_REQUIRED_METHODS,
   SDKWORK_COMMERCE_BACKEND_SDK_REQUIRED_METHODS,
-} from "@sdkwork/commerce-sdk-ports";
+} from "@sdkwork/mall-commerce-sdk-ports";
 
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: infer TArgs) => infer TReturn ? (...args: TArgs) => TReturn : DeepPartial<T[K]>;

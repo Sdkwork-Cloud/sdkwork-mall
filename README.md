@@ -1,4 +1,5 @@
 # SDKWork Mall
+repository-kind: application
 
 Independent SDKWork application repository for the **Mall PC** e-commerce platform (storefront, buyer console, merchant console, platform admin).
 
@@ -6,12 +7,12 @@ Independent SDKWork application repository for the **Mall PC** e-commerce platfo
 
 | Repository | Responsibility |
 | --- | --- |
-| **sdkwork-mall** (this repo) | Mall application UI, routes, packages under `apps/sdkwork-mall-pc/` |
-| **T1 capability repos** | Individual commerce capability backends: `sdkwork-shop`, `sdkwork-order`, `sdkwork-payment`, `sdkwork-merchandise`, `sdkwork-membership`, `sdkwork-promotion`, `sdkwork-invoice`, `sdkwork-inventory`, `sdkwork-account` |
+| **sdkwork-mall** (this repo) | Mall application UI, routes, packages under `apps/sdkwork-mall-pc/`, mall-owned commerce transport SDKs under `sdks/`, and `@sdkwork/mall-commerce-service` |
+| **T1 capability repos** | Individual commerce capability backends: `sdkwork-shop`, `sdkwork-order`, `sdkwork-payment`, `sdkwork-merchandise`, `sdkwork-membership`, `sdkwork-promotion`, `sdkwork-account` |
 | **sdkwork-appbase** | IAM login/session, runtime bootstrap |
 | **sdkwork-utils** | Cross-cutting TypeScript utilities |
 
-The `sdkwork-commerce (deleted)` monolith has been dissolved. Mall consumes T1 capability packages and SDKs through workspace sibling paths declared in `pnpm-workspace.yaml`. Transitional TypeScript packages and generated SDKs are sourced from the vendored snapshot at `../sdkwork-commerce (deleted)/` until per-T1 SDK families fully replace the remaining surfaces. Do not fork generated SDK output or raw HTTP transport.
+Mall consumes T1 domain service packages (`@sdkwork/account-service`, `@sdkwork/order-service`, …) for migrated PC packages and uses mall-owned generated commerce transport SDKs plus `@sdkwork/mall-commerce-service` for remaining federated storefront/admin remote ports. Do not fork generated SDK output, reference deleted sibling repositories, or call raw HTTP transport.
 
 ## Application root
 

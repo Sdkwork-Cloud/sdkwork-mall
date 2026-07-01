@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.composition.resolved",
+  "repository": "sdkwork-mall",
+  "integrations": [
+    {
+      "workspace": "sdkwork-commerce-app-sdk",
+      "surface": "app-api",
+      "apiPrefix": "/app/v3/api",
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_COMMERCE_APP_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-commerce-sdk",
+      "surface": "open-api",
+      "apiPrefix": null,
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_COMMERCE_OPEN_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-iam-app-sdk",
+      "surface": "app-api",
+      "apiPrefix": "/app/v3/api",
+      "connectivityPlane": "platform",
+      "runtimeMode": "external-via-platform-gateway",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_APPBASE_APP_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-mall-app-sdk",
+      "surface": "app-api",
+      "apiPrefix": "/app/v3/api",
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_MALL_APP_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-commerce-backend-sdk",
+      "surface": "backend-api",
+      "apiPrefix": "/backend/v3/api",
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_COMMERCE_BACKEND_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-admin-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-iam-backend-sdk",
+      "surface": "backend-api",
+      "apiPrefix": "/backend/v3/api",
+      "connectivityPlane": "platform",
+      "runtimeMode": "external-via-platform-gateway",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_APPBASE_BACKEND_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "@sdkwork/mall-pc-admin-core",
+      "source": "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-core/specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-commerce-app-sdk",
+      "surface": "app-api",
+      "apiPrefix": "/app/v3/api",
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_COMMERCE_APP_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "sdkwork-mall-workspace",
+      "source": "specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-commerce-backend-sdk",
+      "surface": "backend-api",
+      "apiPrefix": "/backend/v3/api",
+      "connectivityPlane": "application",
+      "runtimeMode": "same-origin-embedded",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_COMMERCE_BACKEND_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "sdkwork-mall-workspace",
+      "source": "specs/component.spec.json"
+    },
+    {
+      "workspace": "sdkwork-iam-app-sdk",
+      "surface": "app-api",
+      "apiPrefix": "/app/v3/api",
+      "connectivityPlane": "platform",
+      "runtimeMode": "external-via-platform-gateway",
+      "mountStatus": null,
+      "envKey": "VITE_SDKWORK_APPBASE_APP_API_BASE_URL",
+      "forbidProductSameOriginFallback": false,
+      "corePackage": "sdkwork-mall-workspace",
+      "source": "specs/component.spec.json"
+    }
+  ],
+  "permissions": {
+    "inheritanceMode": "module-catalog-with-overrides",
+    "inheritedManifests": [
+      {
+        "workspace": "sdkwork-iam-app-sdk",
+        "manifestRef": "../sdkwork-iam/iam/modules/iam-kernel/iam.module.manifest.json",
+        "inheritPermissions": true
+      },
+      {
+        "workspace": "sdkwork-iam-backend-sdk",
+        "manifestRef": "../sdkwork-iam/iam/modules/iam-kernel/iam.module.manifest.json",
+        "inheritPermissions": true
+      },
+      {
+        "workspace": "sdkwork-iam-app-sdk",
+        "manifestRef": "../sdkwork-iam/iam/modules/iam-kernel/iam.module.manifest.json",
+        "inheritPermissions": true
+      }
+    ]
+  },
+  "env": {},
+  "requiresPlatformGatewayProcess": true,
+  "issues": [],
+  "meta": {
+    "resolver": "sdkwork-specs/tools/lib/composition-resolver.mjs",
+    "credentialModes": {
+      "sdkwork-commerce-app-sdk": "authenticated-app-api",
+      "sdkwork-commerce-sdk": "protected-open-api-flexible",
+      "sdkwork-iam-app-sdk": "authenticated-app-api",
+      "sdkwork-mall-app-sdk": "authenticated-app-api",
+      "sdkwork-commerce-backend-sdk": "authenticated-backend-admin",
+      "sdkwork-iam-backend-sdk": "authenticated-backend-admin"
+    }
+  }
+}

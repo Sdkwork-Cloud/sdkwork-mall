@@ -1,6 +1,6 @@
 import {
   getSdkworkCommerceService,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/mall-commerce-service";
 import {
   configureSdkworkAddressRemotePort,
   type SdkworkAddressInput,

@@ -26,7 +26,7 @@ import { getSdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core/admin-rem
 for (const rel of adminPages) {
   const filePath = path.join(packagesRoot, rel);
   let source = readFileSync(filePath, "utf8");
-  if (!source.includes("@sdkwork/commerce-service") && !source.includes("getSdkworkCommerceService")) {
+  if (!source.includes("@sdkwork/mall-commerce-service") && !source.includes("getSdkworkCommerceService")) {
     continue;
   }
   source = source.replace(importBlock, importNew);

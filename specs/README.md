@@ -1,7 +1,7 @@
-# sdkwork-mall component contract
+# SDKWork Mall Specs
 
-Application repository for Mall PC. Backend commerce APIs, database lifecycle, and `sdkwork-web-framework` integration are owned by individual T1 capability repositories (`sdkwork-shop`, `sdkwork-order`, `sdkwork-payment`, `sdkwork-merchandise`, etc.). The `sdkwork-commerce (deleted)` monolith has been dissolved per `../sdkwork-specs/MIGRATION_SPEC.md` §8.
+Application repository for Mall PC. Backend commerce APIs, database lifecycle, and `sdkwork-web-framework` integration are owned by individual T1 capability repositories (`sdkwork-shop`, `sdkwork-order`, `sdkwork-payment`, `sdkwork-merchandise`, `sdkwork-membership`, `sdkwork-promotion`, `sdkwork-account`).
 
-Transitional TypeScript packages and generated SDKs are consumed from the vendored snapshot at `../sdkwork-commerce (deleted)/` until per-T1 SDK families fully replace the remaining surfaces.
+Mall-owned generated commerce transport SDKs live under `sdks/`. Federated storefront and admin remote ports use `@sdkwork/mall-commerce-service` with mall-local SDK families. Migrated PC packages consume T1 domain services (`@sdkwork/account-service`, `@sdkwork/order-service`, …).
 
-See `apps/sdkwork-mall-pc/specs/component.spec.json` for the application component contract.
+Authority: `../sdkwork-specs/README.md`, `../sdkwork-specs/MIGRATION_SPEC.md` section 8.

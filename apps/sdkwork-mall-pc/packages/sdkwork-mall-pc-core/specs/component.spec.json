@@ -64,9 +64,26 @@
     ],
     "sdkClients": [],
     "sdkDependencies": [
-      "sdkwork-commerce-app-sdk",
-      "sdkwork-commerce-sdk",
-      "sdkwork-iam-app-sdk"
+      {
+        "workspace": "sdkwork-commerce-app-sdk",
+        "surface": "app-api",
+        "credentialMode": "authenticated-app-api"
+      },
+      {
+        "workspace": "sdkwork-commerce-sdk",
+        "surface": "open-api",
+        "credentialMode": "protected-open-api-flexible"
+      },
+      {
+        "workspace": "sdkwork-iam-app-sdk",
+        "surface": "app-api",
+        "credentialMode": "authenticated-app-api"
+      },
+      {
+        "workspace": "sdkwork-mall-app-sdk",
+        "surface": "app-api",
+        "credentialMode": "authenticated-app-api"
+      }
     ],
     "dependencyApiExports": [],
     "dependencyApiSurfaces": [],
@@ -74,8 +91,7 @@
     "configKeys": [
       "package.json#sdkwork"
     ],
-    "routeManifest": null,
-    "dependencyComposition": "../../../specs/dependency.composition.json"
+    "routeManifest": null
   },
   "integration": {
     "authority": "Mall PC core owns app-side runtime metadata and app SDK inventory only.",

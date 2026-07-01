@@ -2,8 +2,8 @@ import {
   configureSdkworkCommerceServiceProvider,
   configureSdkworkCommerceSessionTokenProvider,
   createSdkworkCommerceService,
-} from "@sdkwork/commerce-service";
-import type { CommerceAppSdkClient, CommerceBackendSdkClient } from "@sdkwork/commerce-sdk-ports";
+} from "@sdkwork/mall-commerce-service";
+import type { CommerceAppSdkClient, CommerceBackendSdkClient } from "@sdkwork/mall-commerce-sdk-ports";
 
 import { configureSdkworkMallPcCommerceBuyerHubRemotePort } from "./commerce-buyer-hub-remote";
 import { configureSdkworkMallPcDomainServiceProviders } from "./domain-service-providers";

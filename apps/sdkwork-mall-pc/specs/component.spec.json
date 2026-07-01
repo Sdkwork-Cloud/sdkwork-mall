@@ -163,8 +163,7 @@
       "config/server/sdkwork-mall-pc.production.toml.example",
       "config/desktop/sdkwork-mall-pc.production.toml.example",
       "config/container/sdkwork-mall-pc.production.toml.example"
-    ],
-    "dependencyComposition": "specs/dependency.composition.json"
+    ]
   },
   "verification": {
     "commands": [

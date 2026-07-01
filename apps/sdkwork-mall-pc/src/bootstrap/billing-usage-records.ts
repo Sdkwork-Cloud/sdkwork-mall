@@ -1,7 +1,7 @@
 import {
   getSdkworkCommerceService,
   unwrapSdkworkCommerceResponse,
-} from "@sdkwork/commerce-service";
+} from "@sdkwork/mall-commerce-service";
 import {
   configureSdkworkBillingUsageRecordsLoader,
   type LoadSdkworkBillingUsageRecordsOptions,

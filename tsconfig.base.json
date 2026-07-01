@@ -31,56 +31,65 @@
       "@sdkwork/iam-runtime": [
         "../sdkwork-iam/apps/sdkwork-iam-common/packages/sdkwork-iam-runtime/src/index.ts"
       ],
-      "@sdkwork/commerce-contracts": [
-        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-contracts/src/index.ts"
+      "@sdkwork/mall-commerce-service": [
+        "apps/sdkwork-mall-pc/packages/sdkwork-mall-commerce-service/src/index.ts"
       ],
-      "@sdkwork/commerce-sdk-ports": [
-        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-sdk-ports/src/index.ts"
+      "@sdkwork/mall-commerce-sdk-ports": [
+        "apps/sdkwork-mall-pc/packages/sdkwork-mall-commerce-sdk-ports/src/index.ts"
       ],
-      "@sdkwork/commerce-service": [
-        "../sdkwork-clawrouter/packages/common/commerce/sdkwork-commerce-service/src/index.ts"
+      "sdkwork-commerce-app-sdk-generated-typescript": [
+        "sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "sdkwork-commerce-backend-sdk-generated-typescript": [
+        "sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "@sdkwork/account-app-sdk": [
+        "../sdkwork-account/sdks/sdkwork-account-app-sdk/sdkwork-account-app-sdk-typescript/generated/server-openapi/src/index.ts"
+      ],
+      "@sdkwork/order-app-sdk": [
+        "../sdkwork-order/sdks/sdkwork-order-app-sdk/sdkwork-order-app-sdk-typescript/generated/server-openapi/src/index.ts"
       ],
       "@sdkwork/account-service": [
-        "../sdkwork-account/packages/common/account/sdkwork-account-service/src/index.ts"
+        "../sdkwork-account/apps/sdkwork-account-common/packages/sdkwork-account-service/src/index.ts"
       ],
       "@sdkwork/account-sdk-ports": [
-        "../sdkwork-account/packages/common/account/sdkwork-account-sdk-ports/src/index.ts"
+        "../sdkwork-account/apps/sdkwork-account-common/packages/sdkwork-account-sdk-ports/src/index.ts"
       ],
       "@sdkwork/account-contracts": [
-        "../sdkwork-account/packages/common/account/sdkwork-account-contracts/src/index.ts"
+        "../sdkwork-account/apps/sdkwork-account-common/packages/sdkwork-account-contracts/src/index.ts"
       ],
       "@sdkwork/order-service": [
-        "../sdkwork-order/packages/common/order/sdkwork-order-service/src/index.ts"
+        "../sdkwork-order/apps/sdkwork-order-common/packages/sdkwork-order-service/src/index.ts"
       ],
       "@sdkwork/order-sdk-ports": [
-        "../sdkwork-order/packages/common/order/sdkwork-order-sdk-ports/src/index.ts"
+        "../sdkwork-order/apps/sdkwork-order-common/packages/sdkwork-order-sdk-ports/src/index.ts"
       ],
       "@sdkwork/membership-service": [
-        "../sdkwork-membership/packages/common/membership/sdkwork-membership-service/src/index.ts"
+        "../sdkwork-membership/apps/sdkwork-membership-common/packages/sdkwork-membership-service/src/index.ts"
       ],
       "@sdkwork/membership-sdk-ports": [
-        "../sdkwork-membership/packages/common/membership/sdkwork-membership-sdk-ports/src/index.ts"
+        "../sdkwork-membership/apps/sdkwork-membership-common/packages/sdkwork-membership-sdk-ports/src/index.ts"
       ],
       "@sdkwork/membership-contracts": [
-        "../sdkwork-membership/packages/common/membership/sdkwork-membership-contracts/src/index.ts"
+        "../sdkwork-membership/apps/sdkwork-membership-common/packages/sdkwork-membership-contracts/src/index.ts"
       ],
       "@sdkwork/promotion-service": [
-        "../sdkwork-promotion/packages/common/promotion/sdkwork-promotion-service/src/index.ts"
+        "../sdkwork-promotion/apps/sdkwork-promotion-common/packages/sdkwork-promotion-service/src/index.ts"
       ],
       "@sdkwork/promotion-sdk-ports": [
-        "../sdkwork-promotion/packages/common/promotion/sdkwork-promotion-sdk-ports/src/index.ts"
+        "../sdkwork-promotion/apps/sdkwork-promotion-common/packages/sdkwork-promotion-sdk-ports/src/index.ts"
       ],
       "@sdkwork/promotion-contracts": [
-        "../sdkwork-promotion/packages/common/promotion/sdkwork-promotion-contracts/src/index.ts"
+        "../sdkwork-promotion/apps/sdkwork-promotion-common/packages/sdkwork-promotion-contracts/src/index.ts"
       ],
       "@sdkwork/payment-service": [
-        "../sdkwork-payment/packages/common/payment/sdkwork-payment-service/src/index.ts"
+        "../sdkwork-payment/apps/sdkwork-payment-common/packages/sdkwork-payment-service/src/index.ts"
       ],
       "@sdkwork/payment-sdk-ports": [
-        "../sdkwork-payment/packages/common/payment/sdkwork-payment-sdk-ports/src/index.ts"
+        "../sdkwork-payment/apps/sdkwork-payment-common/packages/sdkwork-payment-sdk-ports/src/index.ts"
       ],
       "@sdkwork/payment-contracts": [
-        "../sdkwork-payment/packages/common/payment/sdkwork-payment-contracts/src/index.ts"
+        "../sdkwork-payment/apps/sdkwork-payment-common/packages/sdkwork-payment-contracts/src/index.ts"
       ],
       "@sdkwork/utils": [
         "../sdkwork-utils/packages/sdkwork-utils-typescript/src/index.ts"
@@ -105,12 +114,6 @@
       ],
       "@sdkwork/ui-pc-react/theme": [
         "../sdkwork-ui/sdkwork-ui-pc-react/src/theme/index.ts"
-      ],
-      "sdkwork-commerce-app-sdk-generated-typescript": [
-        "../sdkwork-clawrouter/sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
-      ],
-      "sdkwork-commerce-backend-sdk-generated-typescript": [
-        "../sdkwork-clawrouter/sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
       ],
       "@sdkwork/mall-pc-activity": [
         "apps\\sdkwork-mall-pc\\packages\\sdkwork-mall-pc-activity\\src\\index.ts"

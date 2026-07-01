@@ -1,4 +1,4 @@
-import { getSdkworkCommerceService } from "@sdkwork/commerce-service";
+import { getSdkworkCommerceService } from "@sdkwork/mall-commerce-service";
 import { configureSdkworkCommerceRemotePort } from "@sdkwork/mall-pc-commerce/commerce-remote-port";
 
 export function configureSdkworkMallPcCommerceBuyerHubRemotePort(): void {

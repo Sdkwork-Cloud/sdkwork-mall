@@ -22,7 +22,7 @@ This package is implemented as an independent SDKWork commerce capability. It ow
 
 ## Runtime boundary
 
-This package composes sibling mall domain packages and does not call `@sdkwork/commerce-service` directly.
+This package composes sibling mall domain packages and does not call `@sdkwork/mall-commerce-service` directly.
 
 ## Verification
 

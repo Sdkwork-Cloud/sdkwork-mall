@@ -1,5 +1,8 @@
-import { getSdkworkCommerceService } from "@sdkwork/commerce-service";
-import { configureSdkworkMerchantRemotePort } from "@sdkwork/mall-pc-merchant";
+import { getSdkworkCommerceService } from "@sdkwork/mall-commerce-service";
+import {
+  configureSdkworkMerchantRemotePort,
+  type SdkworkMerchantRemotePort,
+} from "@sdkwork/mall-pc-merchant";
 
 export function configureSdkworkMallPcMerchantCommerceRemotePort(): void {
   const commerce = () => getSdkworkCommerceService();
@@ -7,6 +10,6 @@ export function configureSdkworkMallPcMerchantCommerceRemotePort(): void {
   configureSdkworkMerchantRemotePort({
     afterSales: commerce().afterSales,
     promotions: commerce().promotions,
-    shops: commerce().shops,
+    shops: commerce().shops as SdkworkMerchantRemotePort["shops"],
   });
 }

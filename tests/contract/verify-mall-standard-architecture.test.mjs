@@ -314,7 +314,7 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
   assert.match(sdkClientsSource, /sdkwork-commerce-app-sdk-generated-typescript/);
 
   const runtimeSource = read("apps/sdkwork-mall-pc/src/bootstrap/runtime.ts");
-  assert.match(runtimeSource, /@sdkwork\/commerce-service/);
+  assert.match(runtimeSource, /@sdkwork\/mall-commerce-service/);
 
   const commerceProvidersSource = read("apps/sdkwork-mall-pc/src/bootstrap/commerceProviders.ts");
   assert.doesNotMatch(commerceProvidersSource, /@sdkwork\/commerce-runtime/);
@@ -329,18 +329,18 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
 
   const paymentServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-payment/src/payment-service.ts");
   assert.match(paymentServiceSource, /@sdkwork\/payment-service/);
-  assert.doesNotMatch(paymentServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(paymentServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const couponServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-coupon/src/coupon-service.ts");
   assert.match(couponServiceSource, /@sdkwork\/promotion-service/);
-  assert.doesNotMatch(couponServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(couponServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const membershipServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-membership/src/membership-service.ts");
   assert.match(membershipServiceSource, /@sdkwork\/membership-service/);
-  assert.doesNotMatch(membershipServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(membershipServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const checkoutServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-checkout/src/checkout-service.ts");
-  assert.doesNotMatch(checkoutServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(checkoutServiceSource, /@sdkwork\/mall-commerce-service/);
   assert.match(checkoutServiceSource, /@sdkwork\/mall-pc-order/);
   assert.match(checkoutServiceSource, /@sdkwork\/mall-pc-payment/);
 
@@ -351,11 +351,11 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
 
   const walletServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-wallet/src/wallet-service.ts");
   assert.match(walletServiceSource, /@sdkwork\/account-service/);
-  assert.doesNotMatch(walletServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(walletServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const orderServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-order/src/order-service.ts");
   assert.match(orderServiceSource, /@sdkwork\/order-service/);
-  assert.doesNotMatch(orderServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(orderServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const mallAppPackageJson = readJson("apps/sdkwork-mall-pc/package.json");
   assert.equal(mallAppPackageJson.dependencies["@sdkwork/commerce-runtime"], undefined);
@@ -391,7 +391,7 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
   assert.match(cmsServiceSource, /getSdkworkCmsRemotePort/);
   assert.match(cmsServiceSource, /createAdminPromotionOffer/);
   assert.match(cmsServiceSource, /updateAdminPromotionOffer/);
-  assert.doesNotMatch(cmsServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(cmsServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const routePermissionsSource = read("apps/sdkwork-mall-pc/src/routePermissions.ts");
   assert.match(routePermissionsSource, /hasSdkworkMallPcRoutePermission/);
@@ -417,7 +417,7 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const addressPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-address/src/pages/AddressPage.tsx");
   assert.match(addressPageSource, /createSdkworkAddressService/);
-  assert.doesNotMatch(addressPageSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(addressPageSource, /@sdkwork\/mall-commerce-service/);
 
   const merchantSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-merchant/src/pages/MerchantPage.tsx");
   assert.match(merchantSource, /shops\.current\.inventory\.stocks\.list/);
@@ -450,7 +450,7 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const catalogPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-catalog/src/pages/CatalogPage.tsx");
   assert.match(catalogPageSource, /retrieveMallCategory/);
-  assert.doesNotMatch(catalogPageSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(catalogPageSource, /@sdkwork\/mall-commerce-service/);
   assert.match(catalogPageSource, /@sdkwork\/mall-pc-commerce\/favorites-service/);
 
   const adminShopsSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-shops/src/pages/AdminGovernancePages.tsx");
@@ -481,12 +481,12 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const cartServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-cart/src/cart-service.ts");
   assert.match(cartServiceSource, /getSdkworkCartRemotePort/);
-  assert.doesNotMatch(cartServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(cartServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const cartPageSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-cart/src/pages/CartPage.tsx");
   assert.match(cartPageSource, /retrieveMallOrderPaymentSuccess/);
   assert.match(cartPageSource, /retryMallOrderPayment/);
-  assert.doesNotMatch(cartPageSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(cartPageSource, /@sdkwork\/mall-commerce-service/);
 
   const adminOrdersSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-admin-orders/src/pages/AdminOrdersPage.tsx");
   assert.match(adminOrdersSource, /getSdkworkAdminRemotePort/);
@@ -495,12 +495,12 @@ test("mall PC CMS remote persistence and route permission guards are wired", () 
 
   const buyerDashboardSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/pages/BuyerDashboardPage.tsx");
   assert.match(buyerDashboardSource, /loadMallBuyerDashboardSnapshot/);
-  assert.doesNotMatch(buyerDashboardSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(buyerDashboardSource, /@sdkwork\/mall-commerce-service/);
 
   const buyerHubServiceSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/buyer-hub-service.ts");
   assert.match(buyerHubServiceSource, /getSdkworkCommerceRemotePort/);
   assert.match(buyerHubServiceSource, /orders\.statistics\.retrieve/);
-  assert.doesNotMatch(buyerHubServiceSource, /@sdkwork\/commerce-service/);
+  assert.doesNotMatch(buyerHubServiceSource, /@sdkwork\/mall-commerce-service/);
 
   const buyerFavoritesSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/pages/BuyerFavoritesPage.tsx");
   assert.match(buyerFavoritesSource, /关注店铺/);
@@ -617,7 +617,7 @@ test("mall PC active packages use service subpaths for cross-package imports", (
     "@sdkwork/mall-pc-core",
     "@sdkwork/mall-pc-commons",
     "@sdkwork/mall-pc-admin-core",
-    "@sdkwork/commerce-service",
+    "@sdkwork/mall-commerce-service",
     "@sdkwork/ui-pc-react",
   ]);
 
@@ -653,7 +653,7 @@ test("mall PC active packages use service subpaths for cross-package imports", (
   }
 
   const commerceIndexSource = read("apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-commerce/src/index.ts");
-  assert.doesNotMatch(commerceIndexSource, /commerce-service/);
+  assert.doesNotMatch(commerceIndexSource, /mall-commerce-service/);
   assert.doesNotMatch(commerceIndexSource, /CommercePage/);
   assert.doesNotMatch(commerceIndexSource, /BuyerPages/);
   assert.match(commerceIndexSource, /favorites-service/);
@@ -684,23 +684,43 @@ test("mall workspace metadata and packaging contract align with sdkwork-mall own
   assert.deepEqual(staleCommercePcPaths, []);
 });
 
-test("mall domain-migrated packages must not declare stale commerce-service peers", () => {
+
+test("mall markdown must not reference deleted commerce snapshot paths", () => {
+  const legacyPatterns = [
+    /sdkwork-commerce \(deleted\)/,
+    /@sdkwork\/commerce-service(?!-)/,
+    /apps\/sdkwork-commerce-pc\/packages\/sdkwork-mall-pc/,
+  ];
+
+  const violations = collectFiles(workspaceRoot, (filePath) => {
+    if (!filePath.endsWith(".md") || filePath.includes(`${path.sep}node_modules${path.sep}`)) {
+      return false;
+    }
+    const markdownSource = readFileSync(filePath, "utf8");
+    return legacyPatterns.some((pattern) => pattern.test(markdownSource));
+  }).map((filePath) => path.relative(workspaceRoot, filePath).replaceAll("\\", "/"));
+
+  assert.deepEqual(violations, []);
+});
+
+
+test("mall domain-migrated packages must not declare stale mall-commerce-service peers", () => {
   const violations = [];
 
   for (const directory of MALL_DOMAIN_MIGRATED_PACKAGES) {
     const packageJson = readJson(`apps/sdkwork-mall-pc/packages/${directory}/package.json`);
-    if (packageJson.peerDependencies?.["@sdkwork/commerce-service"]) {
-      violations.push(`${directory}: peerDependencies still declares @sdkwork/commerce-service`);
+    if (packageJson.peerDependencies?.["@sdkwork/mall-commerce-service"]) {
+      violations.push(`${directory}: peerDependencies still declares @sdkwork/mall-commerce-service`);
     }
-    if (packageJson.peerDependenciesMeta?.["@sdkwork/commerce-service"]) {
-      violations.push(`${directory}: peerDependenciesMeta still declares @sdkwork/commerce-service`);
+    if (packageJson.peerDependenciesMeta?.["@sdkwork/mall-commerce-service"]) {
+      violations.push(`${directory}: peerDependenciesMeta still declares @sdkwork/mall-commerce-service`);
     }
 
     const servicePath = path.join(mallPackagesRoot, directory, "src", `${directory.replace("sdkwork-mall-pc-", "")}-service.ts`);
     if (existsSync(servicePath)) {
       const source = readFileSync(servicePath, "utf8");
-      if (source.includes("@sdkwork/commerce-service")) {
-        violations.push(`${directory}/src: source still imports @sdkwork/commerce-service`);
+      if (source.includes("@sdkwork/mall-commerce-service")) {
+        violations.push(`${directory}/src: source still imports @sdkwork/mall-commerce-service`);
       }
     }
   }

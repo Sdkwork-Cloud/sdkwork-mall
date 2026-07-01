@@ -27,7 +27,7 @@ function walk(dir, out = []) {
 
 function applyDomainMigration(source, { pkg, Prefix }) {
   return source
-    .replaceAll("@sdkwork/commerce-service", `@sdkwork/${pkg}-service`)
+    .replaceAll("@sdkwork/mall-commerce-service", `@sdkwork/${pkg}-service`)
     .replaceAll("getSdkworkCommerceService", `getSdkwork${Prefix}Service`)
     .replaceAll("hasSdkworkCommerceSession", `hasSdkwork${Prefix}Session`)
     .replaceAll("requireSdkworkCommerceSession", `requireSdkwork${Prefix}Session`)
@@ -58,7 +58,7 @@ function migratePackage({ pkgDir, pkg, Prefix }) {
   }
   const packageJsonPath = path.join(root, "package.json");
   const packageJson = fs.readFileSync(packageJsonPath, "utf8").replaceAll(
-    "@sdkwork/commerce-service",
+    "@sdkwork/mall-commerce-service",
     `@sdkwork/${pkg}-service`,
   );
   fs.writeFileSync(packageJsonPath, packageJson);

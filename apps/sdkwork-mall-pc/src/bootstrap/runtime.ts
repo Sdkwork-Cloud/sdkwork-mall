@@ -1,4 +1,4 @@
-import type { SdkworkCommerceService } from "@sdkwork/commerce-service";
+import type { SdkworkCommerceService } from "@sdkwork/mall-commerce-service";
 
 import { configureSdkworkMallPcProviders } from "./commerceProviders";
 import {

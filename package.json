@@ -8,13 +8,14 @@
     "dev": "pnpm --dir apps/sdkwork-mall-pc dev",
     "dev:browser": "pnpm --dir apps/sdkwork-mall-pc dev",
     "build": "pnpm --dir apps/sdkwork-mall-pc run build:prod",
-    "check": "pnpm typecheck && node --test tests/contract/verify-mall-standard-architecture.test.mjs",
+    "check": "pnpm run check:app-composition && pnpm typecheck && node --test tests/contract/verify-mall-standard-architecture.test.mjs",
     "clean": "node scripts/clean-artifacts.mjs",
     "test": "pnpm test:node && pnpm test:vitest",
     "test:node": "node --test tests/contract/*.test.mjs",
     "test:vitest": "vitest run --config vitest.config.ts --configLoader native --pool vmThreads",
     "typecheck": "tsc --noEmit",
-    "verify": "pnpm check && pnpm --dir apps/sdkwork-mall-pc run test:config && pnpm test:vitest"
+    "verify": "pnpm check && pnpm --dir apps/sdkwork-mall-pc run test:config && pnpm test:vitest && pnpm run check:app-composition",
+    "check:app-composition": "node ../sdkwork-specs/tools/verify-repo.mjs --root ."
   },
   "devDependencies": {
     "@sdkwork/iam-app-sdk": "workspace:*",

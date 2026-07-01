@@ -19,13 +19,6 @@
   },
   "dependencies": [
     {
-      "id": "sdkwork-commerce",
-      "repository": "Sdkwork-Cloud/sdkwork-commerce",
-      "refInput": "SDKWORK_COMMERCE_REF",
-      "path": "sdkwork-commerce",
-      "tokenSecret": "SDKWORK_RELEASE_TOKEN"
-    },
-    {
       "id": "sdkwork-appbase",
       "repository": "Sdkwork-Cloud/sdkwork-appbase",
       "refInput": "SDKWORK_APPBASE_REF",

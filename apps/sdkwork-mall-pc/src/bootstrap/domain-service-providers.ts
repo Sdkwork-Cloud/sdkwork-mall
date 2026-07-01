@@ -44,19 +44,19 @@ export function configureSdkworkMallPcDomainServiceProviders(
   const commerceClient = () => getCommerceAppSlice();
 
   configureSdkworkAccountAppServiceProvider(() => createSdkworkAccountAppService({
-    appClient: { commerce: commerceClient() } as AccountAppSdkClient,
+    appClient: { commerce: commerceClient() } as unknown as AccountAppSdkClient,
   }));
   configureSdkworkMembershipAppServiceProvider(() => createSdkworkMembershipAppService({
-    appClient: { commerce: commerceClient() } as MembershipAppSdkClient,
+    appClient: { commerce: commerceClient() } as unknown as MembershipAppSdkClient,
   }));
   configureSdkworkOrderAppServiceProvider(() => createSdkworkOrderAppService({
-    appClient: { commerce: commerceClient() } as OrderAppSdkClient,
+    appClient: { commerce: commerceClient() } as unknown as OrderAppSdkClient,
   }));
   configureSdkworkPaymentAppServiceProvider(() => createSdkworkPaymentAppService({
-    appClient: { commerce: commerceClient() } as PaymentAppSdkClient,
+    appClient: { commerce: commerceClient() } as unknown as PaymentAppSdkClient,
   }));
   configureSdkworkPromotionAppServiceProvider(() => createSdkworkPromotionAppService({
-    appClient: { commerce: commerceClient() } as PromotionAppSdkClient,
+    appClient: { commerce: commerceClient() } as unknown as PromotionAppSdkClient,
   }));
 
   configureSdkworkAccountSessionTokenProvider(readSessionTokens);

@@ -1,4 +1,4 @@
-import { getSdkworkCommerceService } from "@sdkwork/commerce-service";
+import { getSdkworkCommerceService } from "@sdkwork/mall-commerce-service";
 import { configureSdkworkAfterSalesRemotePort } from "@sdkwork/mall-pc-after-sales";
 import { configureSdkworkMessagesRemotePort } from "@sdkwork/mall-pc-messages";
 import { configureSdkworkReviewsRemotePort } from "@sdkwork/mall-pc-reviews";

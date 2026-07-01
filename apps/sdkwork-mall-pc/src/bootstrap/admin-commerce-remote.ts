@@ -1,4 +1,4 @@
-import { getSdkworkCommerceService } from "@sdkwork/commerce-service";
+import { getSdkworkCommerceService } from "@sdkwork/mall-commerce-service";
 import {
   configureSdkworkAdminRemotePort,
   type SdkworkAdminCommerceNamespace,

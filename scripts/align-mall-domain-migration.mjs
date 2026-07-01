@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Aligns migrated mall PC packages with T1 domain service ownership:
- * - removes stale @sdkwork/commerce-service peer dependencies
+ * - removes stale @sdkwork/mall-commerce-service peer dependencies
  * - updates README runtime boundary sections
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -312,13 +312,13 @@ const MIGRATED_PACKAGES = {
 function removeCommerceServicePeer(packageJson) {
   let changed = false;
   for (const section of ["peerDependencies", "devDependencies"]) {
-    if (packageJson[section]?.["@sdkwork/commerce-service"]) {
-      delete packageJson[section]["@sdkwork/commerce-service"];
+    if (packageJson[section]?.["@sdkwork/mall-commerce-service"]) {
+      delete packageJson[section]["@sdkwork/mall-commerce-service"];
       changed = true;
     }
   }
-  if (packageJson.peerDependenciesMeta?.["@sdkwork/commerce-service"]) {
-    delete packageJson.peerDependenciesMeta["@sdkwork/commerce-service"];
+  if (packageJson.peerDependenciesMeta?.["@sdkwork/mall-commerce-service"]) {
+    delete packageJson.peerDependenciesMeta["@sdkwork/mall-commerce-service"];
     changed = true;
   }
   return changed;
@@ -374,7 +374,7 @@ function updateReadme(packageDir, directory, config) {
   }
 
   let source = readFileSync(readmePath, "utf8");
-  if (!source.includes("@sdkwork/commerce-service")) {
+  if (!source.includes("@sdkwork/mall-commerce-service")) {
     return false;
   }
 
@@ -388,7 +388,7 @@ function updateReadme(packageDir, directory, config) {
     ? `All remote access goes through \`${config.domainService}\` or through sibling mall packages that compose the same T1 domain boundaries. Generated SDK clients remain behind the domain service contract.`
     : directory === "sdkwork-mall-pc-billing"
       ? "Authenticated dashboards compose T1 domain-backed mall packages. Metered usage history still loads through the transitional commerce app SDK slice (`billing.history.list`) behind an injectable `loadUsageRecords` boundary."
-      : "This package composes sibling mall domain packages and does not call `@sdkwork/commerce-service` directly.";
+      : "This package composes sibling mall domain packages and does not call `@sdkwork/mall-commerce-service` directly.";
 
   source = source.replace(
     /## Runtime boundary\n\n.+\n\n/,

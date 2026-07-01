@@ -1,0 +1,26 @@
+{
+  "name": "@sdkwork/mall-commerce-service",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Mall-owned commerce transport service facade over generated mall app and backend SDK clients.",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "dependencies": {
+    "@sdkwork/mall-commerce-sdk-ports": "workspace:*",
+    "sdkwork-commerce-app-sdk-generated-typescript": "workspace:*",
+    "sdkwork-commerce-backend-sdk-generated-typescript": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

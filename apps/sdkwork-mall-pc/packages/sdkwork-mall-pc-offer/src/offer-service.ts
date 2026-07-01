@@ -266,14 +266,10 @@ export function composeSdkworkOfferDashboard(
 export function createSdkworkOfferService(
   options: CreateSdkworkOfferServiceOptions = {},
 ): SdkworkOfferService {
-  const walletService = options.walletService ?? createSdkworkWalletService({,
-  });
-  const couponService = options.couponService ?? createSdkworkCouponService({ locale: options.locale,
-  });
-  const pointsService = options.pointsService ?? createSdkworkPointsService({,
-  });
-  const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale: options.locale,
-  });
+  const walletService = options.walletService ?? createSdkworkWalletService();
+  const couponService = options.couponService ?? createSdkworkCouponService({ locale: options.locale });
+  const pointsService = options.pointsService ?? createSdkworkPointsService();
+  const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale: options.locale });
 
   return {
     async getDashboard() {
