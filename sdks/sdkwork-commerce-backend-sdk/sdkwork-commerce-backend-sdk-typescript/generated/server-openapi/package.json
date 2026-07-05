@@ -39,5 +39,6 @@
     "api",
     "backend",
     "sdkwork"
-  ]
+  ],
+  "sdkworkRole": "transport"
 }

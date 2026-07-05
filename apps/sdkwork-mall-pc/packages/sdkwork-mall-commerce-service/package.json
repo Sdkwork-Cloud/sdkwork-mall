@@ -17,8 +17,8 @@
   ],
   "dependencies": {
     "@sdkwork/mall-commerce-sdk-ports": "workspace:*",
-    "sdkwork-commerce-app-sdk-generated-typescript": "workspace:*",
-    "sdkwork-commerce-backend-sdk-generated-typescript": "workspace:*"
+    "@sdkwork/clawrouter-app-sdk": "workspace:*",
+    "@sdkwork/clawrouter-backend-sdk": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

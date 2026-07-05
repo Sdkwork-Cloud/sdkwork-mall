@@ -58,5 +58,30 @@
   "standardProfile": "sdkwork-v3",
   "fixedSdkVersion": "0.1.0",
   "ownerOnlyOperationCount": 182,
-  "managedBy": "tools/commerce_sdk_generator_runner.mjs"
+  "managedBy": "tools/commerce_sdk_generator_runner.mjs",
+  "packageName": "@sdkwork/commerce-app-sdk",
+  "transportPackageName": "sdkwork-commerce-app-sdk-generated-typescript",
+  "typescript": {
+    "composedRoot": "sdkwork-commerce-app-sdk-typescript",
+    "composedEntry": "sdkwork-commerce-app-sdk-typescript/src/index.ts",
+    "transportRoot": "sdkwork-commerce-app-sdk-typescript/generated/server-openapi",
+    "transportEntry": "sdkwork-commerce-app-sdk-typescript/generated/server-openapi/src/index.ts"
+  },
+  "workspace": "sdkwork-commerce-app-sdk",
+  "title": "SDKWork Commerce App API SDK",
+  "apiVersion": "0.1.0",
+  "openapiVersion": "3.1.2",
+  "authoritySpec": "../../apis/app-api/commerce/commerce-app-api.openapi.json",
+  "derivedSpecs": {
+    "default": "../../apis/app-api/commerce/commerce-app-api.openapi.json"
+  },
+  "discoverySurface": {
+    "sdkTarget": "app",
+    "apiPrefix": "/app/v3/api",
+    "schemaUrl": "/app/v3/openapi.json",
+    "generatedProtocols": [
+      "http-openapi"
+    ],
+    "manualTransports": []
+  }
 }

@@ -1,7 +1,7 @@
 import { listSdkworkMallPcBackendAdminSdkFamilies } from "@sdkwork/mall-pc-admin-core/composition";
 import { listSdkworkMallPcAppSdkFamilies } from "@sdkwork/mall-pc-core/composition";
-import type { SdkworkAppClient } from "sdkwork-commerce-app-sdk-generated-typescript";
-import type { SdkworkBackendClient } from "sdkwork-commerce-backend-sdk-generated-typescript";
+import type { SdkworkAppClient } from "@sdkwork/clawrouter-app-sdk/domains";
+import type { SdkworkBackendClient } from "@sdkwork/clawrouter-backend-sdk/domains";
 
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
 

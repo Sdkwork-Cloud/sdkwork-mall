@@ -43,7 +43,7 @@ export const sdkworkMallPcAppSdkFamilies = [
     authority: "sdkwork-commerce-app-api",
     family: "sdkwork-commerce-app-sdk",
     generationInputSpec: "apis/app-api/commerce/commerce-app-api.openapi.json",
-    generatedPackageName: "sdkwork-commerce-app-sdk-generated-typescript",
+    generatedPackageName: "@sdkwork/clawrouter-app-sdk/domains",
     surface: "app",
     tokenManagerScope: "global-session",
   },

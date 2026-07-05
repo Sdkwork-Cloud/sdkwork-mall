@@ -26,5 +26,7 @@
     "stateRoots": [
       ".sdkwork/"
     ]
-  }
+  },
+  "transportPackageName": "sdkwork-commerce-app-sdk-generated-typescript",
+  "consumerPackageName": "@sdkwork/commerce-app-sdk"
 }

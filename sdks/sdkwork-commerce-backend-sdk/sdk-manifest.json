@@ -58,5 +58,30 @@
   "standardProfile": "sdkwork-v3",
   "fixedSdkVersion": "0.1.0",
   "ownerOnlyOperationCount": 188,
-  "managedBy": "tools/commerce_sdk_generator_runner.mjs"
+  "managedBy": "tools/commerce_sdk_generator_runner.mjs",
+  "packageName": "@sdkwork/commerce-backend-sdk",
+  "transportPackageName": "sdkwork-commerce-backend-sdk-generated-typescript",
+  "typescript": {
+    "composedRoot": "sdkwork-commerce-backend-sdk-typescript",
+    "composedEntry": "sdkwork-commerce-backend-sdk-typescript/src/index.ts",
+    "transportRoot": "sdkwork-commerce-backend-sdk-typescript/generated/server-openapi",
+    "transportEntry": "sdkwork-commerce-backend-sdk-typescript/generated/server-openapi/src/index.ts"
+  },
+  "workspace": "sdkwork-commerce-backend-sdk",
+  "title": "SDKWork Commerce Backend API SDK",
+  "apiVersion": "0.1.0",
+  "openapiVersion": "3.1.2",
+  "authoritySpec": "../../apis/backend-api/commerce/commerce-backend-api.openapi.json",
+  "derivedSpecs": {
+    "default": "../../apis/backend-api/commerce/commerce-backend-api.openapi.json"
+  },
+  "discoverySurface": {
+    "sdkTarget": "backend",
+    "apiPrefix": "/backend/v3/api",
+    "schemaUrl": "/backend/v3/openapi.json",
+    "generatedProtocols": [
+      "http-openapi"
+    ],
+    "manualTransports": []
+  }
 }

@@ -311,7 +311,7 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
 
   const sdkClientsSource = read("apps/sdkwork-mall-pc/src/bootstrap/sdkClients.ts");
   assert.match(sdkClientsSource, /@sdkwork\/mall-pc-core/);
-  assert.match(sdkClientsSource, /sdkwork-commerce-app-sdk-generated-typescript/);
+  assert.match(sdkClientsSource, /@sdkwork\/clawrouter-app-sdk\/domains/);
 
   const runtimeSource = read("apps/sdkwork-mall-pc/src/bootstrap/runtime.ts");
   assert.match(runtimeSource, /@sdkwork\/mall-commerce-service/);
@@ -665,7 +665,12 @@ test("mall workspace metadata and packaging contract align with sdkwork-mall own
   assert.equal(workflow.app.sourcePath, "apps/sdkwork-mall-pc");
 
   const dependencyIds = (workflow.dependencies ?? []).map((dependency) => dependency.id);
-  assert.equal(dependencyIds.includes("sdkwork-commerce"), true, "packaging workflow must declare sdkwork-commerce dependency");
+  assert.equal(
+    dependencyIds.includes("sdkwork-commerce"),
+    false,
+    "packaging workflow must not declare retired sdkwork-commerce dependency",
+  );
+  assert.equal(dependencyIds.includes("sdkwork-appbase"), true, "packaging workflow must declare sdkwork-appbase dependency");
 
   const appManifest = readJson("apps/sdkwork-mall-pc/sdkwork.app.config.json");
   assert.equal(appManifest.metadata?.standardOwner, "sdkwork-mall");

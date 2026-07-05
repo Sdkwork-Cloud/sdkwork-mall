@@ -7,8 +7,8 @@ import {
 import type { IamAppContext, IamDeploymentMode, IamEnvironment } from "@sdkwork/iam-contracts";
 import type { IamRuntime } from "@sdkwork/iam-runtime";
 import { normalizeSdkworkApiBaseUrl } from "@sdkwork/runtime-bootstrap";
-import { createClient as createCommerceAppClient } from "sdkwork-commerce-app-sdk-generated-typescript";
-import { createClient as createCommerceBackendClient } from "sdkwork-commerce-backend-sdk-generated-typescript";
+import { createClient as createCommerceAppClient } from "@sdkwork/clawrouter-app-sdk/domains";
+import { createClient as createCommerceBackendClient } from "@sdkwork/clawrouter-backend-sdk/domains";
 
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
 import {
