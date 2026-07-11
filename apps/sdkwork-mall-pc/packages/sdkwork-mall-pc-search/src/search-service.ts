@@ -165,8 +165,8 @@ export async function searchMallProducts(input: {
 
   // 当指定 shopId 时，对结果做分页截取
   if (input.shopId && input.page && input.pageSize) {
-    const start = (input.page - 1) * input.pageSize;
-    items = items.slice(start, start + input.pageSize);
+    const fromIdx = (input.page - 1) * input.pageSize;
+    items = items.slice(fromIdx, fromIdx + input.pageSize);
   }
 
   return { items, total };

@@ -132,7 +132,7 @@ export function SdkworkMallShopPage() {
   const totalPages = Math.max(1, Math.ceil(total / SHOP_PAGE_SIZE));
   const pagedProducts = useMemo(() => {
     const start = (page - 1) * SHOP_PAGE_SIZE;
-    return filteredProducts.slice(start, start + SHOP_PAGE_SIZE);
+    return filteredProducts.slice(fromIdx, fromIdx + SHOP_PAGE_SIZE);
   }, [filteredProducts, page]);
 
   // 店铺推荐（取前4个商品作为推荐）
