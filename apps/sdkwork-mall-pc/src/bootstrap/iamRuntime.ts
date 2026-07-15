@@ -13,6 +13,7 @@ import { createClient as createCommerceBackendClient } from "@sdkwork/clawrouter
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
 import {
   createSdkworkMallPcSessionStore,
+  SDKWORK_COMMERCE_PC_SESSION_STORAGE_KEY,
   type SdkworkMallPcSessionSnapshot,
   type SdkworkMallPcSessionStore,
 } from "./sessionStore";
@@ -206,7 +207,18 @@ function resolveSessionStorage(): Storage | undefined {
   if (typeof window === "undefined") {
     return undefined;
   }
-  return window.sessionStorage;
+  migrateLegacySessionStorage(SDKWORK_COMMERCE_PC_SESSION_STORAGE_KEY);
+  return window.localStorage;
+}
+
+function migrateLegacySessionStorage(storageKey: string): void {
+  const legacySession = window.sessionStorage.getItem(storageKey);
+  if (legacySession && !window.localStorage.getItem(storageKey)) {
+    window.localStorage.setItem(storageKey, legacySession);
+  }
+  if (legacySession) {
+    window.sessionStorage.removeItem(storageKey);
+  }
 }
 
 function toIamDeploymentMode(value: SdkworkMallPcRuntimeConfig["deploymentMode"]): IamDeploymentMode {
