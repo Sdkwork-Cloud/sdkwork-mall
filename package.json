@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "pnpm --dir apps/sdkwork-mall-pc dev",
+    "stop": "node ../sdkwork-specs/tools/stop-sdkwork-workspace-processes.mjs --workspace .",    "dev": "pnpm --dir apps/sdkwork-mall-pc dev",
     "dev:browser": "pnpm --dir apps/sdkwork-mall-pc dev",
     "build": "pnpm --dir apps/sdkwork-mall-pc run build:prod",
     "check": "pnpm run check:app-composition && pnpm typecheck && node --test tests/contract/verify-mall-standard-architecture.test.mjs",

@@ -20,7 +20,6 @@
     "generated": true,
     "private": false,
     "manifests": [
-      ".sdkwork-assembly.json",
       "sdk-manifest.json"
     ]
   },

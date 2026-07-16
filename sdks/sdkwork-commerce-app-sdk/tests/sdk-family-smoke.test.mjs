@@ -43,7 +43,7 @@ test("sdkwork-commerce-app-sdk uses sdkwork-v3 profile", () => {
 });
 
 test("sdkwork-commerce-app-sdk declares appbase as a consumer SDK dependency", () => {
-  const assembly = JSON.parse(readFileSync(path.join(sdkRoot, ".sdkwork-assembly.json"), "utf8"));
+  const assembly = JSON.parse(readFileSync(path.join(sdkRoot, "sdk-manifest.json"), "utf8"));
   const manifest = JSON.parse(readFileSync(path.join(sdkRoot, "sdk-manifest.json"), "utf8"));
   for (const document of [assembly, manifest]) {
     assert.equal(document.sdkOwner, "sdkwork-commerce");
