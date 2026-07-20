@@ -2,7 +2,7 @@ import {
   useMemo,
   useSyncExternalStore,
 } from "react";
-import { resolveSdkworkUserCouponRequestId } from "@sdkwork/mall-pc-coupon";
+import { resolveSdkworkUserCouponRequestId } from "@sdkwork/mall-pc-coupon/headless";
 import {
   estimateSdkworkSubscriptionCheckout,
   resolveSdkworkSubscriptionPaymentMethod,

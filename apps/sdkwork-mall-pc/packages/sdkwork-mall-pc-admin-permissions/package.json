@@ -26,9 +26,9 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/mall-pc-core": "*",
+    "@sdkwork/mall-pc-core": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
-    "@sdkwork/mall-pc-admin-core": "*"
+    "@sdkwork/mall-pc-admin-core": "workspace:*"
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

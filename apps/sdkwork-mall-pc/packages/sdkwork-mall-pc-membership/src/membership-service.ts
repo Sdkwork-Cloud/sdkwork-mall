@@ -6,6 +6,7 @@ import {
   toSdkworkMembershipMutationStatus,
   toSdkworkMembershipNumber,
   toSdkworkMembershipOptionalString,
+  unwrapSdkworkMembershipPageItems,
   unwrapSdkworkMembershipResponse,
   readSdkworkMediaResource,
   type SdkworkMembershipAppService,
@@ -341,7 +342,7 @@ export function createSdkworkMembershipService(
 
       if (!hasSdkworkMembershipSession()) {
         const packagesPayload = await membershipService.memberships.packages.list();
-        const packages = unwrapSdkworkMembershipResponse<RemoteMembershipPackage[]>(packagesPayload);
+        const packages = unwrapSdkworkMembershipPageItems<RemoteMembershipPackage>(packagesPayload);
 
         return {
           ...createEmptyDashboard(),
@@ -358,9 +359,9 @@ export function createSdkworkMembershipService(
       ]);
       const membershipInfo = unwrapSdkworkMembershipResponse<RemoteMembershipInfo | null>(membershipInfoPayload);
       const membershipStatus = unwrapSdkworkMembershipResponse<RemoteMembershipStatus | null>(membershipStatusPayload);
-      const levels = unwrapSdkworkMembershipResponse<RemoteMembershipLevel[]>(levelsPayload);
-      const benefits = unwrapSdkworkMembershipResponse<RemoteMembershipBenefit[]>(benefitsPayload);
-      const packages = unwrapSdkworkMembershipResponse<RemoteMembershipPackage[]>(packagesPayload);
+      const levels = unwrapSdkworkMembershipPageItems<RemoteMembershipLevel>(levelsPayload);
+      const benefits = unwrapSdkworkMembershipPageItems<RemoteMembershipBenefit>(benefitsPayload);
+      const packages = unwrapSdkworkMembershipPageItems<RemoteMembershipPackage>(packagesPayload);
       const summary = mapSummary(membershipInfo, membershipStatus);
 
       return {

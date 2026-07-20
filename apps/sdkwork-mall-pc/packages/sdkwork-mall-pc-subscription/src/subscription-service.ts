@@ -15,7 +15,7 @@ import {
   sortSdkworkUserCoupons,
   type SdkworkRemoteUserCouponLike,
   type SdkworkUserCoupon,
-} from "@sdkwork/mall-pc-coupon";
+} from "@sdkwork/mall-pc-coupon/headless";
 import {
   createSdkworkMembershipService,
   type SdkworkMembershipBenefit,
@@ -25,7 +25,7 @@ import {
   type SdkworkMembershipPurchaseResult,
   type SdkworkMembershipService,
   type SdkworkMembershipSummary,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import {
   createDefaultSdkworkSubscriptionPaymentMethodOptions,
   estimateSdkworkSubscriptionCheckout,
@@ -281,21 +281,19 @@ export function createSdkworkSubscriptionService(
   const membershipService: SdkworkMembershipService = options.membershipService
     ? {
         ...createSdkworkMembershipService({
-          promotionService: options.promotionService,
           locale: options.locale,
         }),
         ...options.membershipService,
       }
     : createSdkworkMembershipService({
-        promotionService: options.promotionService,
         locale: options.locale,
       });
   const paymentService: SdkworkPaymentService = options.paymentService
     ? {
-        ...createSdkworkPaymentService({ promotionService: options.promotionService }),
+        ...createSdkworkPaymentService(),
         ...options.paymentService,
       }
-    : createSdkworkPaymentService({ promotionService: options.promotionService });
+    : createSdkworkPaymentService();
 
   return {
     async getDashboard() {

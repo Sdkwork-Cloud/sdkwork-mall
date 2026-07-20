@@ -30,10 +30,10 @@ describe("sdkwork-mall-pc-order service", () => {
     const orderService = createOrderServiceMock({
       orders: {
         cancel: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
         }),
         retrieve: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             createdAt: "2026-04-02T08:00:00.000Z",
             items: [
@@ -63,7 +63,7 @@ describe("sdkwork-mall-pc-order service", () => {
         }),
         paymentSuccess: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               orderId: "ORDER-2",
               paid: true,
@@ -74,7 +74,7 @@ describe("sdkwork-mall-pc-order service", () => {
         },
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               completed: 8,
               pendingPayment: 1,
@@ -87,7 +87,7 @@ describe("sdkwork-mall-pc-order service", () => {
         },
         status: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               orderId: "ORDER-2",
               status: "PAID",
@@ -96,7 +96,7 @@ describe("sdkwork-mall-pc-order service", () => {
           }),
         },
         list: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             content: [
               {
@@ -130,19 +130,21 @@ describe("sdkwork-mall-pc-order service", () => {
             ],
           },
         }),
-        pay: vi.fn().mockResolvedValue({
-          code: "2000",
-          data: {
-            amount: "199",
-            orderId: "ORDER-3",
-            outTradeNo: "OUT-ORDER-3",
-            paymentId: "PAY-ORDER-3",
-            paymentMethod: "ALIPAY",
-            paymentParams: {
-              payUrl: "https://pay.sdkwork.ai/alipay/ORDER-3",
+        payments: {
+          create: vi.fn().mockResolvedValue({
+            code: 0,
+            data: {
+              amount: "199",
+              orderId: "ORDER-3",
+              outTradeNo: "OUT-ORDER-3",
+              paymentId: "PAY-ORDER-3",
+              paymentMethod: "ALIPAY",
+              paymentParams: {
+                payUrl: "https://pay.sdkwork.ai/alipay/ORDER-3",
+              },
             },
-          },
-        }),
+          }),
+        },
       },
     });
 
@@ -213,7 +215,7 @@ describe("sdkwork-mall-pc-order service", () => {
     const orderService = createOrderServiceMock({
       orders: {
         retrieve: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             createdAt: "2026-04-02T08:00:00.000Z",
             items: [
@@ -229,13 +231,13 @@ describe("sdkwork-mall-pc-order service", () => {
         }),
         paymentSuccess: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: null,
           }),
         },
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               totalOrders: 1,
             },
@@ -243,14 +245,14 @@ describe("sdkwork-mall-pc-order service", () => {
         },
         status: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               status: "PENDING_PAYMENT",
             },
           }),
         },
         list: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             content: [
               {
@@ -305,9 +307,11 @@ describe("sdkwork-mall-pc-order service", () => {
     const failingService = createSdkworkOrderService({
       orderService: createOrderServiceMock({
         orders: {
-          pay: vi.fn().mockResolvedValue({
-            code: "5000",
-          }),
+          payments: {
+            create: vi.fn().mockResolvedValue({
+              code: 5000,
+            }),
+          },
         },
       }),
       messages: {

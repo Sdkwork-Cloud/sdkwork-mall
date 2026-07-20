@@ -109,7 +109,7 @@ describe("sdkwork-mall-pc-membership-purchase header entry", () => {
       status: "completed",
     });
     const create = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: 199,
         orderId: "MEMBERSHIP-PURCHASE-1",
@@ -117,7 +117,10 @@ describe("sdkwork-mall-pc-membership-purchase header entry", () => {
         status: "SUCCESS",
       },
     });
-    configureMembershipServiceMockSession({ authToken: "membership-purchase-auth-token" });
+    configureMembershipServiceMockSession({
+      accessToken: "membership-purchase-access-token",
+      authToken: "membership-purchase-auth-token",
+    });
     configureSdkworkMembershipAppServiceProvider(() => createMembershipServiceMock({
       memberships: {
         purchases: {

@@ -10,6 +10,11 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./headless": {
+      "types": "./src/headless.ts",
+      "import": "./src/headless.ts",
+      "default": "./src/headless.ts"
+    },
     "./routes": {
       "types": "./src/routes.ts",
       "import": "./src/routes.ts",
@@ -30,12 +35,16 @@
   },
   "peerDependencies": {
     "@sdkwork/account-service": "workspace:*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/order-service": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {
     "@sdkwork/account-service": {
+      "optional": true
+    },
+    "@sdkwork/order-service": {
       "optional": true
     },
     "@sdkwork/ui-pc-react": {

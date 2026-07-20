@@ -371,10 +371,11 @@ export function SdkworkMallMerchantOrdersPage() {
       setOrderDetail(null);
       return;
     }
+    const orderId = selectedOrderId;
     let active = true;
     async function loadDetail() {
       const service = getSdkworkMerchantRemotePort();
-      const response = await service.shops.current.orders.retrieve(selectedOrderId);
+      const response = await service.shops.current.orders.retrieve(orderId);
       if (active) {
         setOrderDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }
@@ -1123,10 +1124,11 @@ export function SdkworkMallMerchantAfterSalesPage() {
       setDetail(null);
       return;
     }
+    const detailId = selectedId;
     let active = true;
     async function loadDetail() {
       const service = getSdkworkMerchantRemotePort();
-      const response = await service.afterSales.requests.retrieve(selectedId);
+      const response = await service.afterSales.requests.retrieve(detailId);
       if (active) {
         setDetail(unwrapSdkworkPaymentResponse(response) as Record<string, unknown>);
       }

@@ -5,7 +5,7 @@ import {
   type SdkworkMembershipPurchaseResult,
   type SdkworkMembershipService,
   type SdkworkMembershipSummary,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import {
   resolveSdkworkMembershipPurchaseMode,
   type SdkworkMembershipPurchaseMode,

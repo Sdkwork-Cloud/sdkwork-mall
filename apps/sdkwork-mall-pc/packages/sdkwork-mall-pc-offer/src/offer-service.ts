@@ -4,26 +4,26 @@ import {
   type SdkworkCouponCatalog,
   type SdkworkCouponDashboardData,
   type SdkworkCouponService,
-} from "@sdkwork/mall-pc-coupon";
+} from "@sdkwork/mall-pc-coupon/headless";
 import {
   createPointsRouteIntent,
   createSdkworkPointsService,
   type SdkworkPointsDashboardData,
   type SdkworkPointsRechargeOffer,
   type SdkworkPointsService,
-} from "@sdkwork/mall-pc-points";
+} from "@sdkwork/mall-pc-points/headless";
 import { createSubscriptionRouteIntent } from "@sdkwork/mall-pc-subscription";
 import {
   createSdkworkMembershipService,
   type SdkworkMembershipDashboardData,
   type SdkworkMembershipPlan,
   type SdkworkMembershipService,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import {
   createSdkworkWalletService,
   type SdkworkWalletOverview,
   type SdkworkWalletService,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 import {
   createEmptySdkworkOfferDashboard,
   scoreSdkworkCommercialOffer,

@@ -1,11 +1,13 @@
 import { configureSdkworkAccountAppServiceProvider } from "@sdkwork/account-service";
 import { configureSdkworkMembershipAppServiceProvider } from "@sdkwork/membership-service";
+import { configureSdkworkOrderAppServiceProvider } from "@sdkwork/order-service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   configureAccountServiceMockSession,
   configureMembershipServiceMockSession,
   createAccountServiceMock,
   createMembershipServiceMock,
+  createOrderServiceMock,
   resetAccountServiceMockSession,
   resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
@@ -14,12 +16,16 @@ import { createSdkworkPointsService } from "../src";
 describe("sdkwork-mall-pc-points service", () => {
   beforeEach(() => {
     configureAccountServiceMockSession({ authToken: "points-token" });
-    configureMembershipServiceMockSession({ authToken: "points-token" });
+    configureMembershipServiceMockSession({
+      accessToken: "points-access-token",
+      authToken: "points-token",
+    });
   });
 
   afterEach(() => {
     configureSdkworkAccountAppServiceProvider(null);
     configureSdkworkMembershipAppServiceProvider(null);
+    configureSdkworkOrderAppServiceProvider(null);
     resetAccountServiceMockSession();
     resetMembershipServiceMockSession();
   });
@@ -353,19 +359,19 @@ describe("sdkwork-mall-pc-points service", () => {
 
   it("composes wallet and membership domain boundaries for dashboard assembly", async () => {
     const rechargePackages = vi.fn().mockResolvedValue({
-      code: "2000",
-      data: [
-        {
-          id: 101,
-          name: "Studio Credits",
-          pointAmount: 1000,
-          price: 9.9,
-          sortWeight: 1,
-        },
-      ],
+      code: 0,
+      data: {
+        items: [
+          {
+            id: 101,
+            points: 1000,
+            priceAmount: 9.9,
+          },
+        ],
+      },
     });
     const membershipPackages = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: [
         {
           id: 3,
@@ -382,7 +388,7 @@ describe("sdkwork-mall-pc-points service", () => {
         current: {
           summary: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 cashAvailable: 20,
                 pointsAvailable: 1200,
@@ -392,16 +398,10 @@ describe("sdkwork-mall-pc-points service", () => {
         },
       },
       wallet: {
-        exchangeRate: {
-          retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: 100,
-          }),
-        },
         ledgerEntries: {
           points: {
             list: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 content: [],
               },
@@ -411,7 +411,7 @@ describe("sdkwork-mall-pc-points service", () => {
         accounts: {
           points: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 availablePoints: 1200,
                 totalEarned: 1200,
@@ -422,9 +422,17 @@ describe("sdkwork-mall-pc-points service", () => {
           },
         },
       },
+    }));
+    configureSdkworkOrderAppServiceProvider(() => createOrderServiceMock({
       recharges: {
         packages: {
           list: rechargePackages,
+        },
+        settings: {
+          retrieve: vi.fn().mockResolvedValue({
+            code: 0,
+            data: { basePointsPerCny: 100 },
+          }),
         },
       },
     }));
@@ -432,13 +440,13 @@ describe("sdkwork-mall-pc-points service", () => {
       memberships: {
         benefits: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [],
           }),
         },
         current: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               remainingDays: 15,
               planRank: 3,
@@ -448,7 +456,7 @@ describe("sdkwork-mall-pc-points service", () => {
           }),
           status: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 isMember: true,
                 pointBalance: 1200,
@@ -459,7 +467,7 @@ describe("sdkwork-mall-pc-points service", () => {
         },
         plans: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [],
           }),
         },
@@ -495,7 +503,7 @@ describe("sdkwork-mall-pc-points service", () => {
       memberships: {
         purchases: {
           create: vi.fn().mockResolvedValue({
-            code: "5000",
+            code: 5000,
           }),
         },
       },

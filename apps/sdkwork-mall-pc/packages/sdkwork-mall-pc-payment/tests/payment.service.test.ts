@@ -35,7 +35,7 @@ describe("sdkwork-mall-pc-payment service", () => {
 
   it("maps payment methods, records, statistics, and digests into a reusable payment center snapshot", async () => {
     const listPaymentMethods = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: [
         {
           available: true,
@@ -80,22 +80,24 @@ describe("sdkwork-mall-pc-payment service", () => {
     const paymentService = createPaymentServiceMock({
       payments: {
         statistics: {
-          retrieve: vi.fn().mockResolvedValue({
-          code: "2000",
-          data: {
-            closedPayments: 1,
-            failedPayments: 1,
-            pendingPayments: 1,
-            successPayments: 1,
-            timeoutPayments: 0,
-            totalPayments: 4,
+          summary: {
+            retrieve: vi.fn().mockResolvedValue({
+              code: 0,
+              data: {
+                closedPayments: 1,
+                failedPayments: 1,
+                pendingPayments: 1,
+                successPayments: 1,
+                timeoutPayments: 0,
+                totalPayments: 4,
+              },
+            }),
           },
-        }),
         },
         methods: { list: listPaymentMethods },
         records: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               content: [
                 {
@@ -176,10 +178,10 @@ describe("sdkwork-mall-pc-payment service", () => {
 
   it("maps payment creation, detail, status, reconcile, close, and order-payment history through the generated payment SDK boundary", async () => {
     const close = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
     });
     const createPayment = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: "699",
         createdAt: "2026-04-03T10:05:00.000Z",
@@ -208,7 +210,7 @@ describe("sdkwork-mall-pc-payment service", () => {
       },
     });
     const reconcile = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: "699",
         orderId: "ORDER-9",
@@ -227,26 +229,9 @@ describe("sdkwork-mall-pc-payment service", () => {
       payments: {
         close,
         create: createPayment,
-        records: {
-          retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: {
-              amount: "699",
-              createdAt: "2026-04-03T10:05:00.000Z",
-              orderId: "ORDER-9",
-              outTradeNo: "OUT-ORDER-9",
-              paymentId: 1001,
-              paymentMethod: "WECHAT_PAY",
-              paymentProvider: "WECHAT_PAY",
-              paymentSn: "PAY-1001",
-              status: "PENDING",
-              statusName: "Pending",
-            },
-          }),
-        },
         status: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               amount: "699",
               orderId: "ORDER-9",
@@ -261,25 +246,43 @@ describe("sdkwork-mall-pc-payment service", () => {
               transactionId: "TXN-1001",
             },
           }),
-          retrieveByOutTradeNo: vi.fn().mockResolvedValue({
-            code: "2000",
+          outTradeNo: {
+            retrieve: vi.fn().mockResolvedValue({
+              code: 0,
+              data: {
+                amount: "699",
+                orderId: "ORDER-9",
+                outTradeNo: "OUT-ORDER-9",
+                paymentId: 1001,
+                paymentMethod: "WECHAT_PAY",
+                paymentProvider: "WECHAT_PAY",
+                paymentSn: "PAY-1001",
+                status: "SUCCESS",
+                statusName: "Success",
+              },
+            }),
+          },
+        },
+        records: {
+          retrieve: vi.fn().mockResolvedValue({
+            code: 0,
             data: {
               amount: "699",
+              createdAt: "2026-04-03T10:05:00.000Z",
               orderId: "ORDER-9",
               outTradeNo: "OUT-ORDER-9",
               paymentId: 1001,
               paymentMethod: "WECHAT_PAY",
               paymentProvider: "WECHAT_PAY",
               paymentSn: "PAY-1001",
-              status: "SUCCESS",
-              statusName: "Success",
+              status: "PENDING",
+              statusName: "Pending",
             },
           }),
-        },
-        orderPayments: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: [
+            code: 0,
+            data: {
+              content: [
               {
                 amount: "699",
                 createdAt: "2026-04-03T10:05:00.000Z",
@@ -306,7 +309,8 @@ describe("sdkwork-mall-pc-payment service", () => {
                 status: "FAILED",
                 statusName: "Failed",
               },
-            ],
+              ],
+            },
           }),
         },
         reconcile,
@@ -403,21 +407,23 @@ describe("sdkwork-mall-pc-payment service", () => {
     const paymentService = createPaymentServiceMock({
       payments: {
         statistics: {
-          retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: {
-              closedPayments: 1,
-              failedPayments: 0,
-              pendingPayments: 0,
-              successPayments: 0,
-              timeoutPayments: 0,
-              totalPayments: 1,
-            },
-          }),
+          summary: {
+            retrieve: vi.fn().mockResolvedValue({
+              code: 0,
+              data: {
+                closedPayments: 1,
+                failedPayments: 0,
+                pendingPayments: 0,
+                successPayments: 0,
+                timeoutPayments: 0,
+                totalPayments: 1,
+              },
+            }),
+          },
         },
         methods: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 available: true,
@@ -435,7 +441,7 @@ describe("sdkwork-mall-pc-payment service", () => {
         },
         records: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               content: [
                 {
@@ -498,7 +504,7 @@ describe("sdkwork-mall-pc-payment service", () => {
       paymentService: createPaymentServiceMock({
         payments: {
           close: vi.fn().mockResolvedValue({
-            code: "5000",
+            code: 5000,
           }),
         },
       }),

@@ -12,7 +12,7 @@ import {
 import type {
   SdkworkMembershipPlan,
   SdkworkMembershipSummary,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import type {
   SdkworkSubscriptionAction,
   SdkworkSubscriptionCheckoutEstimate,

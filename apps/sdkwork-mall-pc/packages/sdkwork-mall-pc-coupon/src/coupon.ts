@@ -1,7 +1,7 @@
 import {
-  toNullableSdkworkCommerceNumber,
-  toSdkworkCommerceNumber,
-  toSdkworkCommerceOptionalString,
+  toNullableSdkworkPromotionNumber as toNullableSdkworkCommerceNumber,
+  toSdkworkPromotionNumber as toSdkworkCommerceNumber,
+  toSdkworkPromotionOptionalString as toSdkworkCommerceOptionalString,
 } from "@sdkwork/promotion-service";
 
 export interface SdkworkAppCapabilityManifest {

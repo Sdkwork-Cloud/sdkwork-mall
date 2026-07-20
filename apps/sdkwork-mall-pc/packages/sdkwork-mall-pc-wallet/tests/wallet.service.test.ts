@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   configureAccountServiceMockSession,
   createAccountServiceMock,
+  createOrderServiceMock,
   resetAccountServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import { createSdkworkWalletService } from "../src";
@@ -21,7 +22,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
         current: {
           summary: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 cashAvailable: 88.5,
                 cashFrozen: 10,
@@ -39,7 +40,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
         ledgerEntries: {
           points: {
             list: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 content: [
                   {
@@ -76,7 +77,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
         accounts: {
           points: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 availablePoints: 1200,
                 experience: 18,
@@ -93,35 +94,33 @@ describe("sdkwork-mall-pc-wallet service", () => {
             }),
           },
         },
-        exchangeRate: {
+      },
+    });
+    const orderService = createOrderServiceMock({
+      recharges: {
+        settings: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: 200,
+            code: 0,
+            data: { basePointsPerCny: 200 },
           }),
         },
-      },
-      recharges: {
         packages: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
-            data: [
+            code: 0,
+            data: {
+              items: [
               {
-                description: "Starter recharge",
                 id: 101,
-                name: "Starter 1.2K",
-                pointAmount: 1200,
-                price: 6,
-                sortWeight: 10,
+                points: 1200,
+                priceAmount: 6,
               },
               {
-                description: "Growth recharge",
                 id: 202,
-                name: "Growth 5K",
-                pointAmount: 5000,
-                price: 24,
-                sortWeight: 20,
+                points: 5000,
+                priceAmount: 24,
               },
-            ],
+              ],
+            },
           }),
         },
       },
@@ -129,6 +128,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
 
     const service = createSdkworkWalletService({
       accountService,
+      orderService,
     });
 
     const overview = await service.getOverview({
@@ -151,7 +151,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
       id: 202,
       points: 5000,
       priceCny: 24,
-      title: "Growth 5K",
+      title: "5000 points",
     });
     expect(`recharge${"Packs"}` in overview).toBe(false);
   });
@@ -170,21 +170,32 @@ describe("sdkwork-mall-pc-wallet service", () => {
   });
 
   it("recharges points and withdraws cash through the generated SDK boundaries", async () => {
-    const rechargePoints = vi.fn().mockResolvedValue({
-      code: "2000",
+    const listPackages = vi.fn().mockResolvedValue({
+      code: 0,
       data: {
-        cashAmount: 6,
-        paymentMethod: "WECHAT",
-        points: 1200,
-        processedAt: "2026-04-02T12:00:00.000Z",
-        remainingPoints: 2400,
-        requestNo: "REQ-200",
-        status: "SUCCESS",
-        transactionId: "TXN-200",
+        items: [
+          {
+            currencyCode: "CNY",
+            id: 101,
+            points: 1200,
+            priceAmount: 6,
+          },
+        ],
+      },
+    });
+    const rechargePoints = vi.fn().mockResolvedValue({
+      code: 0,
+      data: {
+        item: {
+          amount: 6,
+          orderId: "TXN-200",
+          points: 1200,
+          status: "SUCCESS",
+        },
       },
     });
     const withdraw = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: 12.5,
         channel: "bank_account",
@@ -196,20 +207,24 @@ describe("sdkwork-mall-pc-wallet service", () => {
         transactionId: "TXN-300",
       },
     });
-    const accountService = createAccountServiceMock({
+    const orderService = createOrderServiceMock({
       recharges: {
+        packages: {
+          list: listPackages,
+        },
         orders: {
           create: rechargePoints,
         },
       },
-      wallet: {
-        withdrawalTransfers: {
+      withdrawals: {
+        requests: {
           create: withdraw,
         },
       },
     });
     const service = createSdkworkWalletService({
-      accountService,
+      accountService: createAccountServiceMock(),
+      orderService,
     });
 
     await expect(
@@ -217,6 +232,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
         paymentMethod: "WECHAT",
         points: 1200,
         remarks: "Team recharge",
+        requestNo: "REQ-200",
       }),
     ).resolves.toMatchObject({
       cashAmountCny: 6,
@@ -247,20 +263,22 @@ describe("sdkwork-mall-pc-wallet service", () => {
     });
 
     expect(rechargePoints).toHaveBeenCalledWith({
+      amount: 6,
+      currencyCode: "CNY",
+      packageId: "101",
       paymentMethod: "WECHAT",
-      points: 1200,
-      remarks: "Team recharge",
-      requestNo: undefined,
-    });
+      source: "mall-wallet",
+      subject: "points_recharge",
+      targetAsset: "points",
+    }, expect.any(Object));
     expect(withdraw).toHaveBeenCalledWith({
-      accountName: "SDKWORK Ops",
-      accountNo: "6222020202020202",
+      asset: "cash",
       amount: 12.5,
-      bankName: "SDKWORK Bank",
-      remarks: "Team payout",
-      requestNo: "REQ_WITHDRAW_300",
-      withdrawMethod: "bank_account",
-    });
+      currencyCode: "CNY",
+      payoutAccountRef: "6222020202020202",
+      payoutMethod: "bank_account",
+      reasonCode: "Team payout",
+    }, expect.any(Object));
   });
 
   it("rejects withdraw requests missing required settlement fields before calling the wallet sdk", async () => {

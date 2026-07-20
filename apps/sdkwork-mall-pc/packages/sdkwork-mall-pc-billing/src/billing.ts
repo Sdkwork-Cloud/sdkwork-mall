@@ -3,7 +3,7 @@ import {
   type CreateSdkworkAppCapabilityManifestOptions,
   type SdkworkAppCapabilityManifest,
 } from "@sdkwork/appbase-pc-react";
-import { createInvoiceRouteIntent } from "@sdkwork/mall-pc-invoice";
+import { createInvoiceRouteIntent } from "@sdkwork/mall-pc-invoice/headless";
 import {
   createOfferRouteIntent,
   createSdkworkCommercialAction,

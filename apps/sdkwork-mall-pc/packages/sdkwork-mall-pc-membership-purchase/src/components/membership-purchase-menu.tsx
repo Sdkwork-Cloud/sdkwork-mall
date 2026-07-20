@@ -16,7 +16,7 @@ import {
   formatSdkworkMembershipIncludedPointsLabel,
   type SdkworkMembershipController,
   type SdkworkMembershipPlan,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import { formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny } from "@sdkwork/membership-service";
 import { resolveSdkworkMembershipPurchaseMode } from "../membership-purchase";
 import { useSdkworkMembershipPurchaseIntl } from "../membership-purchase-intl";

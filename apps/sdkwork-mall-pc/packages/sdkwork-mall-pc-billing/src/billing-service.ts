@@ -12,7 +12,7 @@ import {
   createSdkworkInvoiceService,
   type SdkworkInvoiceService,
   type SdkworkInvoiceSummary,
-} from "@sdkwork/mall-pc-invoice";
+} from "@sdkwork/mall-pc-invoice/headless";
 import {
   createSdkworkOfferService,
   type SdkworkOfferDashboardData,
@@ -32,7 +32,7 @@ import {
   createSdkworkWalletService,
   type SdkworkWalletOverview,
   type SdkworkWalletService,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 import {
   createEmptySdkworkBillingUsageSummary,
   createSdkworkBillingBudgetPolicy,
@@ -110,6 +110,28 @@ export interface SdkworkBillingService {
 }
 
 type SdkworkBillingServiceCopy = ReturnType<typeof createSdkworkBillingMessages>["service"];
+
+function normalizeUsageRecords(
+  records: readonly Partial<SdkworkBillingUsageRecord>[],
+  copy: SdkworkBillingServiceCopy,
+): SdkworkBillingUsageRecord[] {
+  const text = (value: unknown, fallback: string) => (
+    typeof value === "string" && value.trim() ? value.trim() : fallback
+  );
+
+  return records.map((record, index) => ({
+    capability: text(record.capability, copy.defaultCapability),
+    costCny: toSdkworkPaymentNumber(record.costCny),
+    id: text(record.id, `usage-${index + 1}`),
+    model: text(record.model, copy.defaultModel),
+    provider: text(record.provider, copy.defaultProvider),
+    title: text(record.title, copy.defaultUsageTitle),
+    unitLabel: text(record.unitLabel, copy.defaultUnitLabel),
+    units: toSdkworkPaymentNumber(record.units),
+    usageAt: text(record.usageAt, new Date(0).toISOString()),
+    workspace: text(record.workspace, copy.defaultWorkspace),
+  }));
+}
 
 function createEmptyDashboard(
   budgetPolicy: Partial<SdkworkBillingBudgetPolicy> | undefined,
@@ -247,7 +269,7 @@ export function createSdkworkBillingService(
         invoiceService.getDashboard(),
         offerService.getDashboard(),
       ]);
-      const usageSummary = summarizeSdkworkBillingUsage(usageRecords, {
+      const usageSummary = summarizeSdkworkBillingUsage(normalizeUsageRecords(usageRecords, copy), {
         budgetPolicy: resolvedBudgetPolicy,
         referenceDate: config.referenceDate,
       });

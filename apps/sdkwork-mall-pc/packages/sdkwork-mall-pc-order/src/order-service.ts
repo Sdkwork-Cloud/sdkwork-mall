@@ -1,4 +1,5 @@
 import {
+  createSdkworkWriteCommandHeaders,
   getSdkworkOrderService,
   hasSdkworkOrderSession,
   requireSdkworkOrderSession,
@@ -513,11 +514,16 @@ export function createSdkworkOrderService(
 
     async payOrder(input) {
       requireSdkworkOrderSession(copy.signInRequired);
+      const body = {
+        paymentMethod: toSdkworkOrderOptionalString(input.paymentMethod),
+        paymentPassword: toSdkworkOrderOptionalString(input.paymentPassword),
+      };
       const result = unwrapSdkworkOrderResponse<RemotePaymentParams>(
-        await getOrderService().orders.pay(input.orderId, {
-          paymentMethod: toSdkworkOrderOptionalString(input.paymentMethod),
-          paymentPassword: toSdkworkOrderOptionalString(input.paymentPassword),
-        }),
+        await getOrderService().orders.payments.create(
+          input.orderId,
+          body,
+          createSdkworkWriteCommandHeaders("orders.payments.create", body),
+        ),
         copy.payFailed,
       );
 

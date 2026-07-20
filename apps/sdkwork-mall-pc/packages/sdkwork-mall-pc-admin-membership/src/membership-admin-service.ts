@@ -66,7 +66,7 @@ export interface SdkworkMembershipAdminMembership {
   status: SdkworkMembershipAdminStatus;
 }
 
-export interface SdkworkMembershipAdminMembershipUpdateInput {
+export interface SdkworkMembershipAdminMembershipUpdateInput extends Record<string, unknown> {
   status: SdkworkMembershipAdminStatus;
 }
 

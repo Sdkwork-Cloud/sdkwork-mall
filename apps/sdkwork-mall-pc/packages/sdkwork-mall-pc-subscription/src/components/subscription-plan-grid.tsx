@@ -2,7 +2,7 @@ import { Button } from "@sdkwork/ui-pc-react";
 import type {
   SdkworkMembershipBenefit,
   SdkworkMembershipSummary,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import {
   createSdkworkSubscriptionPanelStyle,
   createSdkworkSubscriptionToneStyle,

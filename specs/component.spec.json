@@ -47,9 +47,14 @@
   ],
   "contracts": {
     "sdkDependencies": [
+      "sdkwork-account-app-sdk",
       "sdkwork-commerce-app-sdk",
       "sdkwork-commerce-backend-sdk",
-      "sdkwork-iam-app-sdk"
+      "sdkwork-iam-app-sdk",
+      "sdkwork-membership-app-sdk",
+      "sdkwork-order-app-sdk",
+      "sdkwork-payment-app-sdk",
+      "sdkwork-promotion-app-sdk"
     ],
     "dependencyApiSurfaces": [
       {
@@ -61,6 +66,31 @@
         "sdkFamily": "sdkwork-commerce-backend-sdk",
         "mode": "external",
         "baseUrlConfigKey": "SDKWORK_COMMERCE_BACKEND_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-account-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_ACCOUNT_APP_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-membership-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_MEMBERSHIP_APP_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-order-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_ORDER_APP_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-payment-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_PAYMENT_APP_API_BASE_URL"
+      },
+      {
+        "sdkFamily": "sdkwork-promotion-app-sdk",
+        "mode": "external",
+        "baseUrlConfigKey": "SDKWORK_PROMOTION_APP_API_BASE_URL"
       }
     ]
   }

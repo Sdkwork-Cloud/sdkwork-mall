@@ -9,8 +9,16 @@ import {
 } from "@sdkwork/account-service";
 import {
   configureSdkworkMembershipSessionTokenProvider,
+  type SdkworkMembershipAppService,
   type SdkworkMembershipSessionTokens,
 } from "@sdkwork/membership-service";
+import { APP_MEMBERSHIP_METHOD_TREE } from "@sdkwork/membership-sdk-ports";
+import { APP_PAYMENT_METHOD_TREE } from "@sdkwork/payment-sdk-ports";
+import {
+  configureSdkworkPaymentSessionTokenProvider,
+  type SdkworkPaymentAppService,
+  type SdkworkPaymentSessionTokens,
+} from "@sdkwork/payment-service";
 import {
   configureSdkworkPromotionSessionTokenProvider,
   type SdkworkPromotionSessionTokens,
@@ -19,12 +27,19 @@ import {
   SDKWORK_COMMERCE_APP_SDK_REQUIRED_METHODS,
   SDKWORK_COMMERCE_BACKEND_SDK_REQUIRED_METHODS,
 } from "@sdkwork/mall-commerce-sdk-ports";
+import { APP_ORDER_METHOD_TREE } from "@sdkwork/order-sdk-ports";
+import {
+  configureSdkworkOrderSessionTokenProvider,
+  type SdkworkOrderAppService,
+  type SdkworkOrderSessionTokens,
+} from "@sdkwork/order-service";
 
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends (...args: infer TArgs) => infer TReturn ? (...args: TArgs) => TReturn : DeepPartial<T[K]>;
 };
 
 type MockNode = ReturnType<typeof missing> | { [key: string]: MockNode };
+type MockMethodTree = { readonly [key: string]: true | MockMethodTree };
 
 export function createCommerceServiceMock(
   overrides: DeepPartial<SdkworkCommerceService> = {},
@@ -72,6 +87,21 @@ function addMissingMethod(root: { [key: string]: MockNode }, method: string): vo
   node[segments.at(-1)!] = missing(method);
 }
 
+function addMissingMethodsFromTree(
+  root: { [key: string]: MockNode },
+  tree: MockMethodTree,
+  prefix: readonly string[] = [],
+): void {
+  for (const [key, marker] of Object.entries(tree)) {
+    const path = [...prefix, key];
+    if (marker === true) {
+      addMissingMethod(root, path.join("."));
+    } else {
+      addMissingMethodsFromTree(root, marker, path);
+    }
+  }
+}
+
 function missing(name: string) {
   return async () => {
     throw new Error(`Missing commerce service test method: ${name}`);
@@ -96,24 +126,37 @@ function mergeCommerceService<T>(base: T, overrides: DeepPartial<T>): T {
 }
 
 export function createPaymentServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-) {
-  return createCommerceServiceMock(overrides);
+  overrides: DeepPartial<SdkworkPaymentAppService> = {},
+): SdkworkPaymentAppService {
+  const service = {} as SdkworkPaymentAppService & { [key: string]: MockNode };
+  addMissingMethodsFromTree(service, { payments: APP_PAYMENT_METHOD_TREE.payments });
+  return mergeCommerceService(service, overrides);
 }
 
-export const configurePaymentServiceMockSession = configureCommerceServiceMockSession;
-export const resetPaymentServiceMockSession = resetCommerceServiceMockSession;
+export function configurePaymentServiceMockSession(
+  tokens: SdkworkPaymentSessionTokens = { authToken: "payment-auth-token" },
+): void {
+  configureSdkworkPaymentSessionTokenProvider(() => tokens);
+}
+
+export function resetPaymentServiceMockSession(): void {
+  configureSdkworkPaymentSessionTokenProvider(null);
+}
 
 export function createOrderServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-) {
-  return createCommerceServiceMock(overrides);
+  overrides: DeepPartial<SdkworkOrderAppService> = {},
+): SdkworkOrderAppService {
+  const service = {} as SdkworkOrderAppService & { [key: string]: MockNode };
+  addMissingMethodsFromTree(service, APP_ORDER_METHOD_TREE);
+  return mergeCommerceService(service, overrides);
 }
 
 export function createMembershipServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-) {
-  return createCommerceServiceMock(overrides);
+  overrides: DeepPartial<SdkworkMembershipAppService> = {},
+): SdkworkMembershipAppService {
+  const service = {} as SdkworkMembershipAppService & { [key: string]: MockNode };
+  addMissingMethodsFromTree(service, APP_MEMBERSHIP_METHOD_TREE);
+  return mergeCommerceService(service, overrides);
 }
 
 export function createPromotionServiceMock(
@@ -128,8 +171,15 @@ export function createAccountServiceMock(
   return createCommerceServiceMock(overrides);
 }
 
-export const configureOrderServiceMockSession = configureCommerceServiceMockSession;
-export const resetOrderServiceMockSession = resetCommerceServiceMockSession;
+export function configureOrderServiceMockSession(
+  tokens: SdkworkOrderSessionTokens = { authToken: "order-auth-token" },
+): void {
+  configureSdkworkOrderSessionTokenProvider(() => tokens);
+}
+
+export function resetOrderServiceMockSession(): void {
+  configureSdkworkOrderSessionTokenProvider(null);
+}
 export function configureMembershipServiceMockSession(
   tokens: SdkworkMembershipSessionTokens = { authToken: "membership-auth-token" },
 ): void {

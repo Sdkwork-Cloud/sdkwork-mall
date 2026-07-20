@@ -21,12 +21,12 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/mall-pc-cms": "*",
-    "@sdkwork/mall-pc-core": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/mall-pc-cms": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
-    "@sdkwork/mall-pc-admin-core": "*",
-    "@sdkwork/payment-service": "*"
+    "@sdkwork/mall-pc-admin-core": "workspace:*",
+    "@sdkwork/payment-service": "workspace:*"
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

@@ -290,22 +290,22 @@ describe("sdkwork-mall-pc-coupon service", () => {
       userCouponId: "UC-200",
     });
 
-    expect(commerceService.promotions.codes.redemptions.create).toHaveBeenCalledWith({
+    expect(promotionService.promotions.codes.redemptions.create).toHaveBeenCalledWith({
       channel: undefined,
       code: "SPRING80",
     });
-    expect(commerceService.promotions.userCoupons.claims.create).toHaveBeenCalledWith(
+    expect(promotionService.promotions.userCoupons.claims.create).toHaveBeenCalledWith(
       expect.objectContaining({
         offerId: "200",
         requestNo: expect.any(String),
         sourceType: "points_exchange",
       }),
     );
-    expect(commerceService.promotions.discountApplications.create).toHaveBeenCalledWith({
+    expect(promotionService.promotions.discountApplications.create).toHaveBeenCalledWith({
       orderId: "ORDER-9",
       userCouponId: "UC-200",
     });
-    expect(commerceService.promotions.discountApplications.reversals.create).toHaveBeenCalledWith({
+    expect(promotionService.promotions.discountApplications.reversals.create).toHaveBeenCalledWith({
       reason: "duplicate",
       userCouponId: "UC-200",
     });

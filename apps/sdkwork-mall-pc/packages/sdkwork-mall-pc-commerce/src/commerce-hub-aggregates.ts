@@ -1,7 +1,7 @@
 import { hasSdkworkAccountSession } from "@sdkwork/account-service";
 import { unwrapSdkworkPaymentResponse } from "@sdkwork/payment-service";
-import type { SdkworkCouponDashboardData } from "@sdkwork/mall-pc-coupon";
-import type { SdkworkMembershipDashboardData } from "@sdkwork/mall-pc-membership";
+import type { SdkworkCouponDashboardData } from "@sdkwork/mall-pc-coupon/headless";
+import type { SdkworkMembershipDashboardData } from "@sdkwork/mall-pc-membership/headless";
 
 import { getSdkworkCommerceRemotePort } from "./commerce-remote-port";
 

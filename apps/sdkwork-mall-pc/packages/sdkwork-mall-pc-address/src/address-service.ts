@@ -10,6 +10,8 @@ import {
   type SdkworkAddressRemotePort,
 } from "./address-remote-port";
 
+export type { SdkworkAddressInput, SdkworkAddressRecord } from "./address-remote-port";
+
 export interface CreateSdkworkAddressServiceOptions {
   remotePort?: SdkworkAddressRemotePort;
 }

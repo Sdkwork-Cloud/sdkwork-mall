@@ -29,17 +29,20 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/appbase-pc-react": "*",
+    "@sdkwork/appbase-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0",
-    "@sdkwork/mall-pc-admin-core": "*",
-    "@sdkwork/payment-service": "*",
-    "@sdkwork/membership-service": "*"
+    "@sdkwork/mall-pc-admin-core": "workspace:*",
+    "@sdkwork/payment-service": "workspace:*",
+    "@sdkwork/membership-service": "workspace:*"
   },
   "peerDependenciesMeta": {
     "@sdkwork/appbase-pc-react": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@sdkwork/mall-pc-admin-core": "workspace:*"
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

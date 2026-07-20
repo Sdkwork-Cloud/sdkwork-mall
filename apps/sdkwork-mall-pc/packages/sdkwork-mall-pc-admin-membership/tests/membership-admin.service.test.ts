@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  configureCommerceServiceMockSession,
+  configureMembershipServiceMockSession,
   createCommerceServiceMock,
-  resetCommerceServiceMockSession,
+  resetMembershipServiceMockSession,
 } from "../../../tests/test-utils/commerce-service-mock";
 import {
   createSdkworkMembershipAdminRouteIntent,
@@ -14,11 +14,14 @@ import {
 
 describe("sdkwork-mall-pc-admin-membership service", () => {
   beforeEach(() => {
-    configureCommerceServiceMockSession({ authToken: "admin-membership-token" });
+    configureMembershipServiceMockSession({
+      accessToken: "admin-membership-access-token",
+      authToken: "admin-membership-token",
+    });
   });
 
   afterEach(() => {
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
   });
 
   it("uses memberships admin i18n keys and documentation instead of legacy admin tier technical keys", () => {
@@ -37,7 +40,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
 
   it("loads standard admin membership levels, package groups, packages, memberships, and entitlements through commerce admin runtime", async () => {
     const levelCreate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         code: "pro",
         id: "level-pro",
@@ -47,7 +50,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const levelUpdate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         code: "pro",
         id: "level-pro",
@@ -57,14 +60,14 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const levelDelete = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         deleted: true,
         levelId: "level-pro",
       },
     });
     const packageGroupCreate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         billingCycle: "monthly",
         code: "monthly",
@@ -77,7 +80,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const packageGroupUpdate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         billingCycle: "monthly",
         code: "monthly",
@@ -90,14 +93,14 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const packageGroupDelete = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         deleted: true,
         packageGroupId: "group-monthly",
       },
     });
     const packageCreate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         code: "pro-monthly",
         currencyCode: "CNY",
@@ -111,7 +114,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const packageUpdate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         code: "pro-annual",
         currencyCode: "CNY",
@@ -125,14 +128,14 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const packageDelete = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         deleted: true,
         packageId: "package-pro-annual",
       },
     });
     const membershipUpdate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         expiresAt: "2027-01-01T00:00:00Z",
         id: "membership-1",
@@ -147,7 +150,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
         entitlements: {
           grants: {
             list: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: [
                 {
                   code: "priority-rendering",
@@ -165,7 +168,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           plans: {
             management: {
               list: vi.fn().mockResolvedValue({
-                code: "2000",
+                code: 0,
                 data: {
                   items: [
                     {
@@ -192,7 +195,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           },
           members: {
             list: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 records: [
                   {
@@ -211,7 +214,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           packageGroups: {
             management: {
               list: vi.fn().mockResolvedValue({
-                code: "2000",
+                code: 0,
                 data: [
                   {
                     billingCycle: "monthly",
@@ -233,7 +236,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           packages: {
             management: {
               list: vi.fn().mockResolvedValue({
-                code: "2000",
+                code: 0,
                 data: [
                   {
                     code: "pro-annual",
@@ -257,7 +260,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const service = createSdkworkMembershipAdminService({
-      commerceService,
+      adminRemotePort: { admin: commerceService.admin },
     });
 
     const dashboard = await service.getDashboard();
@@ -472,7 +475,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
 
   it("assigns packages to a package group by reusing the standard package update contract", async () => {
     const packageUpdate = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         code: "pro-monthly",
         currencyCode: "CNY",
@@ -495,7 +498,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
       },
     });
     const service = createSdkworkMembershipAdminService({
-      commerceService,
+      adminRemotePort: { admin: commerceService.admin },
     });
 
     await expect(
@@ -535,7 +538,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
   });
 
   it("returns a guest-safe empty dashboard and localizes mutation auth failures", async () => {
-    resetCommerceServiceMockSession();
+    resetMembershipServiceMockSession();
     const service = createSdkworkMembershipAdminService({
       locale: "zh-CN",
     });

@@ -7,7 +7,7 @@ import {
   estimateSdkworkCouponDiscountAmount,
   type SdkworkCouponDiscountInput,
   type SdkworkCouponStatus,
-} from "@sdkwork/mall-pc-coupon";
+} from "@sdkwork/mall-pc-coupon/headless";
 import type {
   SdkworkPaymentProductType,
   SdkworkPaymentProductTypeOption,

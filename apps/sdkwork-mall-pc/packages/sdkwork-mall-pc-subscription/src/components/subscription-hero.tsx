@@ -1,5 +1,5 @@
 import { Button } from "@sdkwork/ui-pc-react";
-import type { SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership";
+import type { SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership/headless";
 import type { SdkworkSubscriptionAction } from "../subscription";
 import {
   createSdkworkSubscriptionGlassStyle,

@@ -150,9 +150,14 @@
     "routeManifest": null,
     "sdkClients": [],
     "sdkDependencies": [
+      "sdkwork-account-app-sdk",
       "sdkwork-commerce-app-sdk",
       "sdkwork-commerce-backend-sdk",
-      "sdkwork-iam-app-sdk"
+      "sdkwork-iam-app-sdk",
+      "sdkwork-membership-app-sdk",
+      "sdkwork-order-app-sdk",
+      "sdkwork-payment-app-sdk",
+      "sdkwork-promotion-app-sdk"
     ],
     "dependencyApiExports": [],
     "dependencyApiSurfaces": [],

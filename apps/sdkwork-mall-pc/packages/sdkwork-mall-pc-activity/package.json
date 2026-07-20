@@ -21,11 +21,11 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/payment-service": "*",
-    "@sdkwork/mall-pc-cms": "*",
-    "@sdkwork/mall-pc-core": "*",
-    "@sdkwork/mall-pc-search": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/payment-service": "workspace:*",
+    "@sdkwork/mall-pc-cms": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*",
+    "@sdkwork/mall-pc-search": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-router-dom": ">=6.0.0 <8.0.0"
   },

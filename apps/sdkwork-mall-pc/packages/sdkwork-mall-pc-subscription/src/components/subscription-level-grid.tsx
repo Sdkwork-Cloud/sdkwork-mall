@@ -1,4 +1,4 @@
-import type { SdkworkMembershipLevel } from "@sdkwork/mall-pc-membership";
+import type { SdkworkMembershipLevel } from "@sdkwork/mall-pc-membership/headless";
 import {
   createSdkworkSubscriptionPanelStyle,
   createSdkworkSubscriptionToneStyle,

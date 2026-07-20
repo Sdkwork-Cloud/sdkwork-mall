@@ -4,13 +4,13 @@ import {
   type SdkworkWalletRechargePackage,
   type SdkworkWalletService,
   type SdkworkWalletTransaction,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 import {
   createSdkworkMembershipService,
   type SdkworkMembershipDashboardData,
   type SdkworkMembershipPlan,
   type SdkworkMembershipService,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 
 export type SdkworkPointsTransactionFilter = "all" | "earned" | "spent";
 export type SdkworkPointsTransactionDirection = Exclude<SdkworkPointsTransactionFilter, "all">;

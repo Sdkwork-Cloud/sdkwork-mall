@@ -7,8 +7,13 @@ import {
 import type { IamAppContext, IamDeploymentMode, IamEnvironment } from "@sdkwork/iam-contracts";
 import type { IamRuntime } from "@sdkwork/iam-runtime";
 import { normalizeSdkworkApiBaseUrl } from "@sdkwork/runtime-bootstrap";
-import { createClient as createCommerceAppClient } from "@sdkwork/clawrouter-app-sdk/domains";
-import { createClient as createCommerceBackendClient } from "@sdkwork/clawrouter-backend-sdk/domains";
+import { createClient as createAccountAppClient } from "@sdkwork/account-app-sdk";
+import { createCommerceAppSdkClient } from "@sdkwork/commerce-app-sdk";
+import { createClient as createCommerceBackendClient } from "@sdkwork/commerce-backend-sdk";
+import { createClient as createMembershipAppClient } from "@sdkwork/membership-app-sdk";
+import { createClient as createOrderAppClient } from "@sdkwork/order-app-sdk";
+import { createClient as createPaymentAppClient } from "@sdkwork/payment-app-sdk";
+import { createClient as createPromotionAppClient } from "@sdkwork/promotion-app-sdk";
 
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
 import {
@@ -21,6 +26,13 @@ import { createSdkworkMallPcSessionTokenManager } from "./sessionTokenManager";
 import type { SdkworkMallPcSdkClientInventory } from "./sdkClients";
 
 const APPBASE_APP_SDK_FAMILY_ID = "sdkwork-iam-app-sdk";
+const DOMAIN_APP_SDK_FAMILY_IDS = {
+  account: "sdkwork-account-app-sdk",
+  membership: "sdkwork-membership-app-sdk",
+  order: "sdkwork-order-app-sdk",
+  payment: "sdkwork-payment-app-sdk",
+  promotion: "sdkwork-promotion-app-sdk",
+} as const;
 const APP_API_PREFIX = "/app/v3/api";
 const BACKEND_API_PREFIX = "/backend/v3/api";
 
@@ -62,8 +74,13 @@ export function createSdkworkMallPcIamRuntime(
     createAppbaseAppClient: () => appbaseAppClient,
     localeProvider: () => options.config.i18n.defaultLocale,
     sdkClients: [
+      options.sdkClients.accountAppClient,
       options.sdkClients.commerceAppClient,
       options.sdkClients.commerceBackendClient,
+      options.sdkClients.membershipAppClient,
+      options.sdkClients.orderAppClient,
+      options.sdkClients.paymentAppClient,
+      options.sdkClients.promotionAppClient,
     ] as SdkworkAppbasePcAuthRuntimeSdkClient[],
     sessionBridge: {
       clearSession: () => {
@@ -86,7 +103,19 @@ export function createSdkworkMallPcSdkClientsWithTokenManager(
   config: SdkworkMallPcRuntimeConfig,
   tokenManager: ReturnType<typeof createSdkworkMallPcSessionTokenManager>,
 ): SdkworkMallPcSdkClientInventory {
-  const commerceAppClient = createCommerceAppClient({
+  const createAppClientConfig = (sdkFamily: string) => ({
+    authMode: "dual-token" as const,
+    baseUrl: normalizeGeneratedSdkBaseUrl(
+      resolveDependencyAppApiBaseUrl(config, sdkFamily),
+      APP_API_PREFIX,
+    ),
+    platform: "pc",
+    tokenManager,
+  });
+  const accountAppClient = createAccountAppClient(
+    createAppClientConfig(DOMAIN_APP_SDK_FAMILY_IDS.account),
+  );
+  const commerceAppClient = createCommerceAppSdkClient({
     authMode: "dual-token",
     baseUrl: normalizeGeneratedSdkBaseUrl(config.appApiBaseUrl, APP_API_PREFIX),
     platform: "pc",
@@ -100,19 +129,49 @@ export function createSdkworkMallPcSdkClientsWithTokenManager(
         tokenManager,
       })
     : undefined;
+  const membershipAppClient = createMembershipAppClient(
+    createAppClientConfig(DOMAIN_APP_SDK_FAMILY_IDS.membership),
+  );
+  const orderAppClient = createOrderAppClient(
+    createAppClientConfig(DOMAIN_APP_SDK_FAMILY_IDS.order),
+  );
+  const paymentAppClient = createPaymentAppClient(
+    createAppClientConfig(DOMAIN_APP_SDK_FAMILY_IDS.payment),
+  );
+  const promotionAppClient = createPromotionAppClient(
+    createAppClientConfig(DOMAIN_APP_SDK_FAMILY_IDS.promotion),
+  );
 
+  accountAppClient.setTokenManager(tokenManager);
   commerceAppClient.setTokenManager(tokenManager);
   commerceBackendClient?.setTokenManager(tokenManager);
+  membershipAppClient.setTokenManager(tokenManager);
+  orderAppClient.setTokenManager(tokenManager);
+  paymentAppClient.setTokenManager(tokenManager);
+  promotionAppClient.setTokenManager(tokenManager);
 
   return {
+    accountAppClient,
     appApiBaseUrl: normalizeSdkworkApiBaseUrl(config.appApiBaseUrl, "app"),
     backendApiBaseUrl: config.backendApiBaseUrl
       ? normalizeSdkworkApiBaseUrl(config.backendApiBaseUrl, "backend")
       : undefined,
     commerceAppClient,
     commerceBackendClient,
+    membershipAppClient,
+    orderAppClient,
+    paymentAppClient,
+    promotionAppClient,
     sdkFamilies: {
-      app: ["sdkwork-commerce-app-sdk", "sdkwork-iam-app-sdk"],
+      app: [
+        "sdkwork-account-app-sdk",
+        "sdkwork-commerce-app-sdk",
+        "sdkwork-iam-app-sdk",
+        "sdkwork-membership-app-sdk",
+        "sdkwork-order-app-sdk",
+        "sdkwork-payment-app-sdk",
+        "sdkwork-promotion-app-sdk",
+      ],
       backendAdmin: ["sdkwork-commerce-backend-sdk", "sdkwork-iam-backend-sdk"],
     },
   };
@@ -209,6 +268,14 @@ function resolveSessionStorage(): Storage | undefined {
   }
   migrateLegacySessionStorage(SDKWORK_COMMERCE_PC_SESSION_STORAGE_KEY);
   return window.localStorage;
+}
+
+function resolveDependencyAppApiBaseUrl(
+  config: SdkworkMallPcRuntimeConfig,
+  sdkFamily: string,
+): string {
+  return config.sdkBaseUrls?.dependencySdkBaseUrls?.[sdkFamily]?.appApiBaseUrl
+    ?? config.appApiBaseUrl;
 }
 
 function migrateLegacySessionStorage(storageKey: string): void {

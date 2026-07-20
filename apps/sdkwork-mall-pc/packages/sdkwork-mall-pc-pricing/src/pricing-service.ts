@@ -30,7 +30,7 @@ import {
   type SdkworkWalletOverview,
   type SdkworkWalletRechargePackage,
   type SdkworkWalletService,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 import {
   createEmptySdkworkPricingCatalog,
   createSdkworkPricingHybridPlan,

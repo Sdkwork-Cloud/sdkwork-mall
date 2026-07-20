@@ -531,7 +531,7 @@ export function createSdkworkPaymentService(
 
       const [methodsPayload, statisticsPayload, pagePayload] = await Promise.all([
         getPaymentService().payments.methods.list({ clientType }),
-        getPaymentService().payments.statistics.retrieve(),
+        getPaymentService().payments.statistics.summary.retrieve(),
         getPaymentService().payments.records.list({
             page: 1,
             pageSize,
@@ -592,7 +592,7 @@ export function createSdkworkPaymentService(
     async getPaymentStatusByOutTradeNo(outTradeNo) {
       requireSdkworkPaymentSession(copy.signInRequired);
       const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus>(
-        await getPaymentService().payments.status.retrieveByOutTradeNo(outTradeNo),
+        await getPaymentService().payments.status.outTradeNo.retrieve(outTradeNo),
         copy.statusByOutTradeNoFailed,
       );
 
@@ -601,12 +601,12 @@ export function createSdkworkPaymentService(
 
     async listOrderPayments(orderId) {
       requireSdkworkPaymentSession(copy.signInRequired);
-      const result = unwrapSdkworkPaymentResponse<RemotePaymentStatus[]>(
-        await getPaymentService().payments.orderPayments.list(orderId),
+      const result = unwrapSdkworkPaymentResponse<RemotePageEnvelope<RemotePaymentStatus>>(
+        await getPaymentService().payments.records.list({ orderId, page: 1, pageSize: 200 }),
         copy.historyFailed,
       );
 
-      return (result ?? [])
+      return (result.content ?? [])
         .map((payment) => mapSummary(payment, messages))
         .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime());
     },

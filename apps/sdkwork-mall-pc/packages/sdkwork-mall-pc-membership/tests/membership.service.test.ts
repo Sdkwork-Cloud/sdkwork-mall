@@ -15,7 +15,10 @@ const proLevelIcon = {
 
 describe("sdkwork-mall-pc-membership service", () => {
   beforeEach(() => {
-    configureMembershipServiceMockSession({ authToken: "membership-auth-token" });
+    configureMembershipServiceMockSession({
+      accessToken: "membership-access-token",
+      authToken: "membership-auth-token",
+    });
   });
 
   afterEach(() => {
@@ -27,7 +30,7 @@ describe("sdkwork-mall-pc-membership service", () => {
       memberships: {
         current: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               expireTime: "2026-06-30T00:00:00.000Z",
               growthValue: 180,
@@ -42,7 +45,7 @@ describe("sdkwork-mall-pc-membership service", () => {
           }),
           status: {
             retrieve: vi.fn().mockResolvedValue({
-              code: "2000",
+              code: 0,
               data: {
                 isMember: true,
                 pointBalance: 2400,
@@ -53,7 +56,7 @@ describe("sdkwork-mall-pc-membership service", () => {
         },
         benefits: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 benefitKey: "priority-rendering",
@@ -80,7 +83,7 @@ describe("sdkwork-mall-pc-membership service", () => {
         },
         plans: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 description: "Entry tier",
@@ -109,7 +112,7 @@ describe("sdkwork-mall-pc-membership service", () => {
         },
         packages: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 description: "Best for teams",
@@ -184,7 +187,7 @@ describe("sdkwork-mall-pc-membership service", () => {
   it("returns a guest-safe membership dashboard with public package plans when the wallet overview is anonymous", async () => {
     resetMembershipServiceMockSession();
     const packagesList = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: [
         {
           description: "Starter public plan",
@@ -228,7 +231,7 @@ describe("sdkwork-mall-pc-membership service", () => {
 
   it("purchases, renews, and upgrades membership through the generated SDK boundary", async () => {
     const purchase = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: 199,
         durationDays: 30,
@@ -240,7 +243,7 @@ describe("sdkwork-mall-pc-membership service", () => {
       },
     });
     const renew = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: 399,
         durationDays: 365,
@@ -252,7 +255,7 @@ describe("sdkwork-mall-pc-membership service", () => {
       },
     });
     const upgrade = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         amount: 199,
         durationDays: 30,
@@ -346,13 +349,16 @@ describe("sdkwork-mall-pc-membership service", () => {
       }),
     ).rejects.toThrow("Please sign in before managing memberships.");
 
-    configureMembershipServiceMockSession({ authToken: "membership-auth-token" });
+    configureMembershipServiceMockSession({
+      accessToken: "membership-access-token",
+      authToken: "membership-auth-token",
+    });
     const localizedMutationService = createSdkworkMembershipService({
       membershipService: createMembershipServiceMock({
         memberships: {
           purchases: {
             create: vi.fn().mockResolvedValue({
-              code: "5000",
+              code: 5000,
             }),
           },
         },

@@ -9,6 +9,13 @@ import {
   unwrapSdkworkAccountResponse,
   type SdkworkAccountAppService,
 } from "@sdkwork/account-service";
+import {
+  createSdkworkPointsRechargeService,
+  createSdkworkWriteCommandHeaders,
+  getSdkworkOrderService,
+  unwrapSdkworkOrderResponse,
+  type SdkworkOrderAppService,
+} from "@sdkwork/order-service";
 
 export interface SdkworkWalletAccount {
   availablePoints: number;
@@ -106,6 +113,7 @@ export interface SdkworkWalletWithdrawResult {
 
 export interface CreateSdkworkWalletServiceOptions {
   accountService?: SdkworkAccountAppService;
+  orderService?: SdkworkOrderAppService;
 }
 
 export interface SdkworkWalletService {
@@ -163,15 +171,8 @@ interface RemoteRechargePackage {
   sortWeight?: number | string;
 }
 
-interface RemoteRechargeResult {
-  cashAmount?: number | string;
-  paymentMethod?: string;
-  points?: number | string;
-  processedAt?: string;
-  remainingPoints?: number | string;
-  requestNo?: string;
-  status?: string;
-  transactionId?: string;
+interface RemoteRechargeSettings {
+  basePointsPerCny?: number | string;
 }
 
 interface RemoteWithdrawResult {
@@ -292,19 +293,6 @@ function mapRechargePackages(
   }));
 }
 
-function mapRechargeResult(result: RemoteRechargeResult | null | undefined): SdkworkWalletRechargeResult {
-  return {
-    cashAmountCny: toNullableSdkworkAccountNumber(result?.cashAmount),
-    paymentMethod: toSdkworkAccountOptionalString(result?.paymentMethod),
-    points: toSdkworkAccountNumber(result?.points),
-    processedAt: toSdkworkAccountOptionalString(result?.processedAt),
-    remainingPoints: toNullableSdkworkAccountNumber(result?.remainingPoints),
-    requestNo: toSdkworkAccountOptionalString(result?.requestNo),
-    status: toSdkworkAccountMutationStatus(toSdkworkAccountOptionalString(result?.status)),
-    transactionId: toSdkworkAccountOptionalString(result?.transactionId),
-  };
-}
-
 function mapWithdrawResult(
   result: RemoteWithdrawResult | null | undefined,
 ): SdkworkWalletWithdrawResult {
@@ -328,6 +316,10 @@ export function createSdkworkWalletService(
   options: CreateSdkworkWalletServiceOptions = {},
 ): SdkworkWalletService {
   const getAccountService = () => options.accountService ?? getSdkworkAccountService();
+  const getOrderService = () => options.orderService ?? getSdkworkOrderService();
+  const pointsRechargeService = createSdkworkPointsRechargeService({
+    appService: options.orderService,
+  });
 
   return {
     getEmptyOverview() {
@@ -341,6 +333,7 @@ export function createSdkworkWalletService(
 
       const pageSize = config.pageSize ?? DEFAULT_HISTORY_PAGE_SIZE;
       const accountService = getAccountService();
+      const orderService = getOrderService();
 
       const [
         summaryPayload,
@@ -357,19 +350,24 @@ export function createSdkworkWalletService(
               sortField: "createdAt",
         }),
         accountService.wallet.accounts.points.retrieve(),
-        accountService.wallet.exchangeRate.retrieve(),
-        accountService.recharges.packages.list(),
+        orderService.recharges.settings.retrieve(),
+        pointsRechargeService.listPackages(),
       ]);
       const summary = unwrapSdkworkAccountResponse<RemoteAccountSummary | null>(summaryPayload);
       const historyPage = unwrapSdkworkAccountResponse<{ content?: RemoteHistoryItem[] }>(historyPagePayload);
       const pointsAccount = unwrapSdkworkAccountResponse<RemotePointsAccount | null>(pointsAccountPayload);
-      const pointsToCashRate = unwrapSdkworkAccountResponse<number | null>(pointsToCashRatePayload);
-      const rechargePackages = unwrapSdkworkAccountResponse<RemoteRechargePackage[]>(rechargePackagesPayload);
+      const rechargeSettings = unwrapSdkworkOrderResponse<RemoteRechargeSettings>(pointsToCashRatePayload);
+      const rechargePackages = rechargePackagesPayload.map((item) => ({
+        id: item.id,
+        name: `${item.points} points`,
+        pointAmount: item.points,
+        price: item.priceAmount,
+      }));
 
       return {
         account: mapAccount(summary, pointsAccount),
         isAuthenticated: true,
-        pointsToCashRate: toNullableSdkworkAccountNumber(pointsToCashRate),
+        pointsToCashRate: toNullableSdkworkAccountNumber(rechargeSettings.basePointsPerCny),
         rechargePackages: mapRechargePackages(rechargePackages),
         transactions: (historyPage.content ?? []).map(mapTransaction),
       };
@@ -377,17 +375,26 @@ export function createSdkworkWalletService(
 
     async rechargePoints(input) {
       requireSdkworkAccountSession("Please sign in to manage wallet balances.");
-      const result = unwrapSdkworkAccountResponse<RemoteRechargeResult>(
-        await getAccountService().recharges.orders.create({
-          paymentMethod: toSdkworkAccountOptionalString(input.paymentMethod),
-          points: input.points,
-          remarks: toSdkworkAccountOptionalString(input.remarks),
-          requestNo: toSdkworkAccountOptionalString(input.requestNo),
-        }),
-        "Failed to recharge points.",
-      );
+      const packages = await pointsRechargeService.listPackages();
+      const rechargePackage = packages.find((item) => item.points === input.points);
+      if (!rechargePackage) {
+        throw new Error("The selected recharge package is unavailable.");
+      }
+      const result = await pointsRechargeService.createOrder({
+        packageId: rechargePackage.id,
+        paymentMethod: toSdkworkAccountOptionalString(input.paymentMethod),
+        source: "mall-wallet",
+      });
 
-      return mapRechargeResult(result);
+      return {
+        cashAmountCny: result.amountCny,
+        paymentMethod: toSdkworkAccountOptionalString(input.paymentMethod),
+        points: result.points,
+        remainingPoints: null,
+        requestNo: toSdkworkAccountOptionalString(input.requestNo),
+        status: result.status,
+        transactionId: result.orderId,
+      };
     },
 
     async withdrawCash(input) {
@@ -422,16 +429,19 @@ export function createSdkworkWalletService(
         throw new Error("Request no must use 6-64 letters, numbers, underscores, or hyphens.");
       }
 
-      const result = unwrapSdkworkAccountResponse<RemoteWithdrawResult>(
-        await getAccountService().wallet.withdrawalTransfers.create({
-          accountName,
-          accountNo,
+      const body = {
+          asset: "cash" as const,
           amount: input.amountCny,
-          bankName,
-          remarks: toSdkworkAccountOptionalString(input.remarks),
-          requestNo,
-          withdrawMethod: destinationCode,
-        }),
+          currencyCode: "CNY",
+          payoutAccountRef: accountNo,
+          payoutMethod: destinationCode,
+          reasonCode: toSdkworkAccountOptionalString(input.remarks),
+      };
+      const result = unwrapSdkworkOrderResponse<RemoteWithdrawResult>(
+        await getOrderService().withdrawals.requests.create(
+          body,
+          createSdkworkWriteCommandHeaders("withdrawals.requests.create", body, requestNo),
+        ),
         "Failed to withdraw cash.",
       );
 

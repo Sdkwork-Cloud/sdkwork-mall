@@ -1,33 +1,30 @@
-import type { AccountAppSdkClient } from "@sdkwork/account-sdk-ports";
 import {
   configureSdkworkAccountAppServiceProvider,
   configureSdkworkAccountSessionTokenProvider,
   createSdkworkAccountAppService,
 } from "@sdkwork/account-service";
-import type { MembershipAppSdkClient } from "@sdkwork/membership-sdk-ports";
 import {
   configureSdkworkMembershipAppServiceProvider,
   configureSdkworkMembershipSessionTokenProvider,
   createSdkworkMembershipAppService,
 } from "@sdkwork/membership-service";
-import type { OrderAppSdkClient } from "@sdkwork/order-sdk-ports";
 import {
   configureSdkworkOrderAppServiceProvider,
   configureSdkworkOrderSessionTokenProvider,
   createSdkworkOrderAppService,
 } from "@sdkwork/order-service";
-import type { PaymentAppSdkClient } from "@sdkwork/payment-sdk-ports";
 import {
   configureSdkworkPaymentAppServiceProvider,
   configureSdkworkPaymentSessionTokenProvider,
   createSdkworkPaymentAppService,
 } from "@sdkwork/payment-service";
-import type { PromotionAppSdkClient } from "@sdkwork/promotion-sdk-ports";
 import {
   configureSdkworkPromotionAppServiceProvider,
   configureSdkworkPromotionSessionTokenProvider,
   createSdkworkPromotionAppService,
 } from "@sdkwork/promotion-service";
+
+import type { SdkworkMallPcSdkClientInventory } from "./sdkClients";
 
 export interface SdkworkMallPcDomainSessionTokens {
   accessToken?: string;
@@ -35,29 +32,46 @@ export interface SdkworkMallPcDomainSessionTokens {
   refreshToken?: string;
 }
 
-type CommerceAppSlice = AccountAppSdkClient["commerce"];
-
 export function configureSdkworkMallPcDomainServiceProviders(
-  getCommerceAppSlice: () => CommerceAppSlice,
+  sdkClients: SdkworkMallPcSdkClientInventory,
   readSessionTokens: () => SdkworkMallPcDomainSessionTokens,
 ): void {
-  const commerceClient = () => getCommerceAppSlice();
-
   configureSdkworkAccountAppServiceProvider(() => createSdkworkAccountAppService({
-    appClient: { commerce: commerceClient() } as unknown as AccountAppSdkClient,
+    appClient: { commerce: sdkClients.accountAppClient },
   }));
   configureSdkworkMembershipAppServiceProvider(() => createSdkworkMembershipAppService({
-    appClient: { commerce: commerceClient() } as unknown as MembershipAppSdkClient,
+    appClient: { commerce: sdkClients.membershipAppClient },
   }));
   configureSdkworkOrderAppServiceProvider(() => createSdkworkOrderAppService({
-    appClient: { commerce: commerceClient() } as unknown as OrderAppSdkClient,
+    appClient: { commerce: sdkClients.orderAppClient },
   }));
   configureSdkworkPaymentAppServiceProvider(() => createSdkworkPaymentAppService({
-    appClient: { commerce: commerceClient() } as unknown as PaymentAppSdkClient,
+    appClient: {
+      commerce: { payments: sdkClients.paymentAppClient.commerce.payments },
+      refunds: sdkClients.paymentAppClient.commerce.refunds,
+    },
   }));
-  configureSdkworkPromotionAppServiceProvider(() => createSdkworkPromotionAppService({
-    appClient: { commerce: commerceClient() } as unknown as PromotionAppSdkClient,
-  }));
+  configureSdkworkPromotionAppServiceProvider(() => {
+    const discountApplications = sdkClients.promotionAppClient.promotions.discountApplications;
+    return createSdkworkPromotionAppService({
+      appClient: {
+        commerce: {
+          promotions: {
+            codes: sdkClients.promotionAppClient.promotions.codes,
+            discountApplications: {
+              create: discountApplications.create.bind(discountApplications),
+              release: discountApplications.releases.create.bind(discountApplications.releases),
+              reversals: discountApplications.reversals,
+              rollback: discountApplications.rollback.bind(discountApplications),
+              settle: discountApplications.settlements.create.bind(discountApplications.settlements),
+            },
+            offers: sdkClients.promotionAppClient.promotions.offers,
+            userCoupons: sdkClients.promotionAppClient.promotions.userCoupons,
+          },
+        },
+      },
+    });
+  });
 
   configureSdkworkAccountSessionTokenProvider(readSessionTokens);
   configureSdkworkMembershipSessionTokenProvider(readSessionTokens);

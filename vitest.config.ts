@@ -92,7 +92,9 @@ function loadTsconfigAliases() {
     "react/jsx-dev-runtime",
   ]);
 
-  return Object.entries(pathMappings).flatMap(([find, replacements]) => {
+  return Object.entries(pathMappings).sort(([left], [right]) => (
+    right.length - left.length
+  )).flatMap(([find, replacements]) => {
     if (runtimeAliases.has(find)) {
       return [];
     }
@@ -103,13 +105,15 @@ function loadTsconfigAliases() {
     }
 
     return [{
-      find: find.endsWith("/*") ? find.slice(0, -2) : find,
+      find: find.endsWith("/*")
+        ? find.slice(0, -2)
+        : new RegExp(`^${find.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
       replacement: path.resolve(
         workspaceRoot,
         replacement.endsWith("/*") ? replacement.slice(0, -2) : replacement,
       ),
     }];
-  }).sort((left, right) => right.find.length - left.find.length);
+  });
 }
 
 export default defineConfig({

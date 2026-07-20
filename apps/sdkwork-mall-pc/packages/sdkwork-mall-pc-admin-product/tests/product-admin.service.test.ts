@@ -86,7 +86,9 @@ describe("sdkwork-mall-pc-admin-product service", () => {
         },
       },
     });
-    const service = createCommerceProductAdminService({ commerceService });
+    const service = createCommerceProductAdminService({
+      catalogAdmin: commerceService.admin.catalog,
+    });
 
     await expect(service.listCategories({ page: "1" })).resolves.toEqual({ data: [{ id: "category-1" }] });
     await expect(service.createCategory({ name: "Root" })).resolves.toEqual({ data: { id: "category-1" } });

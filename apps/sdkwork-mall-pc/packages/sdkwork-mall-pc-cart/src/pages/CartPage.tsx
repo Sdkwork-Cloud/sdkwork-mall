@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Badge, Button, Checkbox, EmptyState, LoadingBlock, StatusNotice } from "@sdkwork/ui-pc-react";
-import { formatSdkworkPaymentCurrencyCny } from "@sdkwork/payment-service";
+import { formatSdkworkPaymentCurrencyCny as formatSdkworkCommerceCurrencyCny } from "@sdkwork/payment-service";
 import { searchMallProducts } from "@sdkwork/mall-pc-search/search-service";
 import {
   createMallCheckoutQuote,

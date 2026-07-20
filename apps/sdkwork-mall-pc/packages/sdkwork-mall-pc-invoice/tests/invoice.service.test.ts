@@ -36,7 +36,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
       invoices: {
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               completedInvoices: 1,
               pendingInvoices: 1,
@@ -47,7 +47,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
         },
         mine: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               content: [
                 {
@@ -124,7 +124,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
     const commerceService = createCommerceServiceMock({
       invoices: {
         retrieve: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             bankAccount: "622202000000000001",
             bankName: "ICBC",
@@ -149,7 +149,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
         }),
         items: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 amountExcludingTax: 264.5,
@@ -197,10 +197,10 @@ describe("sdkwork-mall-pc-invoice service", () => {
 
   it("routes create, update, submit, and cancel mutations through the generated invoice SDK boundary", async () => {
     const cancel = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
     });
     const createInvoice = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         createdAt: "2026-04-03T09:00:00.000Z",
         currency: "CNY",
@@ -213,10 +213,10 @@ describe("sdkwork-mall-pc-invoice service", () => {
       },
     });
     const submit = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
     });
     const updateInvoice = vi.fn().mockResolvedValue({
-      code: "2000",
+      code: 0,
       data: {
         createdAt: "2026-04-03T09:00:00.000Z",
         currency: "CNY",
@@ -313,7 +313,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
       invoices: {
         statistics: {
           retrieve: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               completedInvoices: 0,
               pendingInvoices: 1,
@@ -324,7 +324,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
         },
         mine: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: {
               content: [
                 {
@@ -339,7 +339,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
           }),
         },
         retrieve: vi.fn().mockResolvedValue({
-          code: "2000",
+          code: 0,
           data: {
             createdAt: "2026-04-03T09:00:00.000Z",
             invoiceId: "INV-2001",
@@ -350,7 +350,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
         }),
         items: {
           list: vi.fn().mockResolvedValue({
-            code: "2000",
+            code: 0,
             data: [
               {
                 amountExcludingTax: 77.88,
@@ -400,7 +400,7 @@ describe("sdkwork-mall-pc-invoice service", () => {
       remotePort: createInvoiceRemotePortFromCommerceMock(createCommerceServiceMock({
         invoices: {
           create: vi.fn().mockResolvedValue({
-            code: "5000",
+            code: 5000,
           }),
         },
       })),

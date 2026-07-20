@@ -24,11 +24,11 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/mall-pc-coupon": "*",
-    "@sdkwork/mall-pc-payment": "*",
-    "@sdkwork/ui-pc-react": "*",
-    "@sdkwork/mall-pc-membership": "*",
-    "@sdkwork/mall-pc-wallet": "*",
+    "@sdkwork/mall-pc-coupon": "workspace:*",
+    "@sdkwork/mall-pc-payment": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
+    "@sdkwork/mall-pc-membership": "workspace:*",
+    "@sdkwork/mall-pc-wallet": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },

@@ -13,13 +13,18 @@ import {
 } from "../src";
 
 describe("sdkwork-mall-pc-coupon appearance", () => {
-  it("exposes coupon appearance seam from package index", () => {
+  it("exposes coupon appearance through the delegated headless entrypoint", () => {
     const indexFile = readFileSync(
       resolve(import.meta.dirname, "../src/index.ts"),
       "utf8",
     );
+    const headlessFile = readFileSync(
+      resolve(import.meta.dirname, "../src/headless.ts"),
+      "utf8",
+    );
 
-    expect(indexFile).toMatch(/export \* from "\.\/coupon-appearance(?:\.ts)?";/);
+    expect(indexFile).toMatch(/export \* from "\.\/headless(?:\.ts)?";/);
+    expect(headlessFile).toMatch(/export \* from "\.\/coupon-appearance(?:\.ts)?";/);
   });
 
   it("exports tone and metric helpers for coupon status and chip styling", () => {

@@ -21,9 +21,9 @@
     }
   },
   "peerDependencies": {
-    "@sdkwork/account-service": "*",
-    "@sdkwork/mall-pc-core": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/account-service": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0"
   },
   "peerDependenciesMeta": {

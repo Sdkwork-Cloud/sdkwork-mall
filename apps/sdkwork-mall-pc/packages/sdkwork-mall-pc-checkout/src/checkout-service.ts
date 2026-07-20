@@ -2,11 +2,11 @@ import type { SdkworkMediaResource } from "@sdkwork/order-service";
 import {
   createSdkworkCouponService,
   type SdkworkCouponService,
-} from "@sdkwork/mall-pc-coupon";
+} from "@sdkwork/mall-pc-coupon/headless";
 import {
   createSdkworkInvoiceService,
   type SdkworkInvoiceService,
-} from "@sdkwork/mall-pc-invoice";
+} from "@sdkwork/mall-pc-invoice/headless";
 import {
   createSdkworkCommercialAction,
   createSdkworkOfferService,
@@ -29,7 +29,7 @@ import {
   createSdkworkPointsService,
   type SdkworkPointsRechargeOffer,
   type SdkworkPointsService,
-} from "@sdkwork/mall-pc-points";
+} from "@sdkwork/mall-pc-points/headless";
 import {
   createEmptySdkworkPricingCatalog,
   createSdkworkPricingService,
@@ -45,7 +45,7 @@ import {
 import {
   createSdkworkWalletService,
   type SdkworkWalletService,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 import {
   buildSdkworkCheckoutSession,
   createEmptySdkworkCheckoutCatalog,

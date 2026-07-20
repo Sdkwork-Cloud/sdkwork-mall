@@ -4,7 +4,7 @@ import {
 import {
   configureSdkworkInvoiceRemotePort,
   type SdkworkInvoiceRemotePort,
-} from "@sdkwork/mall-pc-invoice";
+} from "@sdkwork/mall-pc-invoice/headless";
 
 export function createCommerceInvoiceRemotePort(): SdkworkInvoiceRemotePort {
   const commerce = () => getSdkworkCommerceService();

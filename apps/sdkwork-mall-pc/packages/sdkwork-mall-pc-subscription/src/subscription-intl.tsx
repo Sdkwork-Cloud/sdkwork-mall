@@ -4,7 +4,7 @@ import {
   useMemo,
   type PropsWithChildren,
 } from "react";
-import type { SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership";
+import type { SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership/headless";
 import {
   formatSdkworkMembershipCurrencyCny as formatSdkworkCurrencyCny,
   formatSdkworkMembershipPoints as formatSdkworkPoints,

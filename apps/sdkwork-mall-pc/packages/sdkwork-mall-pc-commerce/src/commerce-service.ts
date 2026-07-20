@@ -18,13 +18,13 @@ import {
   type SdkworkCouponDashboardData,
   type SdkworkCouponService,
   type SdkworkUserCoupon,
-} from "@sdkwork/mall-pc-coupon";
+} from "@sdkwork/mall-pc-coupon/headless";
 import {
   createSdkworkInvoiceService,
   type SdkworkInvoiceDashboardData,
   type SdkworkInvoiceService,
   type SdkworkInvoiceSummary,
-} from "@sdkwork/mall-pc-invoice";
+} from "@sdkwork/mall-pc-invoice/headless";
 import {
   createSdkworkOrderService,
   type SdkworkOrderDashboardData,
@@ -36,17 +36,17 @@ import {
   type SdkworkPointsDashboardData,
   type SdkworkPointsService,
   type SdkworkPointsTransaction,
-} from "@sdkwork/mall-pc-points";
+} from "@sdkwork/mall-pc-points/headless";
 import {
   createSdkworkMembershipService,
   type SdkworkMembershipDashboardData,
   type SdkworkMembershipService,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import {
   createSdkworkWalletService,
   type SdkworkWalletOverview,
   type SdkworkWalletService,
-} from "@sdkwork/mall-pc-wallet";
+} from "@sdkwork/mall-pc-wallet/headless";
 
 export type SdkworkCommerceAlertSeverity = "danger" | "info" | "warning";
 

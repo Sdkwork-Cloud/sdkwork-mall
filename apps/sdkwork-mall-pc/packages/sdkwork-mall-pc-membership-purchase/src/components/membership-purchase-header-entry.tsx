@@ -9,7 +9,7 @@ import {
   useSdkworkMembershipController,
   useSdkworkMembershipControllerState,
   type SdkworkMembershipController,
-} from "@sdkwork/mall-pc-membership";
+} from "@sdkwork/mall-pc-membership/headless";
 import type { SdkworkMembershipPurchaseMessagesOverrides } from "../membership-purchase-copy";
 import {
   SdkworkMembershipPurchaseIntlProvider,

@@ -11,13 +11,18 @@ import {
 } from "../src";
 
 describe("sdkwork-mall-pc-invoice appearance", () => {
-  it("exposes invoice appearance seam from package index", () => {
+  it("exposes invoice appearance through the delegated headless entrypoint", () => {
     const indexFile = readFileSync(
       resolve(import.meta.dirname, "../src/index.ts"),
       "utf8",
     );
+    const headlessFile = readFileSync(
+      resolve(import.meta.dirname, "../src/headless.ts"),
+      "utf8",
+    );
 
-    expect(indexFile).toMatch(/export \* from "\.\/invoice-appearance(?:\.ts)?";/);
+    expect(indexFile).toMatch(/export \* from "\.\/headless(?:\.ts)?";/);
+    expect(headlessFile).toMatch(/export \* from "\.\/invoice-appearance(?:\.ts)?";/);
   });
 
   it("exports shared tone, glass, panel, backdrop, and hero helpers", () => {

@@ -29,12 +29,12 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/payment-service": "*",
-    "@sdkwork/mall-pc-commerce": "*",
-    "@sdkwork/mall-pc-core": "*",
-    "@sdkwork/mall-pc-search": "*",
-    "@sdkwork/mall-pc-reviews": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/payment-service": "workspace:*",
+    "@sdkwork/mall-pc-commerce": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*",
+    "@sdkwork/mall-pc-search": "workspace:*",
+    "@sdkwork/mall-pc-reviews": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-router-dom": ">=6.0.0 <8.0.0"
   },

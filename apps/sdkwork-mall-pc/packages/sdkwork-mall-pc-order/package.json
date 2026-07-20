@@ -32,8 +32,8 @@
     "@sdkwork/appbase-pc-react": "workspace:*"
   },
   "peerDependencies": {
-    "@sdkwork/order-service": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/order-service": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },

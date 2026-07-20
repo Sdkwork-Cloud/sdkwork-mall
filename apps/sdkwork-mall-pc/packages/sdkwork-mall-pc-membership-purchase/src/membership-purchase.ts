@@ -3,7 +3,7 @@ import {
   type CreateSdkworkAppCapabilityManifestOptions,
   type SdkworkAppCapabilityManifest,
 } from "@sdkwork/appbase-pc-react";
-import type { SdkworkMembershipPlan, SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership";
+import type { SdkworkMembershipPlan, SdkworkMembershipSummary } from "@sdkwork/mall-pc-membership/headless";
 
 export interface SdkworkMembershipPurchaseWorkspaceManifest extends SdkworkAppCapabilityManifest {
   capability: "membership-purchase";

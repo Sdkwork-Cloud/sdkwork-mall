@@ -37,12 +37,6 @@
       "@sdkwork/mall-commerce-sdk-ports": [
         "apps/sdkwork-mall-pc/packages/sdkwork-mall-commerce-sdk-ports/src/index.ts"
       ],
-      "@sdkwork/clawrouter-app-sdk/domains": [
-        "../sdkwork-clawrouter/sdks/clawrouter-app-sdk/clawrouter-app-sdk-typescript/src/domains/index.ts"
-      ],
-      "@sdkwork/clawrouter-backend-sdk/domains": [
-        "../sdkwork-clawrouter/sdks/clawrouter-backend-sdk/clawrouter-backend-sdk-typescript/src/domains/index.ts"
-      ],
       "@sdkwork/account-app-sdk": [
         "../sdkwork-account/sdks/sdkwork-account-app-sdk/sdkwork-account-app-sdk-typescript/src/index.ts"
       ],

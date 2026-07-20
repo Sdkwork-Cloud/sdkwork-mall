@@ -20,7 +20,7 @@ export const SdkworkMallPcBackendAdminSdkFamilies = [
     authority: "sdkwork-commerce-backend-api",
     family: "sdkwork-commerce-backend-sdk",
     generationInputSpec: "apis/backend-api/commerce/commerce-backend-api.openapi.json",
-    generatedPackageName: "@sdkwork/clawrouter-backend-sdk/domains",
+    generatedPackageName: "@sdkwork/commerce-backend-sdk",
     surface: "backend-admin",
     tokenManagerScope: "global-session",
   },

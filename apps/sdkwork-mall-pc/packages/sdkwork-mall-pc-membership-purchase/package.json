@@ -19,9 +19,9 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/appbase-pc-react": "*",
-    "@sdkwork/ui-pc-react": "*",
-    "@sdkwork/mall-pc-membership": "*",
+    "@sdkwork/appbase-pc-react": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
+    "@sdkwork/mall-pc-membership": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },

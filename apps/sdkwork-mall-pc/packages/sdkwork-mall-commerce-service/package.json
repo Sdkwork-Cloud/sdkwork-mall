@@ -16,9 +16,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@sdkwork/mall-commerce-sdk-ports": "workspace:*",
-    "@sdkwork/clawrouter-app-sdk": "workspace:*",
-    "@sdkwork/clawrouter-backend-sdk": "workspace:*"
+    "@sdkwork/mall-commerce-sdk-ports": "workspace:*"
   },
   "devDependencies": {
     "typescript": "catalog:"

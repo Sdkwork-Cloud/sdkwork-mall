@@ -3,7 +3,7 @@ import {
   Button,
   StatusNotice,
 } from "@sdkwork/ui-pc-react";
-import type { SdkworkMembershipPlan } from "@sdkwork/mall-pc-membership";
+import type { SdkworkMembershipPlan } from "@sdkwork/mall-pc-membership/headless";
 import type {
   SdkworkSubscriptionAction,
   SdkworkSubscriptionCheckoutEstimate,

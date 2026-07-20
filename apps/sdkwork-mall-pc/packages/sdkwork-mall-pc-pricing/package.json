@@ -24,13 +24,13 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sdkwork/account-service": "*",
-    "@sdkwork/mall-pc-billing": "*",
-    "@sdkwork/mall-pc-offer": "*",
-    "@sdkwork/mall-pc-subscription": "*",
-    "@sdkwork/mall-pc-wallet": "*",
-    "@sdkwork/payment-service": "*",
-    "@sdkwork/ui-pc-react": "*",
+    "@sdkwork/account-service": "workspace:*",
+    "@sdkwork/mall-pc-billing": "workspace:*",
+    "@sdkwork/mall-pc-offer": "workspace:*",
+    "@sdkwork/mall-pc-subscription": "workspace:*",
+    "@sdkwork/mall-pc-wallet": "workspace:*",
+    "@sdkwork/payment-service": "workspace:*",
+    "@sdkwork/ui-pc-react": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },

@@ -153,7 +153,7 @@ describe("sdkwork-mall-pc-wallet intl", () => {
 
     expect(screen.getByText("Available points")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /open center/i })).toBeInTheDocument();
-    expect(formatSdkworkCommercePointsRate(200, "en-US")).toBe("200 pts / CNY 1");
+    expect(formatSdkworkAccountPointsRate(200, "en-US")).toBe("200 pts / CNY 1");
   });
 
   it("lets standalone wallet components consume Chinese copy through the intl provider", () => {
@@ -181,6 +181,6 @@ describe("sdkwork-mall-pc-wallet intl", () => {
 
     expect(screen.getByText("\u53ef\u7528\u79ef\u5206")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "\u6253\u5f00\u4e2d\u5fc3" })).toBeInTheDocument();
-    expect(formatSdkworkCommercePointsRate(200, "zh-CN")).toBe("200 \u79ef\u5206 / 1 \u5143");
+    expect(formatSdkworkAccountPointsRate(200, "zh-CN")).toBe("200 \u79ef\u5206 / 1 \u5143");
   });
 });

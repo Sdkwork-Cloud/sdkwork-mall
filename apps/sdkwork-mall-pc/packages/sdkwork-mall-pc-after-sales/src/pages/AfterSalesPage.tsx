@@ -98,9 +98,10 @@ export function SdkworkMallAfterSalesPage() {
       setSelectedRow(null);
       return;
     }
+    const detailId = selectedId;
     let active = true;
     async function loadDetail() {
-      const snapshot = await loadMallAfterSalesDetail(selectedId);
+      const snapshot = await loadMallAfterSalesDetail(detailId);
       if (!active) {
         return;
       }

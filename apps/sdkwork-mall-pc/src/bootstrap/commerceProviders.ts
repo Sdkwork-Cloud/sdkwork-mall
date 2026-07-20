@@ -16,6 +16,7 @@ import { configureSdkworkMallPcCartCommerceRemotePort } from "./cart-commerce-re
 import { configureSdkworkMallPcCmsCommerceRemotePort } from "./cms-commerce-remote";
 import { configureSdkworkMallPcMerchantCommerceRemotePort } from "./merchant-commerce-remote";
 import { configureSdkworkMallPcStorefrontCommerceRemotePorts } from "./storefront-commerce-remote";
+import { createSdkCommandPortAdapter } from "./sdk-command-port-adapter";
 import type { SdkworkMallPcIamRuntime } from "./iamRuntime";
 import type { SdkworkMallPcSdkClientInventory } from "./sdkClients";
 import type { SdkworkMallPcRuntimeConfig } from "./environment";
@@ -24,21 +25,66 @@ export interface SdkworkMallPcCommerceProviders {
   commerceService: ReturnType<typeof createSdkworkCommerceService>;
 }
 
-const APP_API_PREFIX = "/app/v3/api";
+const COMMERCE_APP_COMMAND_PATHS = [
+  "addresses.create",
+  "addresses.defaultSelection.create",
+  "addresses.delete",
+  "addresses.update",
+  "afterSales.requests.create",
+  "cart.items.create",
+  "cart.items.delete",
+  "cart.items.update",
+  "checkout.sessions.create",
+  "checkout.sessions.orders.create",
+  "checkout.sessions.quotes.create",
+  "invoices.cancellations.create",
+  "invoices.create",
+  "invoices.submissions.create",
+  "invoices.update",
+  "orders.create",
+  "orders.pay",
+  "promotions.discountApplications.create",
+  "wallet.holds.create",
+] as const;
+
+const COMMERCE_BACKEND_COMMAND_PATHS = [
+  "catalog.products.create",
+  "inventory.stocks.update",
+  "payments.providerAccounts.create",
+  "promotions.offers.create",
+  "promotions.offers.update",
+] as const;
 
 export function configureSdkworkMallPcProviders(input: {
   config: SdkworkMallPcRuntimeConfig;
   iamRuntime: SdkworkMallPcIamRuntime;
   sdkClients: SdkworkMallPcSdkClientInventory;
 }): SdkworkMallPcCommerceProviders {
-  const commerceAppClient = augmentCommerceAppClient(input.sdkClients.commerceAppClient);
-  const appClient = {
-    commerce: commerceAppClient,
-  } as unknown as CommerceAppSdkClient;
+  const orderAfterSales = createSdkCommandPortAdapter<{
+    requests: {
+      update(...args: unknown[]): Promise<unknown>;
+    };
+  }>(input.sdkClients.orderAppClient.afterSales, {
+    commandPaths: ["requests.update"],
+  });
+  const appClient: CommerceAppSdkClient = {
+    commerce: createSdkCommandPortAdapter<CommerceAppSdkClient["commerce"]>(
+      input.sdkClients.commerceAppClient,
+      {
+        commandPaths: COMMERCE_APP_COMMAND_PATHS,
+        methodOverrides: {
+          "afterSales.requests.update": orderAfterSales.requests.update,
+        },
+      },
+    ),
+  };
   const backendClient = input.sdkClients.commerceBackendClient
-    ? ({
-        commerce: input.sdkClients.commerceBackendClient,
-      } as unknown as CommerceBackendSdkClient)
+    ? {
+        commerce: createSdkCommandPortAdapter<CommerceBackendSdkClient["commerce"]>(
+          input.sdkClients.commerceBackendClient,
+          { commandPaths: COMMERCE_BACKEND_COMMAND_PATHS },
+        ),
+      }
     : undefined;
 
   const commerceService = createSdkworkCommerceService({
@@ -57,7 +103,7 @@ export function configureSdkworkMallPcProviders(input: {
   });
 
   configureSdkworkMallPcDomainServiceProviders(
-    () => commerceAppClient as CommerceAppSdkClient["commerce"],
+    input.sdkClients,
     () => {
       const snapshot = input.iamRuntime.session.getSnapshot();
       return {
@@ -75,42 +121,11 @@ export function configureSdkworkMallPcProviders(input: {
   configureSdkworkMallPcBuyerCommerceRemotePorts();
   configureSdkworkMallPcCommerceBuyerHubRemotePort();
   configureSdkworkMallPcCartCommerceRemotePort();
-  configureSdkworkMallPcMerchantCommerceRemotePort();
-  configureSdkworkMallPcAdminCommerceRemotePort();
+  configureSdkworkMallPcMerchantCommerceRemotePort(input.sdkClients);
+  configureSdkworkMallPcAdminCommerceRemotePort(input.sdkClients);
   configureSdkworkMallPcCmsCommerceRemotePort();
 
   return {
     commerceService,
   };
-}
-
-function augmentCommerceAppClient(client: SdkworkMallPcSdkClientInventory["commerceAppClient"]): SdkworkMallPcSdkClientInventory["commerceAppClient"] {
-  const http = (client as unknown as { http: { patch: <T>(path: string, body?: unknown) => Promise<T> } }).http;
-  if (!http || typeof http.patch !== "function" || !client.afterSales?.requests) {
-    return client;
-  }
-
-  const requests = client.afterSales.requests as unknown as {
-    list: (...args: unknown[]) => Promise<unknown>;
-    create: (...args: unknown[]) => Promise<unknown>;
-    retrieve: (...args: unknown[]) => Promise<unknown>;
-    update?: (afterSalesRequestId: string, body?: unknown) => Promise<unknown>;
-  };
-
-  if (typeof requests.update === "function") {
-    return client;
-  }
-
-  const updateFn = async (afterSalesRequestId: string, body?: unknown) => {
-    return http.patch(`${APP_API_PREFIX}/after_sales/requests/${encodeURIComponent(afterSalesRequestId)}`, body);
-  };
-
-  Object.defineProperty(requests, "update", {
-    value: updateFn,
-    writable: true,
-    configurable: true,
-    enumerable: true,
-  });
-
-  return client;
 }
