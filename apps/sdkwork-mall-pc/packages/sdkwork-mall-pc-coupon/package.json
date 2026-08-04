@@ -53,5 +53,8 @@
     "domain": "commerce",
     "capability": "coupon",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }

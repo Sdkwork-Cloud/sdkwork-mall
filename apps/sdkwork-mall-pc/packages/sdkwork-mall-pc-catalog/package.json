@@ -45,5 +45,8 @@
     "domain": "commerce",
     "capability": "catalog",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-cms": "workspace:*"
   }
 }

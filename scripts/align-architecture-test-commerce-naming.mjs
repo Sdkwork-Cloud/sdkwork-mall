@@ -19,7 +19,7 @@ source = source
   .replaceAll('/commerce-service/', '/mall-commerce-service/')
   .replaceAll(
     'assert.match(sdkClientsSource, /sdkwork-commerce-app-sdk-generated-typescript/);',
-    'assert.match(sdkClientsSource, /@sdkwork\\/clawrouter-app-sdk\\/domains/);',
+    'assert.match(sdkClientsSource, /@sdkwork\\/cloudrouter-app-sdk\\/domains/);',
   )
   .replaceAll(
     'assert.equal(dependencyIds.includes("sdkwork-commerce"), true, "packaging workflow must declare sdkwork-commerce dependency");',

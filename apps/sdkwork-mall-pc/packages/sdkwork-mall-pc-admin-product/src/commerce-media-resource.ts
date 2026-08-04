@@ -27,13 +27,13 @@ export interface CommerceProductAdminMediaResource {
   [key: string]: unknown;
 }
 
-export type ClawRouterMediaResource = CommerceProductAdminMediaResource;
-export type ClawRouterMediaKind = CommerceProductAdminMediaKind;
+export type CloudRouterMediaResource = CommerceProductAdminMediaResource;
+export type CloudRouterMediaKind = CommerceProductAdminMediaKind;
 
 export function toExternalUrlMediaResource(
   value: string | null | undefined,
-  kind: ClawRouterMediaKind = "image",
-): ClawRouterMediaResource | undefined {
+  kind: CloudRouterMediaKind = "image",
+): CloudRouterMediaResource | undefined {
   const url = normalizeMediaUrl(value);
   if (!url) {
     return undefined;
@@ -63,7 +63,7 @@ export function readMediaResourceUrl(value: unknown): string {
   return "";
 }
 
-export function readMediaResource(value: unknown): ClawRouterMediaResource | undefined {
+export function readMediaResource(value: unknown): CloudRouterMediaResource | undefined {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return undefined;
   }
@@ -71,7 +71,7 @@ export function readMediaResource(value: unknown): ClawRouterMediaResource | und
   if (typeof record.kind !== "string" || typeof record.source !== "string") {
     return undefined;
   }
-  return value as ClawRouterMediaResource;
+  return value as CloudRouterMediaResource;
 }
 
 function normalizeMediaUrl(value: string | null | undefined): string {

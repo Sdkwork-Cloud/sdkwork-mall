@@ -14,4 +14,4 @@ Commerce-owned PC internal admin product center package.
 
 Hosts import this package through its public root export. Services use `@sdkwork/mall-commerce-service`, which must be configured by the host bootstrap with Commerce app/backend SDK clients.
 
-Claw Router may keep a compatibility package that re-exports this package during the migration window, but Claw Router must not call its own product/catalog backend SDK methods for product center administration.
+Cloud Router may keep a compatibility package that re-exports this package during the migration window, but Cloud Router must not call its own product/catalog backend SDK methods for product center administration.

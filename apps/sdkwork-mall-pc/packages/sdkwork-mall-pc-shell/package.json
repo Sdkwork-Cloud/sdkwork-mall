@@ -19,7 +19,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sdkwork/mall-pc-commons": "workspace:*"
+    "@sdkwork/mall-pc-commons": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.2.0 <20.0.0"

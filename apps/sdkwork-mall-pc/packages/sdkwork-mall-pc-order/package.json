@@ -29,7 +29,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sdkwork/appbase-pc-react": "workspace:*"
+    "@sdkwork/appbase-pc-react": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*"
   },
   "peerDependencies": {
     "@sdkwork/order-service": "workspace:*",

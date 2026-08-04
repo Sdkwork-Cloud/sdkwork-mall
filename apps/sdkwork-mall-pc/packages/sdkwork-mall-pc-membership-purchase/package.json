@@ -42,5 +42,8 @@
     "domain": "commerce",
     "capability": "membership-purchase",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/membership-service": "workspace:*"
   }
 }

@@ -55,5 +55,11 @@
     "domain": "commerce",
     "capability": "subscription",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/appbase-pc-react": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*",
+    "@sdkwork/membership-service": "workspace:*",
+    "@sdkwork/promotion-service": "workspace:*"
   }
 }

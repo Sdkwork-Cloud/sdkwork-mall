@@ -27,7 +27,7 @@ import {
   readMediaResource,
   readMediaResourceUrl,
   toExternalUrlMediaResource,
-  type ClawRouterMediaResource,
+  type CloudRouterMediaResource,
 } from './commerce-media-resource';
 import {
   createCommerceAttribute,
@@ -144,7 +144,7 @@ export type ProductSkuDraft = {
   title: string;
   skuNo: string;
   barcode: string;
-  image?: ClawRouterMediaResource;
+  image?: CloudRouterMediaResource;
   priceAmount: string;
   currencyCode: string;
   stockQuantity: number;
@@ -2234,7 +2234,7 @@ function normalizeAttributeStatus(value: string): ProductAttributeDefinition['st
   return value === 'inactive' || value === 'archived' ? value : 'active';
 }
 
-function readCatalogMediaResource(record: CatalogRecord, keys: string[]): ClawRouterMediaResource | undefined {
+function readCatalogMediaResource(record: CatalogRecord, keys: string[]): CloudRouterMediaResource | undefined {
   for (const key of keys) {
     const value = record[key];
     const resource = readMediaResource(value);
@@ -2953,8 +2953,8 @@ function SkuImageField({
   image,
   onChange,
 }: {
-  image?: ClawRouterMediaResource;
-  onChange: (value?: ClawRouterMediaResource) => void;
+  image?: CloudRouterMediaResource;
+  onChange: (value?: CloudRouterMediaResource) => void;
 }) {
   const imageSource = readMediaResourceUrl(image);
   return (

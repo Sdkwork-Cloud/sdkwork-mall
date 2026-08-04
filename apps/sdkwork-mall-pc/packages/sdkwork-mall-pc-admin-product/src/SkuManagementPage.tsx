@@ -5,7 +5,7 @@ import {
   readMediaResource,
   readMediaResourceUrl,
   toExternalUrlMediaResource,
-  type ClawRouterMediaResource,
+  type CloudRouterMediaResource,
 } from './commerce-media-resource';
 import {
   createCommerceSku,
@@ -44,7 +44,7 @@ type SkuFormState = {
   fulfillmentType: SkuFulfillmentType;
   status: SkuStatus;
   barcode: string;
-  image?: ClawRouterMediaResource;
+  image?: CloudRouterMediaResource;
 };
 
 type SkuFulfillmentType =
@@ -561,7 +561,7 @@ function readSkuString(record: SkuRecord, keys: string[]): string {
   return '';
 }
 
-function readSkuImage(record: SkuRecord): ClawRouterMediaResource | undefined {
+function readSkuImage(record: SkuRecord): CloudRouterMediaResource | undefined {
   return readMediaResource(record.image);
 }
 

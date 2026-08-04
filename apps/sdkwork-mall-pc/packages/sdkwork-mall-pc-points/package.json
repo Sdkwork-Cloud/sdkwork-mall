@@ -57,5 +57,10 @@
     "domain": "commerce",
     "capability": "points",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/account-service": "workspace:*",
+    "@sdkwork/appbase-pc-react": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }

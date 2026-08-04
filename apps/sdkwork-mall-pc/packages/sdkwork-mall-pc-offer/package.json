@@ -63,5 +63,9 @@
     "domain": "commerce",
     "capability": "offer",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/account-service": "workspace:*",
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }

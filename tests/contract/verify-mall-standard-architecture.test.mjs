@@ -311,7 +311,7 @@ test("mall PC composition root delegates shell layout and SDK integration", () =
 
   const sdkClientsSource = read("apps/sdkwork-mall-pc/src/bootstrap/sdkClients.ts");
   assert.match(sdkClientsSource, /@sdkwork\/mall-pc-core/);
-  assert.match(sdkClientsSource, /@sdkwork\/clawrouter-app-sdk\/domains/);
+  assert.match(sdkClientsSource, /@sdkwork\/cloudrouter-app-sdk\/domains/);
 
   const runtimeSource = read("apps/sdkwork-mall-pc/src/bootstrap/runtime.ts");
   assert.match(runtimeSource, /@sdkwork\/mall-commerce-service/);

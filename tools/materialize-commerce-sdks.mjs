@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Materializes mall-owned commerce SDK transport packages from the archived
- * sdkwork-commerce vendor snapshot in sdkwork-clawrouter git history.
+ * sdkwork-commerce vendor snapshot in sdkwork-cloudrouter git history.
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const mallRoot = path.resolve(scriptDir, '..');
-const clawrouterRoot = path.resolve(mallRoot, '..', 'sdkwork-clawrouter');
+const cloudrouterRoot = path.resolve(mallRoot, '..', 'sdkwork-cloudrouter');
 const sourceCommit = process.env.SDKWORK_COMMERCE_SDK_SOURCE_COMMIT ?? '8c5d3f0';
 
 const SDK_SOURCES = [
@@ -25,7 +25,7 @@ const SDK_SOURCES = [
 ];
 
 function run(command) {
-  return execSync(command, { cwd: clawrouterRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  return execSync(command, { cwd: cloudrouterRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 }
 
 function listFiles(gitPrefix) {
@@ -63,8 +63,8 @@ function materializeSdk({ gitPrefix, target }) {
   return written;
 }
 
-if (!fs.existsSync(path.join(clawrouterRoot, '.git'))) {
-  console.error(`sdkwork-clawrouter git checkout not found at ${clawrouterRoot}`);
+if (!fs.existsSync(path.join(cloudrouterRoot, '.git'))) {
+  console.error(`sdkwork-cloudrouter git checkout not found at ${cloudrouterRoot}`);
   process.exit(1);
 }
 

@@ -48,5 +48,8 @@
     "domain": "commerce",
     "capability": "search",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-commons": "workspace:*"
   }
 }

@@ -137,7 +137,7 @@ describe("sdkwork-mall-pc-admin-product service", () => {
     expect(calls.categoryAttributeUpdate).toHaveBeenCalledWith("binding-1", { required: true });
   });
 
-  it("exports a reusable workspace manifest for Claw Router integration", () => {
+  it("exports a reusable workspace manifest for Cloud Router integration", () => {
     expect(createCommerceProductAdminWorkspaceManifest()).toMatchObject({
       capability: "product-admin",
       packageNames: ["@sdkwork/mall-pc-admin-product"],
@@ -158,7 +158,7 @@ describe("sdkwork-mall-pc-admin-product service", () => {
     expect(source).toContain("catalog.attributes.management.list");
     expect(source).not.toMatch(/\bfetch\s*\(/);
     expect(source).not.toMatch(/\baxios\b/);
-    expect(source).not.toContain("clawrouter-backend-sdk");
+    expect(source).not.toContain("cloudrouter-backend-sdk");
   });
 
   it("keeps product admin catalog field names on the canonical commerce contract", () => {

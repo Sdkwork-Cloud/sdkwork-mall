@@ -5,7 +5,7 @@ import { BusinessStatePanel } from './commerce-admin-primitives';
 import {
   readMediaResource,
   readMediaResourceUrl,
-  type ClawRouterMediaResource,
+  type CloudRouterMediaResource,
 } from './commerce-media-resource';
 import { listCommerceProducts } from './catalogService';
 import { readProductCommercialSignals } from './productAdminMapping';
@@ -910,7 +910,7 @@ function productRecordKey(record: ProductRecord, index: number): string {
   return readProductString(record, ['id', 'spuNo']) || String(index);
 }
 
-export function readProductCoverResource(record: ProductRecord): ClawRouterMediaResource | undefined {
+export function readProductCoverResource(record: ProductRecord): CloudRouterMediaResource | undefined {
   const media = record.media;
   if (!Array.isArray(media)) {
     return undefined;

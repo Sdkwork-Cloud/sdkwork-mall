@@ -57,5 +57,8 @@
     "domain": "commerce",
     "capability": "membership",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }

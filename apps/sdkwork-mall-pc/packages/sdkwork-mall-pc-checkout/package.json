@@ -87,5 +87,8 @@
     "domain": "commerce",
     "capability": "checkout",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }

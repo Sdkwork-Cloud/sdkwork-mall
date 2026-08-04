@@ -36,5 +36,8 @@
     "domain": "commerce",
     "capability": "admin-permissions",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/ui-pc-react": "workspace:*"
   }
 }

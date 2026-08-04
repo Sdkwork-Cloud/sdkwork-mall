@@ -39,5 +39,8 @@
     "domain": "commerce",
     "capability": "entitlement",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/mall-pc-core": "workspace:*"
   }
 }
