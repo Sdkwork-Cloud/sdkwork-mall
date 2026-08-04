@@ -88,6 +88,7 @@
       "@sdkwork/utils": [
         "../sdkwork-utils/packages/sdkwork-utils-typescript/src/index.ts"
       ],
+      "@sdkwork/utils/money": ["../sdkwork-utils/packages/sdkwork-utils-typescript/src/money.ts"],
       "@sdkwork/runtime-bootstrap": [
         "../sdkwork-appbase/packages/common/foundation/sdkwork-runtime-bootstrap/src/index.ts"
       ],

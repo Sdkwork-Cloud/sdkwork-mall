@@ -1,3 +1,4 @@
+import { formatMoney } from "@sdkwork/utils/money";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Search, Sparkles, TrendingUp, X } from "lucide-react";
@@ -33,7 +34,7 @@ const sortOptions = [
 const PAGE_SIZE = 20;
 
 function formatCny(value: number | null): string {
-  return value == null ? "询价" : `¥${value.toFixed(2)}`;
+  return value == null ? "询价" : (formatMoney(value, { currency: "CNY", locale: "en-US", mode: "symbol" }) ?? "询价");
 }
 
 function formatSalesCount(count?: number): string | null {

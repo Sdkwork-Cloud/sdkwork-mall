@@ -35,6 +35,7 @@
     "@sdkwork/mall-pc-search": "workspace:*",
     "@sdkwork/mall-pc-reviews": "workspace:*",
     "@sdkwork/ui-pc-react": "workspace:*",
+    "@sdkwork/utils": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-router-dom": ">=6.0.0 <8.0.0"
   },

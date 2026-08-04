@@ -1,3 +1,4 @@
+import { formatMoney } from "@sdkwork/utils/money";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -78,7 +79,7 @@ const DEFAULT_FAQ = [
 
 function formatCny(value: number | null | undefined): string {
   if (value == null || !Number.isFinite(value)) return "询价";
-  return `¥${value.toFixed(2)}`;
+  return formatMoney(value, { currency: "CNY", locale: "en-US", mode: "symbol" }) ?? "询价";
 }
 
 function formatRating(value: number | null | undefined): string {

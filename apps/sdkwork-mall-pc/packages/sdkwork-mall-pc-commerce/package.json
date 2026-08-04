@@ -95,6 +95,7 @@
     "@sdkwork/ui-pc-react": "workspace:*",
     "@sdkwork/mall-pc-membership": "workspace:*",
     "@sdkwork/mall-pc-wallet": "workspace:*",
+    "@sdkwork/utils": "workspace:*",
     "react": ">=18.2.0 <20.0.0",
     "react-dom": ">=18.2.0 <20.0.0"
   },

@@ -12,6 +12,7 @@ import {
 } from "@sdkwork/mall-pc-offer";
 import { createPaymentRouteIntent } from "@sdkwork/mall-pc-payment";
 import { createSubscriptionRouteIntent } from "@sdkwork/mall-pc-subscription";
+import { formatMoney } from "@sdkwork/utils/money";
 import {
   createSdkworkBillingMessages,
   normalizeSdkworkBillingLocale,
@@ -315,11 +316,17 @@ function createZeroBreakdowns(): Record<SdkworkBillingBreakdownKey, SdkworkBilli
 }
 
 function formatBillingValue(value: number, locale?: string | null): string {
-  return new Intl.NumberFormat(normalizeSdkworkBillingLocale(locale), {
-    currency: "CNY",
-    maximumFractionDigits: 2,
-    style: "currency",
-  }).format(roundCurrency(value));
+  return (
+    formatMoney(roundCurrency(value), {
+      currency: "CNY",
+      locale: locale ?? undefined,
+      mode: "symbol",
+    }) ?? new Intl.NumberFormat(normalizeSdkworkBillingLocale(locale), {
+      currency: "CNY",
+      maximumFractionDigits: 2,
+      style: "currency",
+    }).format(roundCurrency(value))
+  );
 }
 
 export function formatSdkworkBillingPosture(

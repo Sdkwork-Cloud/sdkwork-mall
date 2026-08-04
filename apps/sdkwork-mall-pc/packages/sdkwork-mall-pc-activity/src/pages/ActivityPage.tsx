@@ -1,3 +1,4 @@
+import { formatMoney } from "@sdkwork/utils/money";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Clock, Flame, Tag, Timer, Zap } from "lucide-react";
@@ -51,7 +52,7 @@ function activityTypeBadgeVariant(type: MallActivityType): "default" | "secondar
 }
 
 function formatCny(value: number | null): string {
-  return value == null ? "询价" : `¥${value.toFixed(2)}`;
+  return value == null ? "询价" : (formatMoney(value, { currency: "CNY", locale: "en-US", mode: "symbol" }) ?? "询价");
 }
 
 /** 倒计时组件 */

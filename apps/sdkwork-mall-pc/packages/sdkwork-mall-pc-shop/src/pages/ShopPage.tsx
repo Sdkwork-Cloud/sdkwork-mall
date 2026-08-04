@@ -1,3 +1,4 @@
+import { formatMoney } from "@sdkwork/utils/money";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Headphones, Heart, Store, Truck } from "lucide-react";
@@ -32,7 +33,7 @@ const SHOP_SORT_OPTIONS = [
 ] as const;
 
 function formatCny(value: number | null): string {
-  return value == null ? "询价" : `¥${value.toFixed(2)}`;
+  return value == null ? "询价" : (formatMoney(value, { currency: "CNY", locale: "en-US", mode: "symbol" }) ?? "询价");
 }
 
 function formatRating(rating: number | null | undefined): string {

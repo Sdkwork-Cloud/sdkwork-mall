@@ -1,3 +1,4 @@
+import { formatMoney } from "@sdkwork/utils/money";
 export interface RecentOrder {
   id: string;
   title: string;
@@ -29,7 +30,7 @@ export interface MembershipInfo {
 
 export function formatCny(value: number | null | undefined): string {
   if (value == null) return "-";
-  return `¥${value.toFixed(2)}`;
+  return formatMoney(value, { currency: "CNY", locale: "en-US", mode: "symbol" }) ?? "-";
 }
 
 export function formatDate(value: string | undefined): string {
