@@ -36,5 +36,8 @@
     "domain": "commerce",
     "capability": "shop",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/utils": "workspace:*"
   }
 }

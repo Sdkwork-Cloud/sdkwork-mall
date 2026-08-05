@@ -55,12 +55,15 @@
     "@sdkwork/mall-pc-membership": "workspace:*",
     "@sdkwork/mall-pc-merchant": "workspace:*",
     "@sdkwork/mall-pc-messages": "workspace:*",
+    "@sdkwork/mall-pc-offer": "workspace:*",
     "@sdkwork/mall-pc-order": "workspace:*",
+    "@sdkwork/mall-pc-payment": "workspace:*",
     "@sdkwork/mall-pc-points": "workspace:*",
     "@sdkwork/mall-pc-reviews": "workspace:*",
     "@sdkwork/mall-pc-search": "workspace:*",
     "@sdkwork/mall-pc-shell": "workspace:*",
     "@sdkwork/mall-pc-shop": "workspace:*",
+    "@sdkwork/mall-pc-subscription": "workspace:*",
     "@sdkwork/mall-pc-wallet": "workspace:*",
     "@sdkwork/membership-app-sdk": "workspace:*",
     "@sdkwork/membership-service": "workspace:*",
@@ -88,7 +91,10 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "@sdkwork/membership-sdk-ports": "workspace:*",
+    "@sdkwork/payment-sdk-ports": "workspace:*",
+    "@sdkwork/order-sdk-ports": "workspace:*"
   },
   "sdkwork": {
     "workspace": "sdkwork-mall",

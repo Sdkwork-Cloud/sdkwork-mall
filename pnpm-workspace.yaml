@@ -1,5 +1,8 @@
 packages:
   - "apps/sdkwork-mall-pc"
+  - "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-subscription"
+  - "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-payment"
+  - "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-offer"
   - "apps/sdkwork-mall-pc/packages/*"
   - "sdks/sdkwork-commerce-app-sdk/sdkwork-commerce-app-sdk-typescript"
   - "sdks/sdkwork-commerce-backend-sdk/sdkwork-commerce-backend-sdk-typescript"
@@ -38,6 +41,11 @@ packages:
   - "../sdkwork-payment/apps/sdkwork-payment-common/packages/*"
   - "../sdkwork-payment/sdks/sdkwork-payment-app-sdk/sdkwork-payment-app-sdk-typescript"
 
+  - "../sdkwork-iam/apps/sdkwork-iam-pc/packages/sdkwork-user-center-core-pc-react"
+  - "../sdkwork-ui/sdkwork-ui-mobile-react"
+  - "../sdkwork-membership/apps/sdkwork-membership-common/packages/sdkwork-membership-sdk-ports"
+  - "../sdkwork-payment/apps/sdkwork-payment-common/packages/sdkwork-payment-sdk-ports"
+  - "../sdkwork-order/apps/sdkwork-order-common/packages/sdkwork-order-sdk-ports"
 catalog:
   react: ^19.2.4
   react-dom: ^19.2.4
@@ -147,4 +155,3 @@ catalog:
   "@xterm/addon-web-links": ^0.12.0
   "@xterm/addon-webgl": ^0.19.0
   "@sdkwork/sdk-common": ^1.0.3
-  - "../../sdkwork-iam/apps/sdkwork-iam-pc/packages/sdkwork-user-center-core-pc-react"

@@ -481,7 +481,7 @@ export function createSdkworkCommerceService(
 ): SdkworkCommerceHubService {
   const locale = options.locale ?? "en-US";
   const copy = createSdkworkCommerceMessages(locale, options.messages);
-  const walletService = options.walletService ?? createSdkworkWalletService({ locale });
+  const walletService = options.walletService ?? createSdkworkWalletService();
   const couponService = options.couponService ?? createSdkworkCouponService({ locale });
   const pointsService = options.pointsService ?? createSdkworkPointsService({ locale });
   const membershipService = options.membershipService ?? createSdkworkMembershipService({ locale });

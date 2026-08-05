@@ -29,9 +29,11 @@ describe("sdkwork-mall-pc-order service", () => {
   it("maps orders, statistics, details, and payment actions into a reusable order center", async () => {
     const orderService = createOrderServiceMock({
       orders: {
-        cancel: vi.fn().mockResolvedValue({
-          code: 0,
-        }),
+        cancellations: {
+          create: vi.fn().mockResolvedValue({
+            code: 0,
+          }),
+        },
         retrieve: vi.fn().mockResolvedValue({
           code: 0,
           data: {

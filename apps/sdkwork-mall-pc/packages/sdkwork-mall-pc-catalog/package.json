@@ -47,6 +47,7 @@
     "status": "ready"
   },
   "dependencies": {
-    "@sdkwork/mall-pc-cms": "workspace:*"
+    "@sdkwork/mall-pc-cms": "workspace:*",
+    "@sdkwork/utils": "workspace:*"
   }
 }

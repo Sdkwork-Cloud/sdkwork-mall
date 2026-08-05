@@ -134,5 +134,8 @@
     "domain": "commerce",
     "capability": "commerce",
     "status": "ready"
+  },
+  "dependencies": {
+    "@sdkwork/utils": "workspace:*"
   }
 }

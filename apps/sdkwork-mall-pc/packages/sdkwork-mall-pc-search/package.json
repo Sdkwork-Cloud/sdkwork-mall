@@ -50,6 +50,7 @@
     "status": "ready"
   },
   "dependencies": {
-    "@sdkwork/mall-pc-commons": "workspace:*"
+    "@sdkwork/mall-pc-commons": "workspace:*",
+    "@sdkwork/utils": "workspace:*"
   }
 }

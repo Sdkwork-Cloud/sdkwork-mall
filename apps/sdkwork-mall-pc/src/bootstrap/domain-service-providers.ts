@@ -43,7 +43,7 @@ export function configureSdkworkMallPcDomainServiceProviders(
     appClient: { commerce: sdkClients.membershipAppClient },
   }));
   configureSdkworkOrderAppServiceProvider(() => createSdkworkOrderAppService({
-    appClient: { commerce: sdkClients.orderAppClient },
+    appClient: sdkClients.orderAppClient,
   }));
   configureSdkworkPaymentAppServiceProvider(() => createSdkworkPaymentAppService({
     appClient: {

@@ -267,6 +267,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
       currencyCode: "CNY",
       packageId: "101",
       paymentMethod: "WECHAT",
+      paymentProduct: "mobile_cashier_h5",
       source: "mall-wallet",
       subject: "points_recharge",
       targetAsset: "points",
@@ -284,13 +285,7 @@ describe("sdkwork-mall-pc-wallet service", () => {
   it("rejects withdraw requests missing required settlement fields before calling the wallet sdk", async () => {
     const withdraw = vi.fn();
     const service = createSdkworkWalletService({
-      accountService: createAccountServiceMock({
-        wallet: {
-          withdrawalTransfers: {
-            create: withdraw,
-          },
-        },
-      }),
+      accountService: createAccountServiceMock(),
     });
 
     await expect(

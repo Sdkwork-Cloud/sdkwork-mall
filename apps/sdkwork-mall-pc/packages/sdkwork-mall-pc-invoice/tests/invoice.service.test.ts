@@ -7,8 +7,21 @@ import {
 import { createSdkworkInvoiceService } from "../src";
 import type { SdkworkInvoiceRemotePort } from "../src/invoice-remote-port";
 
+interface InvoiceCommerceMockPort {
+  invoices: {
+    cancellations: { create(invoiceId: string, body?: unknown): Promise<unknown> };
+    create(body: unknown): Promise<unknown>;
+    items: { list(invoiceId: string): Promise<unknown> };
+    mine: { list(query?: unknown): Promise<unknown> };
+    retrieve(invoiceId: string): Promise<unknown>;
+    statistics: { retrieve(): Promise<unknown> };
+    submissions: { create(invoiceId: string, body: unknown): Promise<unknown> };
+    update(invoiceId: string, body: unknown): Promise<unknown>;
+  };
+}
+
 function createInvoiceRemotePortFromCommerceMock(
-  commerceService: ReturnType<typeof createCommerceServiceMock>,
+  commerceService: { invoices: any },
 ): SdkworkInvoiceRemotePort {
   return {
     cancelInvoice: (invoiceId, body) => commerceService.invoices.cancellations.create(invoiceId, body),

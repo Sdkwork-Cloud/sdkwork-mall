@@ -1,5 +1,5 @@
 import {
-  createSdkworkWriteCommandHeaders,
+  createSdkworkIdempotencyParams,
   getSdkworkOrderService,
   hasSdkworkOrderSession,
   requireSdkworkOrderSession,
@@ -447,10 +447,14 @@ export function createSdkworkOrderService(
     async cancelOrder(input) {
       requireSdkworkOrderSession(copy.signInRequired);
       await unwrapSdkworkOrderResponse<void>(
-        await getOrderService().orders.cancel(input.orderId, {
-          cancelReason: toSdkworkOrderOptionalString(input.cancelReason),
-          cancelType: toSdkworkOrderOptionalString(input.cancelType),
-        }),
+        await getOrderService().orders.cancellations.create(
+          input.orderId,
+          createSdkworkIdempotencyParams(),
+          {
+            cancelReason: toSdkworkOrderOptionalString(input.cancelReason),
+            cancelType: toSdkworkOrderOptionalString(input.cancelType),
+          },
+        ),
         copy.cancelFailed,
       );
 
@@ -469,8 +473,6 @@ export function createSdkworkOrderService(
         getOrderService().orders.list({
             page: 1,
             pageSize: 20,
-            sortDirection: "desc",
-            sortField: "createdAt",
         }),
         getOrderService().orders.statistics.retrieve(),
       ]);
@@ -522,7 +524,7 @@ export function createSdkworkOrderService(
         await getOrderService().orders.payments.create(
           input.orderId,
           body,
-          createSdkworkWriteCommandHeaders("orders.payments.create", body),
+          createSdkworkIdempotencyParams(),
         ),
         copy.payFailed,
       );

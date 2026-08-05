@@ -16,5 +16,10 @@
     "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-payment/**",
     "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-pricing/**",
     "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-subscription/**"
-  ]
+  ],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "module": "ESNext"
+  }
 }

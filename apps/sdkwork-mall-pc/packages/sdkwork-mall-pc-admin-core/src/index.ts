@@ -37,3 +37,11 @@ export const SdkworkMallPcBackendAdminSdkFamilies = [
 export function listSdkworkMallPcBackendAdminSdkFamilies(): readonly SdkworkMallPcBackendAdminSdkFamilyInventoryItem[] {
   return SdkworkMallPcBackendAdminSdkFamilies;
 }
+
+export {
+  configureSdkworkAdminRemotePort,
+  getSdkworkAdminRemotePort,
+  type SdkworkAdminCommerceNamespace,
+  type SdkworkAdminMembershipsNamespace,
+  type SdkworkAdminRemotePort,
+} from "./admin-remote-port";

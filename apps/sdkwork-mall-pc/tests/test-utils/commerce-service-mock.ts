@@ -21,8 +21,10 @@ import {
 } from "@sdkwork/payment-service";
 import {
   configureSdkworkPromotionSessionTokenProvider,
+  type SdkworkPromotionAppService,
   type SdkworkPromotionSessionTokens,
 } from "@sdkwork/promotion-service";
+import type { SdkworkAccountAppService } from "@sdkwork/account-service";
 import {
   SDKWORK_COMMERCE_APP_SDK_REQUIRED_METHODS,
   SDKWORK_COMMERCE_BACKEND_SDK_REQUIRED_METHODS,
@@ -35,16 +37,18 @@ import {
 } from "@sdkwork/order-service";
 
 type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends (...args: infer TArgs) => infer TReturn ? (...args: TArgs) => TReturn : DeepPartial<T[K]>;
+  [K in keyof T]?: T[K] extends (...args: any[]) => any
+    ? T[K] | ((...args: any[]) => unknown)
+    : DeepPartial<T[K]>;
 };
 
 type MockNode = ReturnType<typeof missing> | { [key: string]: MockNode };
 type MockMethodTree = { readonly [key: string]: true | MockMethodTree };
 
-export function createCommerceServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-): SdkworkCommerceService {
-  return mergeCommerceService(createDefaultCommerceServiceMock(), overrides);
+export function createCommerceServiceMock<T = SdkworkCommerceService>(
+  overrides: DeepPartial<T> = {},
+): T {
+  return mergeCommerceService(createDefaultCommerceServiceMock(), overrides) as unknown as T;
 }
 
 export function configureCommerceServiceMockSession(
@@ -160,15 +164,15 @@ export function createMembershipServiceMock(
 }
 
 export function createPromotionServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-) {
-  return createCommerceServiceMock(overrides);
+  overrides: DeepPartial<SdkworkPromotionAppService> = {},
+): SdkworkPromotionAppService {
+  return createCommerceServiceMock<SdkworkPromotionAppService>(overrides);
 }
 
 export function createAccountServiceMock(
-  overrides: DeepPartial<SdkworkCommerceService> = {},
-) {
-  return createCommerceServiceMock(overrides);
+  overrides: DeepPartial<SdkworkAccountAppService> = {},
+): SdkworkAccountAppService {
+  return createCommerceServiceMock<SdkworkAccountAppService>(overrides);
 }
 
 export function configureOrderServiceMockSession(

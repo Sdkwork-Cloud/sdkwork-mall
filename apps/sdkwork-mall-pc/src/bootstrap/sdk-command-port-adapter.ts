@@ -1,4 +1,4 @@
-import { createSdkworkWriteCommandHeaders } from "@sdkwork/order-service";
+import { createSdkworkIdempotencyParams } from "@sdkwork/order-service";
 
 type ArgumentRule = (args: readonly unknown[]) => unknown[];
 type MethodOverride = (...args: unknown[]) => unknown;
@@ -45,7 +45,7 @@ export function createSdkCommandPortAdapter<TPort extends object>(
                 args.push({});
               }
               const body = findCommandBody(args);
-              args.push(createSdkworkWriteCommandHeaders(methodPath, body));
+              args.push(createSdkworkIdempotencyParams());
             }
 
             if (args.length > value.length) {

@@ -11,7 +11,7 @@ import {
 } from "@sdkwork/account-service";
 import {
   createSdkworkPointsRechargeService,
-  createSdkworkWriteCommandHeaders,
+  createSdkworkIdempotencyParams,
   getSdkworkOrderService,
   unwrapSdkworkOrderResponse,
   type SdkworkOrderAppService,
@@ -440,7 +440,7 @@ export function createSdkworkWalletService(
       const result = unwrapSdkworkOrderResponse<RemoteWithdrawResult>(
         await getOrderService().withdrawals.requests.create(
           body,
-          createSdkworkWriteCommandHeaders("withdrawals.requests.create", body, requestNo),
+          createSdkworkIdempotencyParams(),
         ),
         "Failed to withdraw cash.",
       );

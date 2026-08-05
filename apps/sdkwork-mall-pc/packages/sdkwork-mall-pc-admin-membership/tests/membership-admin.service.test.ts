@@ -11,6 +11,7 @@ import {
   createSdkworkMembershipAdminService,
   createSdkworkMembershipAdminWorkspaceManifest,
 } from "../src";
+import type { SdkworkAdminRemotePort } from "@sdkwork/mall-pc-admin-core";
 
 describe("sdkwork-mall-pc-admin-membership service", () => {
   beforeEach(() => {
@@ -145,7 +146,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
         status: "suspended",
       },
     });
-    const commerceService = createCommerceServiceMock({
+    const adminRemotePort = {
       admin: {
         entitlements: {
           grants: {
@@ -258,9 +259,9 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           },
         },
       },
-    });
+    } as unknown as SdkworkAdminRemotePort;
     const service = createSdkworkMembershipAdminService({
-      adminRemotePort: { admin: commerceService.admin },
+      adminRemotePort,
     });
 
     const dashboard = await service.getDashboard();
@@ -488,7 +489,7 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
         status: "active",
       },
     });
-    const commerceService = createCommerceServiceMock({
+    const adminRemotePort = {
       admin: {
         memberships: {
           packages: {
@@ -496,9 +497,9 @@ describe("sdkwork-mall-pc-admin-membership service", () => {
           },
         },
       },
-    });
+    } as unknown as SdkworkAdminRemotePort;
     const service = createSdkworkMembershipAdminService({
-      adminRemotePort: { admin: commerceService.admin },
+      adminRemotePort,
     });
 
     await expect(
