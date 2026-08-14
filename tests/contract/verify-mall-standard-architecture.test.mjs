@@ -661,7 +661,7 @@ test("mall PC active packages use service subpaths for cross-package imports", (
 
 test("mall workspace metadata and packaging contract align with sdkwork-mall ownership", () => {
   const workflow = readJson("apps/sdkwork-mall-pc/sdkwork.workflow.json");
-  assert.equal(workflow.app.repository, "Sdkwork-Cloud/sdkwork-mall");
+  assert.equal(workflow.app.repository, "sdkwork-ai/sdkwork-mall");
   assert.equal(workflow.app.sourcePath, "apps/sdkwork-mall-pc");
 
   const dependencyIds = (workflow.dependencies ?? []).map((dependency) => dependency.id);

@@ -29,42 +29,42 @@ jobs:
       - name: Checkout commerce foundation
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-commerce
+          repository: sdkwork-ai/sdkwork-commerce
           path: sdkwork-commerce
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 
       - name: Checkout appbase
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-appbase
+          repository: sdkwork-ai/sdkwork-appbase
           path: sdkwork-appbase
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 
       - name: Checkout UI
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-ui
+          repository: sdkwork-ai/sdkwork-ui
           path: sdkwork-ui
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 
       - name: Checkout SDK commons
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-sdk-commons
+          repository: sdkwork-ai/sdkwork-sdk-commons
           path: sdkwork-sdk-commons
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 
       - name: Checkout utils
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-utils
+          repository: sdkwork-ai/sdkwork-utils
           path: sdkwork-utils
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 
       - name: Checkout core
         uses: actions/checkout@v4
         with:
-          repository: Sdkwork-Cloud/sdkwork-core
+          repository: sdkwork-ai/sdkwork-core
           path: sdkwork-core
           token: ${{ secrets.SDKWORK_RELEASE_TOKEN || github.token }}
 

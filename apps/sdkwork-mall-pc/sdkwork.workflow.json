@@ -4,7 +4,7 @@
   "app": {
     "id": "sdkwork-mall-pc",
     "name": "SDKWork Mall PC",
-    "repository": "Sdkwork-Cloud/sdkwork-mall",
+    "repository": "sdkwork-ai/sdkwork-mall",
     "sourcePath": "apps/sdkwork-mall-pc",
     "configPath": "sdkwork.app.config.json"
   },
@@ -20,35 +20,35 @@
   "dependencies": [
     {
       "id": "sdkwork-appbase",
-      "repository": "Sdkwork-Cloud/sdkwork-appbase",
+      "repository": "sdkwork-ai/sdkwork-appbase",
       "refInput": "SDKWORK_APPBASE_REF",
       "path": "sdkwork-appbase",
       "tokenSecret": "SDKWORK_RELEASE_TOKEN"
     },
     {
       "id": "sdkwork-ui",
-      "repository": "Sdkwork-Cloud/sdkwork-ui",
+      "repository": "sdkwork-ai/sdkwork-ui",
       "refInput": "SDKWORK_UI_REF",
       "path": "sdkwork-ui",
       "tokenSecret": "SDKWORK_RELEASE_TOKEN"
     },
     {
       "id": "sdkwork-sdk-commons",
-      "repository": "Sdkwork-Cloud/sdkwork-sdk-commons",
+      "repository": "sdkwork-ai/sdkwork-sdk-commons",
       "refInput": "SDKWORK_SDK_COMMONS_REF",
       "path": "sdkwork-sdk-commons",
       "tokenSecret": "SDKWORK_RELEASE_TOKEN"
     },
     {
       "id": "sdkwork-utils",
-      "repository": "Sdkwork-Cloud/sdkwork-utils",
+      "repository": "sdkwork-ai/sdkwork-utils",
       "refInput": "SDKWORK_UTILS_REF",
       "path": "sdkwork-utils",
       "tokenSecret": "SDKWORK_RELEASE_TOKEN"
     },
     {
       "id": "sdkwork-core",
-      "repository": "Sdkwork-Cloud/sdkwork-core",
+      "repository": "sdkwork-ai/sdkwork-core",
       "refInput": "SDKWORK_CORE_REF",
       "path": "sdkwork-core",
       "tokenSecret": "SDKWORK_RELEASE_TOKEN"
