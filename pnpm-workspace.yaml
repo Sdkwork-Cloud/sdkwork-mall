@@ -40,12 +40,12 @@ packages:
   - "../sdkwork-promotion/sdks/sdkwork-promotion-backend-sdk/sdkwork-promotion-backend-sdk-typescript"
   - "../sdkwork-payment/apps/sdkwork-payment-common/packages/*"
   - "../sdkwork-payment/sdks/sdkwork-payment-app-sdk/sdkwork-payment-app-sdk-typescript"
-
   - "../sdkwork-iam/apps/sdkwork-iam-pc/packages/sdkwork-user-center-core-pc-react"
   - "../sdkwork-ui/sdkwork-ui-mobile-react"
   - "../sdkwork-membership/apps/sdkwork-membership-common/packages/sdkwork-membership-sdk-ports"
   - "../sdkwork-payment/apps/sdkwork-payment-common/packages/sdkwork-payment-sdk-ports"
   - "../sdkwork-order/apps/sdkwork-order-common/packages/sdkwork-order-sdk-ports"
+
 catalog:
   "@monaco-editor/react": ^4.7.0
   "@playwright/test": ^1.52.0
