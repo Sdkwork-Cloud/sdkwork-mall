@@ -8,12 +8,14 @@
     "dev": "node ../../../sdkwork-iam/scripts/dev/run-pc-renderer-dev-with-bootstrap.mjs -- vite --host 127.0.0.1 --port 5175",
     "dev:server": "node -e \"console.log('Mall PC server development profile: apps/sdkwork-mall-pc/config/server/sdkwork-mall-pc.development.toml.example')\"",
     "build": "vite build",
-    "build:staging": "node scripts/validate-runtime-config.mjs --profile staging && vite build --mode staging",
-    "build:prod": "node scripts/validate-runtime-config.mjs --profile production && vite build --mode production",
+    "build:staging": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment staging",
+    "build:prod": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment prod",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "pnpm --dir ../.. run test:vitest",
     "test:config": "node --test ../../tests/contract/verify-mall-standard-architecture.test.mjs && node scripts/validate-runtime-config.mjs --all",
-    "lint": "pnpm run typecheck"
+    "lint": "pnpm run typecheck",
+    "build:dev": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment dev",
+    "build:test": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment test"
   },
   "dependencies": {
     "@sdkwork/account-app-sdk": "workspace:*",
