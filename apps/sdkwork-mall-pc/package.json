@@ -15,7 +15,11 @@
     "test:config": "node --test ../../tests/contract/verify-mall-standard-architecture.test.mjs && node scripts/validate-runtime-config.mjs --all",
     "lint": "pnpm run typecheck",
     "build:dev": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment dev",
-    "build:test": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment test"
+    "build:test": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment test",
+    "build:dev:cloud": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment dev --deployment-profile cloud",
+    "build:test:cloud": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment test --deployment-profile cloud",
+    "build:staging:cloud": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment staging --deployment-profile cloud",
+    "build:prod:cloud": "node ../../../sdkwork-specs/tools/build-browser-client.mjs --app-root . --environment prod --deployment-profile cloud"
   },
   "dependencies": {
     "@sdkwork/account-app-sdk": "workspace:*",
