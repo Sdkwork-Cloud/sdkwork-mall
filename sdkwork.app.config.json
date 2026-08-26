@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 3,
+  "kind": "sdkwork.app",
+  "app": {
+    "key": "sdkwork-mall",
+    "name": "SDKWork Mall",
+    "displayName": "SDKWork Mall",
+    "description": "SDKWork Mall application.",
+    "appType": "SDK"
+  },
+  "runtime": {
+    "family": "server",
+    "framework": "rust-service",
+    "defaultPlatform": "API",
+    "defaultArchitecture": "x64",
+    "supportedDeploymentProfiles": [
+      "standalone",
+      "cloud"
+    ],
+    "defaultDeploymentProfile": "standalone"
+  }
+}
