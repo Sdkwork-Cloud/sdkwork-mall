@@ -21,7 +21,7 @@
     }
   },
   "dependencies": {
-    "@sdkwork/sdk-common": "^1.0.5"
+    "@sdkwork/sdk-common": "^1.0.8"
   },
   "peerDependencies": {
     "@sdkwork/iam-app-sdk": "^0.1.1"
