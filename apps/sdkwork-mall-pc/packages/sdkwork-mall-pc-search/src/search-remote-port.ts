@@ -1,5 +1,6 @@
 export interface SdkworkSearchRemotePort {
   listCategories(query: Record<string, unknown>): Promise<unknown>;
+  listProducts(query: Record<string, unknown>): Promise<unknown>;
   listShops(query: Record<string, unknown>): Promise<unknown>;
   listSpus(query: Record<string, unknown>): Promise<unknown>;
 }

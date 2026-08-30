@@ -84,6 +84,7 @@ export function SdkworkMallShopPage() {
 
   const [shop, setShop] = useState<MallShopDetail | null>(null);
   const [products, setProducts] = useState<MallSearchProduct[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(() => isMallShopFavorite(shopId));
 
@@ -98,7 +99,8 @@ export function SdkworkMallShopPage() {
         const [shopDetail, productResult] = await Promise.all([
           retrieveMallShop(shopId),
           searchMallProducts({
-            pageSize: 100,
+            page,
+            pageSize: SHOP_PAGE_SIZE,
             shopId,
             sort: sort || undefined,
           }),
@@ -106,6 +108,7 @@ export function SdkworkMallShopPage() {
         if (active) {
           setShop(shopDetail);
           setProducts(productResult.items);
+          setTotal(productResult.total);
         }
       } finally {
         if (active) {
@@ -117,24 +120,19 @@ export function SdkworkMallShopPage() {
     return () => {
       active = false;
     };
-  }, [shopId, sort]);
+  }, [shopId, sort, page]);
 
-  // 从商品中提取店铺分类
+  // 从当前页商品中提取店铺分类（基于 brand 的品牌聚合）
   const shopCategories = useMemo(() => extractShopCategories(products), [products]);
 
-  // 按分类（品牌）筛选
+  // 按分类（品牌）对当前页做高亮过滤
   const filteredProducts = useMemo(() => {
     if (!selectedCategory) return products;
     return products.filter((product) => product.brand === selectedCategory);
   }, [products, selectedCategory]);
 
-  // 分页
-  const total = filteredProducts.length;
+  // 分页使用服务端返回的 total
   const totalPages = Math.max(1, Math.ceil(total / SHOP_PAGE_SIZE));
-  const pagedProducts = useMemo(() => {
-    const start = (page - 1) * SHOP_PAGE_SIZE;
-    return filteredProducts.slice(start, start + SHOP_PAGE_SIZE);
-  }, [filteredProducts, page]);
 
   // 店铺推荐（取前4个商品作为推荐）
   const recommendedProducts = useMemo(() => products.slice(0, 4), [products]);
@@ -332,12 +330,12 @@ export function SdkworkMallShopPage() {
           </div>
         ) : null}
 
-        {pagedProducts.length === 0 ? (
+        {filteredProducts.length === 0 ? (
           <EmptyState description="店铺正在上新" title="暂无商品" />
         ) : (
           <>
             <div className="sdkwork-mall-pc-product-grid">
-              {pagedProducts.map((product) => (
+              {filteredProducts.map((product) => (
                 <Link className="sdkwork-mall-pc-product-card" key={product.id} to={`/product/${product.id}`}>
                   <div className="sdkwork-mall-pc-product-image">
                     {product.imageUrl ? <img alt={product.title} src={product.imageUrl} /> : null}

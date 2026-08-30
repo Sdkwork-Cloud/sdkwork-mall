@@ -6259,6 +6259,14 @@
         "operationId": "catalog.products.list",
         "parameters": [
           {
+            "name": "shop_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "q",
             "in": "query",
             "required": false,

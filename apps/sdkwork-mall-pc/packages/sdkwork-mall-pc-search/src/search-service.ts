@@ -132,65 +132,40 @@ export async function searchMallProducts(input: {
   sort?: string;
 }): Promise<MallSearchResult> {
   const remote = getSdkworkSearchRemotePort();
-  // SDK 的 catalog.spus.list 不支持 shop_id 服务端过滤，当指定 shopId 时
-  // 拉取较大批次后在前端过滤，避免分页丢数据。
-  const requestPageSize = input.shopId
-    ? Math.max(input.pageSize ?? 20, 100)
-    : input.pageSize ?? 20;
+  const page = input.page ?? 1;
+  const pageSize = input.pageSize ?? 20;
+
+  // 指定 shopId 时走 catalog.products.list，由服务端按 shop_id + sort +
+  // page/page_size 过滤分页，直接使用服务端 total 与已分页 items。
+  if (input.shopId) {
+    const response = await remote.listProducts({
+      categoryId: input.categoryId,
+      page,
+      pageSize,
+      shopId: input.shopId,
+      sort: input.sort,
+    });
+    const payload = unwrapSdkworkPaymentResponse(response) as {
+      items?: Record<string, unknown>[];
+      total?: number;
+    };
+    const items = payload.items?.map(readSearchProduct) ?? [];
+    return { items, total: payload.total ?? items.length };
+  }
+
+  // 自由文本搜索走 catalog.spus.list（支持 q），由服务端分页。
   const response = await remote.listSpus({
     categoryId: input.categoryId,
-    page: input.page ?? 1,
-    pageSize: requestPageSize,
+    page,
+    pageSize,
     q: input.query,
   });
   const payload = unwrapSdkworkPaymentResponse(response) as {
     items?: Record<string, unknown>[];
     total?: number;
   };
-
-  let items = payload.items?.map(readSearchProduct) ?? [];
-
-  if (input.shopId) {
-    items = items.filter((item) => !item.shopId || item.shopId === input.shopId);
-  }
-
-  // SDK 的 catalog.spus.list 不支持 sort 参数，在前端按 sort 排序
-  if (items.length > 0 && input.sort) {
-    items = sortSearchProducts(items, input.sort);
-  }
-
-  // 当指定 shopId 时，total 以过滤后的条数为准；
-  // 否则使用服务端返回的 total
-  const total = input.shopId ? items.length : payload.total ?? items.length;
-
-  // 当指定 shopId 时，对结果做分页截取
-  if (input.shopId && input.page && input.pageSize) {
-    const fromIdx = (input.page - 1) * input.pageSize;
-    items = items.slice(fromIdx, fromIdx + input.pageSize);
-  }
-
-  return { items, total };
-}
-
-function sortSearchProducts(items: MallSearchProduct[], sort: string): MallSearchProduct[] {
-  const sorted = [...items];
-  switch (sort) {
-    case "sales":
-      // 销量排序（无销量字段时保持原序）
-      return sorted;
-    case "price-asc":
-      return sorted.sort((a, b) => (a.priceCny ?? 0) - (b.priceCny ?? 0));
-    case "price-desc":
-      return sorted.sort((a, b) => (b.priceCny ?? 0) - (a.priceCny ?? 0));
-    case "rating":
-      // 好评排序（无评分字段时保持原序）
-      return sorted;
-    case "created_at":
-      // 上新排序（无时间字段时保持原序）
-      return sorted;
-    default:
-      return sorted;
-  }
+  const items = payload.items?.map(readSearchProduct) ?? [];
+  return { items, total: payload.total ?? items.length };
 }
 
 export interface MallSearchShop {

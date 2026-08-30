@@ -33,6 +33,9 @@ export function configureSdkworkMallPcStorefrontCommerceRemotePorts(): void {
     listCategories(query) {
       return commerce().catalog.categories.list(query);
     },
+    listProducts(query) {
+      return commerce().catalog.products.list(query);
+    },
     listSpus(query) {
       return commerce().catalog.spus.list(query);
     },
