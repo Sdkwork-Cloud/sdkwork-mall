@@ -1,8 +1,8 @@
 import { listSdkworkMallPcBackendAdminSdkFamilies } from "@sdkwork/mall-pc-admin-core/composition";
 import { listSdkworkMallPcAppSdkFamilies } from "@sdkwork/mall-pc-core/composition";
 import type { SdkworkAccountAppClient } from "@sdkwork/account-app-sdk";
-import type { SdkworkAppClient } from "@sdkwork/commerce-app-sdk";
-import type { SdkworkBackendClient } from "@sdkwork/commerce-backend-sdk";
+import type { SdkworkAppClient } from "@sdkwork/cloudrouter-app-sdk";
+import type { SdkworkBackendClient } from "@sdkwork/cloudrouter-backend-sdk";
 import type { SdkworkAppClient as SdkworkMembershipAppClient } from "@sdkwork/membership-app-sdk";
 import type { SdkworkAppClient as SdkworkOrderAppClient } from "@sdkwork/order-app-sdk";
 import type { SdkworkAppClient as SdkworkPaymentAppClient } from "@sdkwork/payment-app-sdk";

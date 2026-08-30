@@ -69,7 +69,7 @@
       },
       "platform": [],
       "metadata": {
-        "generatedBy": "sdkwork-commerce"
+        "generatedPlaceholder": true
       }
     },
     "screenshots": [
@@ -185,7 +185,10 @@
           "checksum": "8b4c7f1a8b4c7f1a8b4c7f1a8b4c7f1a8b4c7f1a8b4c7f1a8b4c7f1a8b4c7f1a",
           "architecture": "universal",
           "deploymentProfile": "cloud",
-          "runtimeTarget": "browser"
+          "runtimeTarget": "browser",
+          "profileBinding": "fixed",
+          "targetPlatform": "web",
+          "clientArchitecture": "pc-web"
         }
       ],
       "metadata": {
@@ -206,11 +209,12 @@
         "version": "0.1.0",
         "releaseChannel": "STABLE",
         "title": "SDKWork Mall PC 0.1.0",
-        "summary": "Mall PC app root for commerce owned admin modules.",
-        "content": "Initial Mall PC app manifest for reusable commerce admin packages.",
+        "summary": "SDKWork Mall PC initialized standard release.",
+        "content": "Initial SDKWork App Standard v3 manifest for SDKWork Mall PC.",
         "highlights": [
-          "Mall PC app identity initialized",
-          "Product center admin package ownership moved to commerce"
+          "SDKWork App Standard v3 configuration initialized",
+          "platform_app projection metadata standardized",
+          "Download package matrix normalized"
         ],
         "packageIds": [
           "web-universal-cloud-browser-zip"
