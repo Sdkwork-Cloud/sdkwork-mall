@@ -1,6 +1,6 @@
 {
   "name": "@sdkwork/commerce-app-sdk",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "SDKWork Commerce App SDK with composed workflow facade.",
   "type": "module",
   "private": false,
