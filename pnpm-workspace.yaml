@@ -1,4 +1,7 @@
 packages:
+  - "../sdkwork-ui/sdkwork-ui-mobile-react"
+  - "../sdkwork-cloudrouter/sdks/cloudrouter-backend-sdk/cloudrouter-backend-sdk-typescript"
+  - "../sdkwork-cloudrouter/sdks/cloudrouter-app-sdk/cloudrouter-app-sdk-typescript"
   - "apps/sdkwork-mall-pc"
   - "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-subscription"
   - "apps/sdkwork-mall-pc/packages/sdkwork-mall-pc-payment"
