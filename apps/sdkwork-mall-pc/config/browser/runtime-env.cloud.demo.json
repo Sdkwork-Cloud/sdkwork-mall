@@ -1,7 +1,7 @@
 {
-  "environment": "development",
+  "environment": "demo",
   "deploymentProfile": "cloud",
-  "profileId": "cloud.development",
+  "profileId": "cloud.demo",
   "runtimeTarget": "browser",
   "browserOriginMode": "cross-origin",
   "configProfile": "dev",
@@ -42,13 +42,13 @@
     "backendApiBaseUrl": "http://127.0.0.1:18083/backend/v3/api"
   },
   "cloudApiBaseUrls": [
-    "https://api-dev.sdkwork.com"
+    "https://api-demo.sdkwork.com"
   ],
-  "appApiBaseUrl": "https://api-dev.sdkwork.com",
-  "backendApiBaseUrl": "https://api-dev.sdkwork.com",
-  "driveAppApiBaseUrl": "https://api-dev.sdkwork.com",
-  "appbaseAppApiBaseUrl": "https://api-dev.sdkwork.com",
-  "deployAppApiBaseUrl": "https://api-dev.sdkwork.com",
-  "openApiBaseUrl": "https://api-dev.sdkwork.com",
-  "sdkBaseUrl": "https://api-dev.sdkwork.com"
+  "appApiBaseUrl": "https://api-demo.sdkwork.com",
+  "backendApiBaseUrl": "https://api-demo.sdkwork.com",
+  "driveAppApiBaseUrl": "https://api-demo.sdkwork.com",
+  "appbaseAppApiBaseUrl": "https://api-demo.sdkwork.com",
+  "deployAppApiBaseUrl": "https://api-demo.sdkwork.com",
+  "openApiBaseUrl": "https://api-demo.sdkwork.com",
+  "sdkBaseUrl": "https://api-demo.sdkwork.com"
 }
