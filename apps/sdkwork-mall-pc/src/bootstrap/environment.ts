@@ -1,4 +1,5 @@
 import manifest from "../../sdkwork.app.config.json";
+import { resolveSharedSdkApiBaseUrl } from "./resolveSdkApiBaseUrl";
 
 export type SdkworkMallPcEnvironment =
   | "development"
@@ -124,7 +125,10 @@ export function resolveSdkworkMallPcRuntimeConfig(
   const sdkBaseUrls = parseSdkBaseUrls(sdkBaseUrl);
 
   return {
-    appApiBaseUrl: envValue("VITE_SDKWORK_COMMERCE_PC_APP_API_BASE_URL")
+    appApiBaseUrl: (resolveSharedSdkApiBaseUrl() !== undefined
+      ? `${resolveSharedSdkApiBaseUrl()}/app/v3/api`
+      : undefined)
+      ?? envValue("VITE_SDKWORK_COMMERCE_PC_APP_API_BASE_URL")
       ?? sdkBaseUrls?.appApiBaseUrl
       ?? (sdkBaseUrl ? `${sdkBaseUrl.replace(/\/+$/u, "")}/app/v3/api` : "/app/v3/api"),
     appDisplayName: manifest.app.displayName,
@@ -136,7 +140,10 @@ export function resolveSdkworkMallPcRuntimeConfig(
       tokenManagerMode: "appbase-global",
       tokenStorage: "browser-session",
     },
-    backendApiBaseUrl: envValue("VITE_SDKWORK_COMMERCE_PC_BACKEND_API_BASE_URL")
+    backendApiBaseUrl: (resolveSharedSdkApiBaseUrl() !== undefined
+      ? `${resolveSharedSdkApiBaseUrl()}/backend/v3/api`
+      : undefined)
+      ?? envValue("VITE_SDKWORK_COMMERCE_PC_BACKEND_API_BASE_URL")
       ?? sdkBaseUrls?.backendApiBaseUrl,
     buildMode: environment,
     configProfile: profileByEnvironment[environment],
